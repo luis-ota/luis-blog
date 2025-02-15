@@ -6,19 +6,42 @@ const POSTS_DIR = path.join(process.cwd(), "posts");
 
 // console.log("POSTS_DIR", POSTS_DIR);
 
-export const getAllPosts = async (generate_description?: boolean, page: number = 1, limit: number = 5): Promise<{ posts: Partial<Post>[]; total: number }> => {
+export const getAllPosts = async (
+  generate_description?: boolean,
+  page: number = 1,
+  limit: number = 5
+): Promise<{ posts: Partial<Post>[]; total: number }> => {
   const folders = await fs.readdir(POSTS_DIR);
 
-  // Filter out hidden folders and limit results
+  // Filter out hidden folders
   const validFolders = folders.filter((folder) => !folder.startsWith("."));
 
+  // Fetch metadata (createdAt date) for sorting
+  const foldersWithDates = await Promise.all(
+    validFolders.map(async (folder) => {
+      const postPath = path.join(POSTS_DIR, folder, "post.md");
+      try {
+        const stats = await fs.stat(postPath);
+        return { folder, createdAt: stats.birthtime };
+      } catch (error) {
+        console.error(`Error reading metadata for ${folder}:`, error);
+        return null;
+      }
+    })
+  );
+
+  // Remove null values and sort by createdAt (newest first)
+  const sortedFolders = foldersWithDates
+    .filter((item): item is { folder: string; createdAt: Date } => item !== null)
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) // Sort descending
+
   // Pagination logic
-  const total = validFolders.length;
+  const total = sortedFolders.length;
   const start = (page - 1) * limit;
-  const paginatedFolders = validFolders.slice(start, start + limit);
+  const paginatedFolders = sortedFolders.slice(start, start + limit);
 
   const posts = await Promise.all(
-    paginatedFolders.map(async (folder) => {
+    paginatedFolders.map(async ({ folder }) => {
       const postPath = path.join(POSTS_DIR, folder, "post.md");
       const imgPath = path.join(POSTS_DIR, folder, "img.png");
       const imgUrl = path.join(POSTS_DIR, folder, "img.url");
@@ -63,6 +86,7 @@ export const getAllPosts = async (generate_description?: boolean, page: number =
 
   return { posts: posts.filter((post): post is Partial<Post> => post !== null), total };
 };
+
 
 
 export const getPostById = async (postId: string): Promise<Post | null> => {

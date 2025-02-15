@@ -8,17 +8,15 @@ async function initializeModel() {
   generator = await pipeline('text-generation', 'Xenova/Qwen1.5-0.5B-Chat');
 }
 
-const prompt = `**Details to keep in mind:**
-# your mission it to gerenate a short description of a blog post.
+const prompt = `Create a concise blog description using ONLY this text:
 
-1. Responde with somethong like: "On this post you will read about [...]".
-2. Do not create any text that is not present in the original content.
-3. if the content is too small, you can just return it again.
-4. try to keep the responde under 10 words.
-5. if you can't generate a good description, just return the original content.
-6. if your answer is bad i will kill my self
+Instructions:
+1. Start with "You'll discover: [description]"
+2. Use only exact phrases from the text
+3. Keep it under 10 words
+4. If text is short (<15 words) or unclear, return it unchanged
 
-**Here is the text:**
+Text to analyze:
 `;
 
 function stripMarkdown(content: string): string {

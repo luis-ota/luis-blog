@@ -2,6 +2,7 @@ import { useLoaderData, Link, useFetcher, useNavigate } from "@remix-run/react";
 import { LoaderFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { useEffect, useState } from "react";
 import { getAllPosts, searchPost } from "~/utils/posts";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
@@ -11,7 +12,7 @@ export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) =>
 
   // console.log("Pagination - page:", page, "limit:", limit);
 
-  const { posts, total } = query ? await searchPost(query) : await getAllPosts(false, page, limit);
+  const { posts, total } = query ? await searchPost(query) : await getAllPosts(true, page, limit);
 
   return Response.json({ posts, total, page, limit });
 };
@@ -53,7 +54,7 @@ export default function Index() {
           disabled={page <= 1}
           className={`px-4 py-2 border rounded ${page <= 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
         >
-          Previous
+         <ChevronLeft />
         </button>
 
         <span className="mx-4">
@@ -65,8 +66,8 @@ export default function Index() {
           disabled={page >= totalPages}
           className={`px-4 py-2 border rounded ${page >= totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
         >
-          Next
-        </button>
+         <ChevronRight />
+         </button>
         </div>
 
 
@@ -78,12 +79,12 @@ export default function Index() {
               to={`/post/${post.id}`}
               className="flex flex-col p-4 border rounded-lg hover:bg-violet-400 w-full md:w-2/4 gap-4"
             >
-              <div className="flex gap-4 items-center">
+                <div className="flex flex-col md:flex-row gap-4 items-center">
                 {post.imgPath && (
                   <img
-                    src={post.imgPath}
-                    alt={post.description}
-                    className="w-20 md:w-36 h-24 object-cover rounded-lg"
+                  src={post.imgPath}
+                  alt={post.description}
+                  className="w-full md:w-36 h-24 object-cover rounded-lg"
                   />
                 )}
                 <div>
