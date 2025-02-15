@@ -1,5 +1,0 @@
-
-| <img src="https://antixlinux.com/wp-content/uploads/2017/03/logo_antiX.png" width="100">                   | [AntiX](https://antixlinux.com/download/)<br>**antiX** is a lightweight, systemd-free Linux distro based on Debian, built for old and new x86 systems.      |
-| ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://upload.wikimedia.org/wikipedia/commons/4/48/Gentoo_Linux_logo_matte.svg" width="100">    | [Gentoo](https://www.gentoo.org/downloads/)<br>**A highly flexible, source-based Linux distribution.**                                                      |
-| <img src="https://nixos.wiki/images/thumb/2/20/Home-nixos-logo.png/207px-Home-nixos-logo.png" width="100"> | [NixOs](https://nixos.org/download/)<br>**Package management and system configuration. Learn how to make reproducible, declarative, and reliable systems.** |
