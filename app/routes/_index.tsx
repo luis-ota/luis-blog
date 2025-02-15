@@ -3,6 +3,10 @@ import { LoaderFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { useEffect, useState } from "react";
 import { getAllPosts, searchPost } from "~/utils/posts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import captureWebsite from 'capture-website';
+
+
+await captureWebsite.file('https://sindresorhus.com', 'public/preview.png');
 
 export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);

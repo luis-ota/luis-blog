@@ -27,8 +27,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <title>luis's blog</title>
+        <meta property="og:title" content="luis's blog" />
+        <meta name="description" content="luis blog" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:image" content="/preview.png" />
+        <meta property="og:description" content="luis's blog where you will find tech and other crazy posts" />
         <Meta />
         <Links />
       </head>
