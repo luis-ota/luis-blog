@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) =>
 
   // console.log("Pagination - page:", page, "limit:", limit);
 
-  const { posts, total } = query ? await searchPost(query) : await getAllPosts(true, page, limit);
+  const { posts, total } = query ? await searchPost(query) : await getAllPosts(false, page, limit);
 
   return Response.json({ posts, total, page, limit });
 };
