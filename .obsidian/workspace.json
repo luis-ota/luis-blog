@@ -179,6 +179,10 @@
   },
   "active": "0707dfc5ad5bfbaf",
   "lastOpenFiles": [
+    "vite.config.ts.timestamp-1739595183732-ec28e9aafd7e7.mjs",
+    "vite.config.ts.timestamp-1739595183676-69a3ac073626.mjs",
+    "vite.config.ts.timestamp-1739595116458-3c59110849cfb.mjs",
+    "vite.config.ts.timestamp-1739595116405-5b8d792bdd9e2.mjs",
     "public/input.png",
     "public/preview.png.png",
     "public/preview.png",
@@ -192,9 +196,6 @@
     "preview",
     "prev",
     "node_modules/wrap-ansi/node_modules/string-width/readme.md",
-    "node_modules/wrap-ansi/node_modules/string-width/package.json",
-    "node_modules/wrap-ansi/node_modules/string-width/license",
-    "node_modules/wrap-ansi/node_modules/string-width/index.js",
     "node_modules/@isaacs/cliui/node_modules/string-width/readme.md",
     "node_modules/tslib/SECURITY.md",
     "node_modules/tslib/README.md",
@@ -223,7 +224,6 @@
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-LightItalic-webfont.svg",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Light-webfont.svg",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Italic-webfont.svg",
-    "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-BoldItalic-webfont.svg",
-    "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Bold-webfont.svg"
+    "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-BoldItalic-webfont.svg"
   ]
 }
