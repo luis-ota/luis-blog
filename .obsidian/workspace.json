@@ -11,14 +11,12 @@
             "id": "0707dfc5ad5bfbaf",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "README.md",
-                "mode": "source",
-                "source": false
+                "file": "public/preview.png.png"
               },
-              "icon": "lucide-file",
-              "title": "README"
+              "icon": "lucide-image",
+              "title": "preview.png"
             }
           }
         ]
@@ -179,8 +177,17 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "2a5479f2ffa5d4a7",
+  "active": "44aa57b16892837e",
   "lastOpenFiles": [
+    "vite.config.ts.timestamp-1739594388394-515d32a2f5d02.mjs",
+    "vite.config.ts.timestamp-1739594388340-a71c8e97a6197.mjs",
+    "public/input.png",
+    "public/preview.png.png",
+    "public/Untitled.md",
+    "README.md",
+    "vite.config.ts.timestamp-1739594184964-e2ce26b45fa99.mjs",
+    "vite.config.ts.timestamp-1739594184911-fd036d5d281b9.mjs",
+    "vite.config.ts.timestamp-1739594167745-7da8e07ee48f2.mjs",
     "preview",
     "prev",
     "node_modules/wrap-ansi/node_modules/string-width/readme.md",
@@ -188,12 +195,7 @@
     "node_modules/wrap-ansi/node_modules/string-width/license",
     "node_modules/wrap-ansi/node_modules/string-width/index.js",
     "node_modules/wrap-ansi/node_modules/string-width/index.d.ts",
-    "node_modules/wrap-ansi/node_modules/string-width",
     "node_modules/@isaacs/cliui/node_modules/string-width/readme.md",
-    "node_modules/@isaacs/cliui/node_modules/string-width/package.json",
-    "node_modules/@isaacs/cliui/node_modules/string-width/license",
-    "node_modules/@isaacs/cliui/node_modules/string-width/index.js",
-    "node_modules/@isaacs/cliui/node_modules/string-width/index.d.ts",
     "node_modules/tslib/SECURITY.md",
     "node_modules/tslib/README.md",
     "node_modules/sprintf-js/README.md",
@@ -215,9 +217,6 @@
     "node_modules/netmask/CHANGELOG.md",
     "node_modules/degenerator/README.md",
     "node_modules/basic-ftp/README.md",
-    "node_modules/pend/README.md",
-    "node_modules/socks/docs/examples/typescript/connectExample.md",
-    "public/input.png",
     "public/favicon.png",
     "public/164dcdfe0aeb412993425302c7b0f379.png",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Regular-webfont.svg",
@@ -225,7 +224,6 @@
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Light-webfont.svg",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Italic-webfont.svg",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-BoldItalic-webfont.svg",
-    "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Bold-webfont.svg",
-    "node_modules/browserify-zlib/test/fixtures/person.jpg"
+    "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Bold-webfont.svg"
   ]
 }

@@ -3,12 +3,12 @@ import { LoaderFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { useEffect, useState } from "react";
 import { getAllPosts, searchPost } from "~/utils/posts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import captureWebsite from 'capture-website';
+// import captureWebsite from 'capture-website';
 
 
 
 export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
-  await captureWebsite.file('https://luis-blog-c93208b2f883.herokuapp.com/?q=&page=1', 'public/preview.png');
+  // await captureWebsite.file('https://luis-blog-c93208b2f883.herokuapp.com/?q=&page=1', 'public/preview.png');
 
   const url = new URL(request.url);
   const query = url.searchParams.get("q");
