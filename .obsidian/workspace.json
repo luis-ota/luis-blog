@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "posts/How to increase linux swap/post.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "post"
+              "title": "README"
             }
           }
         ]
@@ -179,8 +179,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "0707dfc5ad5bfbaf",
+  "active": "44aa57b16892837e",
   "lastOpenFiles": [
+    "posts/How to increase linux swap/post.md",
     "vite.config.ts.timestamp-1739592899380-d6464abd193cc.mjs",
     "vite.config.ts.timestamp-1739592899333-982dfc2b931dd.mjs",
     "vite.config.ts.timestamp-1739592759903-37ae9d3654a69.mjs",
@@ -193,10 +194,8 @@
     "vite.config.ts.timestamp-1739592422495-6e9840690258b.mjs",
     "vite.config.ts.timestamp-1739592422441-50c8bd342200f.mjs",
     "public/favicon.png",
-    "public/164dcdfe0aeb412993425302c7b0f379.png.1",
     "public/164dcdfe0aeb412993425302c7b0f379.png",
     "posts/Cool linux distros/post.md",
-    "posts/How to increase linux swap/post.md",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-classify-character/readme.md",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-html-tag-name/readme.md",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-whitespace/readme.md",
