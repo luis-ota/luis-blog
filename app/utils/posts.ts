@@ -6,6 +6,10 @@ const POSTS_DIR = path.join(process.cwd(), "posts");
 
 // console.log("POSTS_DIR", POSTS_DIR);
 
+const removeMdSymbol = (content: string): string => {
+  return content.replace(/[#*`]/g, "");
+}
+
 export const getAllPosts = async (
   generate_description?: boolean,
   page: number = 1,
@@ -29,6 +33,7 @@ export const getAllPosts = async (
       }
     })
   );
+
 
   // Remove null values and sort by createdAt (newest first)
   const sortedFolders = foldersWithDates
@@ -67,7 +72,7 @@ export const getAllPosts = async (
           fs.stat(postPath),
         ]);
 
-        const description = generate_description ? await generateDescription(content) : "Just another post";
+        const description = generate_description ? await generateDescription(content) : removeMdSymbol(content).slice(0, 200);
 
         return {
           id: folder,

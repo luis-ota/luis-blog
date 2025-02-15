@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "posts/Cool linux distros/post.md",
+                "file": "posts/How to increase linux swap/post.md",
                 "mode": "source",
                 "source": false
               },
@@ -181,19 +181,22 @@
   },
   "active": "0707dfc5ad5bfbaf",
   "lastOpenFiles": [
-    "posts/Cool linux distros/img.url",
-    "posts/How to increase linux swap/post.md",
+    "vite.config.ts.timestamp-1739592899380-d6464abd193cc.mjs",
+    "vite.config.ts.timestamp-1739592899333-982dfc2b931dd.mjs",
+    "vite.config.ts.timestamp-1739592759903-37ae9d3654a69.mjs",
+    "vite.config.ts.timestamp-1739592759856-0fef2c4322e06.mjs",
+    "vite.config.ts.timestamp-1739592691200-bdf9e1872532.mjs",
+    "vite.config.ts.timestamp-1739592691141-ec30eb50facba.mjs",
+    "public/input.ico",
+    "public/favicon.ico",
+    "public/input.png",
+    "vite.config.ts.timestamp-1739592422495-6e9840690258b.mjs",
+    "vite.config.ts.timestamp-1739592422441-50c8bd342200f.mjs",
+    "public/favicon.png",
+    "public/164dcdfe0aeb412993425302c7b0f379.png.1",
+    "public/164dcdfe0aeb412993425302c7b0f379.png",
     "posts/Cool linux distros/post.md",
-    "posts/Cool linux distros",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-title/dev/index.js",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-title/dev/index.d.ts",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-classify-character/dev/index.js",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-classify-character/dev/index.d.ts",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-whitespace/dev/index.js",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-whitespace/dev/index.d.ts",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-label/dev/index.js",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-destination/dev/index.d.ts",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-label/dev/index.d.ts",
+    "posts/How to increase linux swap/post.md",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-classify-character/readme.md",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-html-tag-name/readme.md",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-whitespace/readme.md",
@@ -223,9 +226,6 @@
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Italic-webfont.svg",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-BoldItalic-webfont.svg",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Bold-webfont.svg",
-    "node_modules/browserify-zlib/test/fixtures/person.jpg",
-    "node_modules/retry/equation.gif",
-    "build/client/logo-light.png",
-    "build/client/logo-dark.png"
+    "node_modules/browserify-zlib/test/fixtures/person.jpg"
   ]
 }
