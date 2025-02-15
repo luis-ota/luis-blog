@@ -13,10 +13,10 @@
             "state": {
               "type": "image",
               "state": {
-                "file": "public/preview.png.png"
+                "file": "public/preview.png"
               },
               "icon": "lucide-image",
-              "title": "preview.png"
+              "title": "preview"
             }
           }
         ]
@@ -177,12 +177,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "44aa57b16892837e",
+  "active": "0707dfc5ad5bfbaf",
   "lastOpenFiles": [
-    "vite.config.ts.timestamp-1739594388394-515d32a2f5d02.mjs",
-    "vite.config.ts.timestamp-1739594388340-a71c8e97a6197.mjs",
     "public/input.png",
     "public/preview.png.png",
+    "public/preview.png",
+    "vite.config.ts.timestamp-1739594388394-515d32a2f5d02.mjs",
+    "vite.config.ts.timestamp-1739594388340-a71c8e97a6197.mjs",
     "public/Untitled.md",
     "README.md",
     "vite.config.ts.timestamp-1739594184964-e2ce26b45fa99.mjs",
@@ -194,7 +195,6 @@
     "node_modules/wrap-ansi/node_modules/string-width/package.json",
     "node_modules/wrap-ansi/node_modules/string-width/license",
     "node_modules/wrap-ansi/node_modules/string-width/index.js",
-    "node_modules/wrap-ansi/node_modules/string-width/index.d.ts",
     "node_modules/@isaacs/cliui/node_modules/string-width/readme.md",
     "node_modules/tslib/SECURITY.md",
     "node_modules/tslib/README.md",
