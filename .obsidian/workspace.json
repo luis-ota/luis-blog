@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "posts/How to increase linux swap/post.md",
+                "file": "posts/Cool linux distros/post.md",
                 "mode": "source",
                 "source": false
               },
@@ -150,13 +150,23 @@
               "icon": "lucide-list",
               "title": "Outline of post"
             }
+          },
+          {
+            "id": "2a5479f2ffa5d4a7",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -169,8 +179,12 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "44aa57b16892837e",
+  "active": "0707dfc5ad5bfbaf",
   "lastOpenFiles": [
+    "posts/Cool linux distros/img.url",
+    "posts/How to increase linux swap/post.md",
+    "posts/Cool linux distros/post.md",
+    "posts/Cool linux distros",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-title/dev/index.js",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-title/dev/index.d.ts",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-classify-character/dev/index.js",
@@ -180,8 +194,6 @@
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-label/dev/index.js",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-destination/dev/index.d.ts",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-label/dev/index.d.ts",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-destination/dev/index.js",
-    "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/dev/lib/thematic-break.js",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-classify-character/readme.md",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-util-html-tag-name/readme.md",
     "node_modules/@mdx-js/mdx/node_modules/remark-parse/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-core-commonmark/node_modules/micromark-factory-whitespace/readme.md",
@@ -205,8 +217,6 @@
     "node_modules/hast-util-to-estree/node_modules/mdast-util-mdxjs-esm/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-util-subtokenize/readme.md",
     "node_modules/hast-util-to-estree/node_modules/mdast-util-mdxjs-esm/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-util-sanitize-uri/readme.md",
     "node_modules/hast-util-to-estree/node_modules/mdast-util-mdxjs-esm/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-util-encode/readme.md",
-    "node_modules/hast-util-to-estree/node_modules/mdast-util-mdxjs-esm/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-util-resolve-all/readme.md",
-    "node_modules/hast-util-to-estree/node_modules/mdast-util-mdxjs-esm/node_modules/mdast-util-from-markdown/node_modules/micromark/node_modules/micromark-factory-space/readme.md",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Regular-webfont.svg",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-LightItalic-webfont.svg",
     "node_modules/onnx-proto/node_modules/protobufjs/cli/node_modules/jsdoc/templates/default/static/fonts/OpenSans-Light-webfont.svg",
