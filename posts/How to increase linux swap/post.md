@@ -1,3 +1,4 @@
+
 turn off the swap
 ```sh
 sudo swapoff /swap.img

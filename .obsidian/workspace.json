@@ -1,29 +1,19 @@
 {
   "main": {
-    "id": "133cbdc74f2c48ef",
+    "id": "723fe0d093fd254f",
     "type": "split",
     "children": [
       {
-        "id": "63a85f57f79b3b7a",
+        "id": "9fe59e0920929e7a",
         "type": "tabs",
         "children": [
           {
-            "id": "7be084441d3b2203",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
-            }
-          },
-          {
-            "id": "f455dab3b06e8ed1",
+            "id": "0707dfc5ad5bfbaf",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "How to increase linux swap/post.md",
+                "file": "posts/How to increase linux swap/post.md",
                 "mode": "source",
                 "source": false
               },
@@ -31,22 +21,21 @@
               "title": "post"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "f24755659010e6cc",
+    "id": "b4668f055ea4457c",
     "type": "split",
     "children": [
       {
-        "id": "6e19199488fde7a7",
+        "id": "34e48e269605cbc5",
         "type": "tabs",
         "children": [
           {
-            "id": "e9d802657575216a",
+            "id": "44aa57b16892837e",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -59,7 +48,7 @@
             }
           },
           {
-            "id": "e5d570572dd842fc",
+            "id": "db6f76b293f0cd73",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -76,7 +65,7 @@
             }
           },
           {
-            "id": "17a131d5e3cde2b6",
+            "id": "36575cc2e66ddd35",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -92,19 +81,20 @@
     "width": 300
   },
   "right": {
-    "id": "191898e284892eaa",
+    "id": "a5bb0d6bd3b0c876",
     "type": "split",
     "children": [
       {
-        "id": "d1b40fa359824b38",
+        "id": "3abe9236744030e3",
         "type": "tabs",
         "children": [
           {
-            "id": "d0f737eea350e239",
+            "id": "335c3fc69be3d40d",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
+                "file": "posts/How to increase linux swap/post.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,24 +104,25 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for post"
             }
           },
           {
-            "id": "926066ff7a2ea88c",
+            "id": "0c30fcd91b78f006",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "posts/How to increase linux swap/post.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from post"
             }
           },
           {
-            "id": "cca561bd52aec8f8",
+            "id": "55e35e0603f7ab3c",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -146,61 +137,60 @@
             }
           },
           {
-            "id": "3bfff086ed0a2ed5",
+            "id": "d8ba7fd22cd14fb0",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
+                "file": "posts/How to increase linux swap/post.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
-            }
-          },
-          {
-            "id": "d41476a8435dcfa2",
-            "type": "leaf",
-            "state": {
-              "type": "git-view",
-              "state": {},
-              "icon": "git-pull-request",
-              "title": "Source Control"
+              "title": "Outline of post"
             }
           }
-        ],
-        "currentTab": 4
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
-      "obsidian-git:Open Git source control": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "e9d802657575216a",
+  "active": "0707dfc5ad5bfbaf",
   "lastOpenFiles": [
-    "Untitled/Untitled.md",
-    "How to increase linux swap/post.md",
-    "How to increase linux swap",
-    "teste (Copy 3)/post.md",
-    "teste (Copy 3)",
-    "teste (Copy 2)/post.md",
-    "teste (Copy 2)",
-    "teste (Copy)/post.md",
-    "teste (Copy)",
-    "teste/post.md",
-    "teste.md",
-    "teste/teste.md",
-    "teste"
+    "posts/How to increase linux swap (Copy 10)/post.md",
+    "posts/How to increase linux swap (Copy 10)/img.url",
+    "posts/How to increase linux swap (Copy 10)",
+    "posts/How to increase linux swap (Copy 9)/post.md",
+    "posts/How to increase linux swap (Copy 9)/img.url",
+    "posts/How to increase linux swap (Copy 9)",
+    "posts/How to increase linux swap (Copy 8)/post.md",
+    "posts/How to increase linux swap (Copy 8)/img.url",
+    "posts/How to increase linux swap (Copy 8)",
+    "posts/How to increase linux swap (Copy 7)/post.md",
+    "posts/How to increase linux swap (Copy 7)/img.url",
+    "posts/How to increase linux swap (Copy 7)",
+    "posts/How to increase linux swap (Copy 6)/post.md",
+    "posts/How to increase linux swap (Copy 6)/img.url",
+    "posts/How to increase linux swap (Copy 6)",
+    "posts/How to increase linux swap (Copy 5)/post.md",
+    "posts/How to increase linux swap (Copy 4)/post.md",
+    "posts/How to increase linux swap (Copy 3)/post.md",
+    "posts/How to increase linux swap (Copy 2)/post.md",
+    "posts/How to increase linux swap (Copy)/post.md",
+    "README.md"
   ]
 }
