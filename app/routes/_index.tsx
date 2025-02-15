@@ -6,9 +6,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import captureWebsite from 'capture-website';
 
 
-await captureWebsite.file('https://sindresorhus.com', 'public/preview.png');
 
 export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) => {
+  await captureWebsite.file('https://luis-blog-c93208b2f883.herokuapp.com/?q=&page=1', 'public/preview.png');
+
   const url = new URL(request.url);
   const query = url.searchParams.get("q");
   const page = Number(url.searchParams.get("page")) || 1;
@@ -23,6 +24,7 @@ export const loader: LoaderFunction = async ({ request }: LoaderFunctionArgs) =>
 
 
 export default function Index() {
+  
   const { posts, total, page, limit } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');

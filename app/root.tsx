@@ -30,9 +30,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <title>luis's blog</title>
         <meta property="og:title" content="luis's blog" />
         <meta name="description" content="luis blog" />
+        <meta property="og:url" content="https://luis-blog-c93208b2f883.herokuapp.com/?q=&page=1" />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta property="og:image" content="/preview.png" />
+        <meta property="og:image" content="https://luis-blog-c93208b2f883.herokuapp.com/preview.png" />
         <meta property="og:description" content="luis's blog where you will find tech and other crazy posts" />
         <Meta />
         <Links />
