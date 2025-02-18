@@ -1,3 +1,11 @@
+---
+date: 2025-02-18
+title: how to use tar to compress files
+description: How to use tar with examples, and more
+img: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ10Be4J3ahQau5SRo8G44OCFtOblXGz1mkRQ&s
+---
+
+
 command:
 ```sh
 tar -czvf filename.tar.gz /path/to/dir1/*

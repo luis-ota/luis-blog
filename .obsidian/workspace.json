@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "ab4336eb65e2a530",
+        "id": "2405b64be4650bae",
         "type": "tabs",
         "children": [
           {
-            "id": "8554fbc2e220f0b5",
+            "id": "bedf910348c35094",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -179,11 +179,12 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "4431bb5687b3d1f2",
+  "active": "bedf910348c35094",
   "lastOpenFiles": [
     "posts/first-post/sonic.gif",
     "posts/first-post/fisrt-post.md",
     "posts/how-to-targz/how-to-targz.md",
+    "README.md",
     "posts/how-to-targz"
   ]
 }
