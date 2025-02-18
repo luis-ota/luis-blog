@@ -1,32 +1,36 @@
-# [My Personal Blog](https://luis-blog-c93208b2f883.herokuapp.com/?q=&page=1)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Welcome to my personal blog! i will post things that i thing is cool. 
+## Getting Started
 
+First, run the development server:
 
-## Tech Stack
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-- **[Remix](https://remix.run/)** - A full-stack React framework for fast and dynamic web applications.
-- **[Bun](https://bun.sh/)** - A lightning-fast JavaScript runtime that boosts performance.
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework for beautiful styling with ease.
-- **[Hugging Face Pipelines](https://huggingface.co/docs/transformers/main_classes/pipelines)** - AI-powered text summarization for generating concise descriptions of blog posts.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Each blog post is stored in its own folder, containing a `post.md` file (Markdown format) and any related assets.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Features
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- **Markdown-Based Posts** - Write and manage blog posts easily with Markdown.
-- **AI-Powered Summaries** - Automatically generate post descriptions using Hugging Face.
-- **Fast & Optimized** - Built with Remix and Bun for blazing-fast performance.
-- **Responsive & Beautiful** - Styled with Tailwind CSS for a sleek UI.
+## Learn More
 
-## 🧠 AI-Powered Summarization
+To learn more about Next.js, take a look at the following resources:
 
-This blog leverages Hugging Face's NLP pipelines to generate post summaries automatically. The summaries help readers quickly understand the content before diving in.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## License
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-This project is open-source and available under the MIT License.
+## Deploy on Vercel
 
----
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-🔥 Built with passion and technology! Happy blogging! 🚀
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
