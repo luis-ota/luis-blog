@@ -40,7 +40,7 @@ function remarkImagePathTransformer(postId: string) {
       // Cast tree to the expected unist.Node type
       visit(tree as unknown as import('unist').Node, 'image', (node: Image) => {
         if (node.url && !node.url.startsWith('http') && !node.url.startsWith('/')) {
-          node.url = `/images/${postId}/${node.url}`;
+          node.url = `/luis-blog/images/${postId}/${node.url}`;
         }
       });
     };
