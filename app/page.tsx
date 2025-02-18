@@ -1,4 +1,3 @@
-// app/page.tsx
 import { getSortedPostsData } from '@/lib/posts';
 import Link from "next/link";
 import Image from "next/image";
