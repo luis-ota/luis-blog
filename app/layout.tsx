@@ -16,26 +16,26 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "luis's blog",
   description: "luis's blog where you will find tech and other crazy posts",
-  // openGraph: {
-  //   url: "https://luis-blog-c93208b2f883.herokuapp.com",
-  //   type: "website",
-  //   title: "luis's blog",
-  //   description: "luis's blog where you will find tech and other crazy posts",
-  //   images: [
-  //     {
-  //       url: "https://luis-blog-c93208b2f883.herokuapp.com/preview.png",
-  //       width: 1860,
-  //       height: 1036,
-  //     },
-  //   ],
-  // },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   site: "luis-blog-c93208b2f883.herokuapp.com", // corresponds to twitter:domain
-  //   title: "luis's blog",
-  //   description: "luis's blog where you will find tech and other crazy posts",
-  //   images: ["https://luis-blog-c93208b2f883.herokuapp.com/preview.png"],
-  // },
+  openGraph: {
+    url: "https://luis-ota.github.io/luis-blog/",
+    type: "website",
+    title: "luis's blog",
+    description: "luis's blog where you will find tech and other crazy posts",
+    images: [
+      {
+        url: "https://luis-ota.github.io/luis-blog/sonic.gif",
+        width: 1860,
+        height: 1036,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "luis-ota.github.io/luis-blog/", // corresponds to twitter:domain
+    title: "luis's blog",
+    description: "luis's blog where you will find tech and other crazy posts",
+    images: ["https://luis-ota.github.io/luis-blog/sonic.gif"],
+  },
 };
 export default function RootLayout({
   children,
