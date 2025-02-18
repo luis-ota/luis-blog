@@ -9,4 +9,4 @@ img: "/images/first-post/sonic.gif"
 
 Here is an image from my post:
 
-![sonic](/images/first-post/sonic.gif)
+![sonic](sonic.gif)

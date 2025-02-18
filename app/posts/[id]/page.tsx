@@ -20,7 +20,7 @@ export default async function PostPage({ params }: Props) {
         <div>
             <h1>{postData.title}</h1>
             <p>{postData.date}</p>
-            <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+            <div dangerouslySetInnerHTML={{ __html: postData.contentHtml || '' }} />
         </div>
     );
 }

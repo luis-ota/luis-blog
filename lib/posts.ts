@@ -5,11 +5,14 @@ import matter from 'gray-matter';
 import {remark} from 'remark';
 import html from 'remark-html';
 import fse from 'fs-extra';
+import {Post} from '@/types/post';
+import { visit } from 'unist-util-visit';
+import type { Image, Root } from 'mdast';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
 // Get sorted posts data
-export function getSortedPostsData(): { id: string; title: string; date: string, img: string }[] {
+export function getSortedPostsData(): Post[] {
     const postFolders = fs.readdirSync(postsDirectory);
 
     const allPostsData = postFolders.map((folder) => {
@@ -27,36 +30,48 @@ export function getSortedPostsData(): { id: string; title: string; date: string,
         return {
             id: folder,
             ...matterResult.data,
-        } as { id: string; title: string; date: string, img: string };
-    }).filter(Boolean) as { id: string; title: string; date: string, img:string }[];
+        } as Post;
+    }).filter(Boolean) as Post[];
 
     return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+function remarkImagePathTransformer(postId: string) {
+    return () => (tree: Root) => {
+      // Cast tree to the expected unist.Node type
+      visit(tree as unknown as import('unist').Node, 'image', (node: Image) => {
+        if (node.url && !node.url.startsWith('http') && !node.url.startsWith('/')) {
+          node.url = `/images/${postId}/${node.url}`;
+        }
+      });
+    };
+  }
+
 // Get post data by ID
-export async function getPostData(id: string): Promise<{ id: string; contentHtml: string; title: string; date: string }> {
+export async function getPostData(id: string): Promise<Post> {
     const folderPath = path.join(postsDirectory, id);
     const markdownFile = fs
-        .readdirSync(folderPath)
-        .find((file) => file.endsWith('.md'));
-
+      .readdirSync(folderPath)
+      .find((file) => file.endsWith('.md'));
+  
     if (!markdownFile) throw new Error(`Markdown file not found for post: ${id}`);
-
+  
     const fullPath = path.join(folderPath, markdownFile);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     const matterResult = matter(fileContents);
-
+  
     const processedContent = await remark()
-        .use(html)
-        .process(matterResult.content);
+      .use(remarkImagePathTransformer(id)) // Use the plugin to transform image paths
+      .use(html)
+      .process(matterResult.content);
     const contentHtml = processedContent.toString();
-
+  
     return {
-        id,
-        contentHtml,
-        ...matterResult.data,
-    } as { id: string; contentHtml: string; title: string; date: string };
-}
+      id,
+      contentHtml,
+      ...matterResult.data,
+    } as Post;
+  }
 
 // Copy images to the public directory
 export function copyImagesToPublic(): void {
