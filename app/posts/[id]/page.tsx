@@ -26,7 +26,7 @@ export default async function PostPage({ params }: Props) {
             </div>
 
             <article
-                className="markdown-body p-8"
+                className="markdown-body p-8 rounded"
                 dangerouslySetInnerHTML={{ __html: postData.contentHtml || "" }}
             />
         </main>
