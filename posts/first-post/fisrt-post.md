@@ -7,6 +7,6 @@ img: "/luis-blog/images/first-post/sonic.gif"
 
 # my first post
 
-get out the way
+## get out the way
 
 ![sonic](sonic.gif)

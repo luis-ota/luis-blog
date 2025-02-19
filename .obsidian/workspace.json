@@ -15,7 +15,7 @@
               "state": {
                 "file": "posts/how-to-targz/how-to-targz.md",
                 "mode": "source",
-                "source": true
+                "source": false
               },
               "icon": "lucide-file",
               "title": "how-to-targz"
@@ -182,8 +182,8 @@
   "active": "91d9011380c343cf",
   "lastOpenFiles": [
     "posts/first-post/fisrt-post.md",
-    "posts/how-to-targz/how-to-targz.md",
     "posts/first-post/sonic.gif",
+    "posts/how-to-targz/how-to-targz.md",
     "README.md",
     "posts/how-to-targz"
   ]
