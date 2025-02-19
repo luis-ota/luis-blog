@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "posts/how-to-targz/how-to-targz.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": true
               },
               "icon": "lucide-file",
@@ -181,8 +181,11 @@
   },
   "active": "91d9011380c343cf",
   "lastOpenFiles": [
-    "posts/first-post/fisrt-post.md",
+    "posts/teste/teste.md",
+    "posts/teste/input.webp",
     "posts/how-to-targz/how-to-targz.md",
+    "posts/teste",
+    "posts/first-post/fisrt-post.md",
     "posts/first-post/sonic.gif",
     "README.md",
     "posts/how-to-targz"
