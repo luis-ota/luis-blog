@@ -26,15 +26,20 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+        
+      - name: Install Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
       
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: bun install
 
       - name: Run prebuild script (copy images)
-        run: npm run prebuild
+        run: bun run prebuild
 
       - name: Build Next.js site
-        run: npm run build
+        run: bun run build
       
       - name: Post-process exported files for basePath
         run: |

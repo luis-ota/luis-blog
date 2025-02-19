@@ -39,3 +39,9 @@ tar -xzvf file.tar.gz
 | -f file.tar.gz     | Use archive file                                                    |
 | -C DIR             | Change to DIR before performing any operations                      |
 | -z                 | Filter the archive through gzip i.e. compress or decompress archive |
+
+# How compression works
+
+Basically all files have redundant data, when you compress a file, the software is actually replacing all the duplicate data and rearranging the bytes, reducing its size, when you use .zip .rar .tar.gz or other compression methods, you are specifying how it was compressed.
+
+So when you unzip, the software knows exactly how to do the opposite logic, creating files/folders that can be opened

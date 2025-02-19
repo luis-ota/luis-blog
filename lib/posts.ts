@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import {remark} from 'remark';
+import remarkGfm from 'remark-gfm';
 import html from 'remark-html';
 import fse from 'fs-extra';
 import {Post} from '@/types/post';
@@ -48,29 +49,30 @@ function remarkImagePathTransformer(postId: string) {
 
 // Get post data by ID
 export async function getPostData(id: string): Promise<Post> {
-    const folderPath = path.join(postsDirectory, id);
-    const markdownFile = fs
-      .readdirSync(folderPath)
-      .find((file) => file.endsWith('.md'));
-  
-    if (!markdownFile) throw new Error(`Markdown file not found for post: ${id}`);
-  
-    const fullPath = path.join(folderPath, markdownFile);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const matterResult = matter(fileContents);
-  
-    const processedContent = await remark()
-      .use(remarkImagePathTransformer(id)) // Use the plugin to transform image paths
-      .use(html)
-      .process(matterResult.content);
-    const contentHtml = processedContent.toString();
-  
-    return {
-      id,
-      contentHtml,
-      ...matterResult.data,
-    } as Post;
-  }
+  const folderPath = path.join(postsDirectory, id);
+  const markdownFile = fs
+    .readdirSync(folderPath)
+    .find((file) => file.endsWith('.md'));
+
+  if (!markdownFile) throw new Error(`Markdown file not found for post: ${id}`);
+
+  const fullPath = path.join(folderPath, markdownFile);
+  const fileContents = fs.readFileSync(fullPath, 'utf8');
+  const matterResult = matter(fileContents);
+
+  const processedContent = await remark()
+    .use(remarkGfm) // Enables tables, strikethrough, etc.
+    .use(remarkImagePathTransformer(id))
+    .use(html)
+    .process(matterResult.content);
+  const contentHtml = processedContent.toString();
+
+  return {
+    id,
+    contentHtml,
+    ...matterResult.data,
+  } as Post;
+}
 
 // Copy images to the public directory
 export function copyImagesToPublic(): void {
