@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'github-markdown-css/github-markdown.css';
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
