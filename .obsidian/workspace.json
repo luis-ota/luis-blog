@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "posts/linux-swap/linux-swap.md",
+                "file": "posts/first-post/fisrt-post.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "linux-swap"
+              "title": "fisrt-post"
             }
           }
         ]
@@ -179,16 +179,16 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "09e47f35d6cd1f61",
+  "active": "91d9011380c343cf",
   "lastOpenFiles": [
+    "posts/linux-swap/swap.jpeg",
+    "posts/linux-swap/linux-swap.md",
     "app/page.tsx~",
     "public/images/linux-swap/swap.jpeg",
     "public/images/linux-swap",
     "package.json~",
     "posts/how-to-targz/how-to-targz.md",
     "swap.jpeg",
-    "posts/linux-swap/swap.jpeg",
-    "posts/linux-swap/linux-swap.md",
     "posts/linux-swap",
     "posts/first-post/fisrt-post.md",
     "posts/first-post/sonic.gif",
