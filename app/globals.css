@@ -1,8 +1,8 @@
+@import 'github-markdown-css/github-markdown.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import 'github-markdown-css/github-markdown.css';
 
 :root {
   --background: #ffffff;
@@ -13,6 +13,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --cute-bg: #bda8bf;
   }
 }
 
@@ -20,4 +21,15 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  height: 100vh;
+}
+
+header {
+  background: var(--cute-bg);
+}
+
+.backgroundImage {
+  background-image: url("/docs/bg_baleia.png");
+  background-position: center;
+  height: 100%;
 }

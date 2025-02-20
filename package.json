@@ -5,9 +5,11 @@
   "homepage": "https://luis-ota.github.io/luis-blog",
   "scripts": {
     "dev": "next dev",
+    "act": "act -s ACTIONS_RUNTIME_TOKEN=dummy-token --artifact-server-path /tmp/artifacts",
     "build": "next build",
-    "start": "mkdir out/luis-blog && cp -r /out/_next out/luis-blog/_next && bunx serve@latest out",
-    "prebuild": "tsx lib/copy-images.ts"
+    "start": "bun run posbuild && bunx serve@latest out",
+    "prebuild": "tsx lib/copy-images.ts",
+    "posbuild": "mkdir out/luis-blog/ && cp -r out/_next out/luis-blog/_next && cp -r out/images out/luis-blog/images && cp -r out/docs out/luis-blog/docs"
   },
   "dependencies": {
     "@types/fs-extra": "^11.0.4",

@@ -46,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased backgroundImage`}
       >
       <header className="flex justify-between items-center p-4 bg-gray-800">
         <Link href="/">
