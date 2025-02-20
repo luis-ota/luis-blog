@@ -51,14 +51,14 @@ export default async function PostPage({ params }: Props) {
         if (metadata.openGraph.images && Array.isArray(metadata.openGraph.images) && metadata.openGraph.images.length > 0) {
             const firstImage = metadata.openGraph.images[0];
             if (typeof firstImage === 'object' && 'url' in firstImage) {
-                firstImage.url = `https://luis-ota.github.io/${postData.img}` || "";
+                firstImage.url = postData.img?.startsWith("http") ? postData.img : `https://luis-ota.github.io/${postData.img}` || "";
             }
         }
     }
     metadata.twitter!.title = postData.title;
     metadata.twitter!.description = postData.description;
     if (metadata.twitter && metadata.twitter.images && Array.isArray(metadata.twitter.images)) {
-        metadata.twitter.images[0] = `https://luis-ota.github.io/${postData.img}` || "";
+        metadata.twitter.images[0] = postData.img?.startsWith("http") ? postData.img : `https://luis-ota.github.io/${postData.img}` || "";
     }
 
     return (
