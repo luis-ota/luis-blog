@@ -63,15 +63,15 @@ export default async function PostPage({ params }: Props) {
 
     return (
         <main className="max-w-3xl mx-auto p-6">
-            <div className="mb-6 p-4 text-center rounded bg-gray-800">
+            <div className="markdown-body mb-6 p-4 text-center rounded">
                 <h1 className="text-4xl font-bold mb-2 capitalize">{postData.title}</h1>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-sm">
                 Published on {new Date(postData.date).toLocaleDateString("pt-BR")}
                 </p>
             </div>
 
             <article
-                className="markdown-body p-6 rounded bg-gray-800"
+                className="markdown-body p-6 rounded"
                 dangerouslySetInnerHTML={{ __html: postData.contentHtml || "" }}
             />
         </main>
