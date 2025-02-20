@@ -35,7 +35,7 @@ On Linux, swap is basically an extension of virtual memory, and it's exactly wha
 
 All operating systems need memory to run, so if your RAM runs out, the system might crash or slow down. Swap works like a lifesaver: when the RAM is exhausted, the OS uses swap space as extra memory, even though it's much slower than real RAM.
 
-`"Wow, so I can set the swap to 64GB and have lots of RAM?"`
+`"wow, so i can set the swap to 64GB and have lots of RAM?"`
 
 Actually, yes, you can set a large swap, but you shouldn't rely on it as a substitute for physical RAM.
 
