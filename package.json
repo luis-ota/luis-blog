@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://luis-ota.github.io/luis-blog",
   "scripts": {
-    "dev": "next dev",
+    "dev": "bun run prebuild && next dev",
     "act": "act -s ACTIONS_RUNTIME_TOKEN=dummy-token --artifact-server-path /tmp/artifacts",
     "build": "next build",
     "start": "bun run posbuild && bunx serve@latest out",
