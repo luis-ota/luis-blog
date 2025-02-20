@@ -1,8 +1,8 @@
 ---
-title: "How to change linux swap size"
-date: "2025-02-19"
-description: "how to increase linux swap amd more about it"
-img: "/luis-blog/images/linux-swap/swap.jpeg"
+title: How to change linux swap size
+date: 2025-02-19
+description: how to increase linux swap and more about it
+img: /luis-blog/images/linux-swap/swap.jpeg
 ---
 
 turn off the swap
@@ -28,8 +28,8 @@ sudo swapon /swap.img
 ---
 ## What is swap
 
-| ![[swap.jpeg]] |
-| ---------------|
+| ![swap pic](swap.jpeg) |
+| ---------------------- |
 
 On Linux, swap is basically an extension of virtual memory, and it's exactly what it sounds like.
 
