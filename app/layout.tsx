@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     description: "luis's blog where you will find tech and other crazy posts",
     images: [
       {
-        url: "https://luis-ota.github.io/luis-blog/sonic.gif",
+        url: "https://luis-ota.github.io/luis-blog/docs/lain-room.jpg",
         width: 1860,
         height: 1036,
       },
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     site: "luis-ota.github.io/luis-blog/", // corresponds to twitter:domain
     title: "luis's blog",
     description: "luis's blog where you will find tech and other crazy posts",
-    images: ["https://luis-ota.github.io/luis-blog/sonic.gif"],
+    images: ["https://luis-ota.github.io/luis-blog/docs/lain-room.jpg"],
   },
 };
 
