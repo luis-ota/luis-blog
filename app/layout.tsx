@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     images: ["https://luis-ota.github.io/luis-blog/sonic.gif"],
   },
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,10 +49,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased backgroundImage`}
       >
-      <header className="flex justify-between items-center p-4 bg-gray-800">
+      <header className="flex justify-between items-center p-4 bg-blue-400 dark:bg-gray-800">
         <Link href="/">
-          <h1 className="text-3xl font-bold text-white">
-          luis personal blog
+          <h1 className="text-3xl font-bold text-black dark:text-white">
+           {"luis's personal blog"}
           </h1>
         </Link>
         <nav className="flex justify-between items-center p-4 gap-4">
