@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "bun run posbuild && bunx serve@latest out",
     "prebuild": "tsx lib/copy-images.ts",
-    "posbuild": "rm -rf out/luis-blog && mkdir out/luis-blog/ && cp -r out/_next out/luis-blog/_next && cp -r out/images out/luis-blog/images && cp -r out/docs out/luis-blog/docs",
+    "posbuild": "mkdir -p out/luis-blog/ && cp -r out/_next out/luis-blog/_next && cp -r out/images out/luis-blog/images && cp -r out/docs out/luis-blog/docs && cp -r out/index.txt out/luis-blog.txt",
     "deploy-local": "bun install && bun run prebuild && bun run build && bun run start"
 
   },
