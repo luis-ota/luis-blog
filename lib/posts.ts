@@ -78,7 +78,7 @@ export async function getPostData(id: string): Promise<Post> {
 
 export function copyImagesToPublic(): void {
     const basePublicDir = path.join(process.cwd(), 'public');
-    const publicImagesDir = path.join(basePublicDir, 'luis-blog', 'images'); 
+    const publicImagesDir = path.join(basePublicDir, 'images'); 
     
     fse.mkdirpSync(publicImagesDir);
 
