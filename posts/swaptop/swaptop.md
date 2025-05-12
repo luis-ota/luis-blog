@@ -103,7 +103,8 @@ As I said, I wanted it to be a TUI interface like btop, so I searched for libs i
 
 First I found [`tui-rs`](https://docs.rs/tui/latest/tui/), then, [`ratatui`](https://github.com/ratatui/ratatui), so I decided to use Ratatui...  
 Because, you know, Ratatui!  
-![ratatui](https://github.com/ratatui/ratatui/raw/87ae72dbc756067c97f6400d3e2a58eeb383776e/examples/demo2-destroy.gif?raw=true)
+
+![ratatui](ratatui.gif)
 
 So the `frontend` and `backend` tools were there, now time to get hands on.
 

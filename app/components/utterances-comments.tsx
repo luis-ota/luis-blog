@@ -1,16 +1,17 @@
-"use client"; 
+"use client";
+
 import React, { useEffect, useRef } from 'react';
 
 type UtterancesProps = {
   repo: string;
-  issueTerm?: string; 
-  theme?: string;    
-  label?: string;    
+  issueTerm?: string;
+  theme?: string;
+  label?: string;
 };
 
 const UtterancesComments: React.FC<UtterancesProps> = ({
   repo,
-  issueTerm = "pathname", 
+  issueTerm = "pathname",
   theme = "preferred-color-scheme",
   label
 }) => {
@@ -36,15 +37,24 @@ const UtterancesComments: React.FC<UtterancesProps> = ({
     return () => {
       if (container) {
         const iframe = container.querySelector('iframe.utterances-frame');
-        if (iframe) {
-          container.removeChild(iframe);
+        if (iframe && iframe.parentNode === container) {
+          try {
+            container.removeChild(iframe);
+          } catch (e) {
+              console.error("Error removing Utterances iframe during cleanup:", e);
+          }
         }
         if (scriptEl.parentNode === container) {
-          container.removeChild(scriptEl);
+          try {
+              container.removeChild(scriptEl);
+          } catch (e) {
+               console.error("Error removing Utterances script during cleanup:", e);
+          }
         }
       }
     };
-  }, [repo, issueTerm, theme, label]); 
+
+  }, [repo, issueTerm, theme, label]);
 
   return <div ref={commentsContainerRef} id="utterances-comments-container" />;
 };

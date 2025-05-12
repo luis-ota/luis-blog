@@ -179,8 +179,15 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "91d9011380c343cf",
+  "active": "4431bb5687b3d1f2",
   "lastOpenFiles": [
+    "posts/swaptop/ratatui.gif",
+    "posts/swaptop/ratatui.gif.crdownload",
+    "posts/swaptop/ratatui.png",
+    "posts/swaptop/demo2-destroy 1.gif",
+    "posts/swaptop/theme-demo.gif",
+    "posts/swaptop/swaptop.md",
+    "posts/swaptop/demo2-destroy.gif",
     "public/luis-blog/images/swaptop/theme-demo.gif",
     "public/luis-blog/images/swaptop/chart-demo.gif",
     "public/luis-blog/images/swaptop/btop-swap-info.png",
@@ -196,7 +203,6 @@
     "node_modules/hast-util-parse-selector/readme.md",
     "node_modules/hast-util-parse-selector/package.json",
     "node_modules/hast-util-parse-selector/license",
-    "node_modules/hast-util-parse-selector/lib",
     "node_modules/entities/readme.md",
     "node_modules/vfile-location/readme.md",
     "node_modules/hastscript/node_modules/property-information/readme.md",
@@ -211,11 +217,6 @@
     "node_modules/rehype-stringify/readme.md",
     "node_modules/rehype-raw/readme.md",
     "out/images/swaptop/theme-demo.gif",
-    "out/images/swaptop/chart-demo.gif",
-    "out/images/swaptop/btop-swap-info.png",
-    "out/images/linux-swap/swap.jpeg",
-    "out/images/first-post/sonic.gif",
-    "out/docs/sonictaildancandop.gif",
     "node_modules/eslint-module-utils/node_modules/debug/README.md",
     "node_modules/eslint-module-utils/node_modules/debug/CHANGELOG.md",
     "node_modules/tinyglobby/node_modules/picomatch/README.md",
@@ -225,7 +226,6 @@
     "node_modules/sharp/node_modules/semver/README.md",
     "node_modules/fast-glob/node_modules/glob-parent/README.md",
     "node_modules/fast-glob/node_modules/glob-parent/CHANGELOG.md",
-    "node_modules/chokidar/node_modules/glob-parent/README.md",
-    "node_modules/chokidar/node_modules/glob-parent/CHANGELOG.md"
+    "node_modules/chokidar/node_modules/glob-parent/README.md"
   ]
 }
