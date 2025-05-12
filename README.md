@@ -11,3 +11,8 @@ welcome to my personal blog! i will post things that i thing is cool.
 
 each blog post is stored in its own folder with the md post inside and assets.
 
+## build locally
+```sh
+bun run deploy-local
+```
+
