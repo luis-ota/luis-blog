@@ -1,30 +1,31 @@
-import {getPostData, getSortedPostsData} from '@/lib/posts';
+import UtterancesComments from '@/app/components/UtterancesComments.tsx UtterancesComments';
+import { getPostData, getSortedPostsData } from '@/lib/posts';
 import { Metadata } from 'next';
- 
+
 
 export const metadata: Metadata = {
-  title: "luis's blog",
-  description: "luis's blog where you will find tech and other crazy posts",
-  openGraph: {
-    url: "https://luis-ota.github.io/luis-blog/",
-    type: "website",
     title: "luis's blog",
     description: "luis's blog where you will find tech and other crazy posts",
-    images: [
-      {
-        url: "https://luis-ota.github.io/luis-blog/sonic.gif",
-        width: 1860,
-        height: 1036,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: "luis-ota.github.io/luis-blog/", // corresponds to twitter:domain
-    title: "luis's blog",
-    description: "luis's blog where you will find tech and other crazy posts",
-    images: ["https://luis-ota.github.io/luis-blog/sonic.gif"],
-  },
+    openGraph: {
+        url: "https://luis-ota.github.io/luis-blog/",
+        type: "website",
+        title: "luis's blog",
+        description: "luis's blog where you will find tech and other crazy posts",
+        images: [
+            {
+                url: "https://luis-ota.github.io/luis-blog/sonic.gif",
+                width: 1860,
+                height: 1036,
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        site: "luis-ota.github.io/luis-blog/", // corresponds to twitter:domain
+        title: "luis's blog",
+        description: "luis's blog where you will find tech and other crazy posts",
+        images: ["https://luis-ota.github.io/luis-blog/sonic.gif"],
+    },
 };
 
 export function generateStaticParams() {
@@ -62,11 +63,11 @@ export default async function PostPage({ params }: Props) {
     }
 
     return (
-        <main className="max-w-3xl mx-auto p-6">
-            <div className="markdown-body mb-6 p-4 text-center rounded">
+        <main className="max-w-3xl mx-auto p-4 flex flex-col justify-center gap-4">
+            <div className="markdown-body p-4 text-center rounded">
                 <h1 className="text-4xl font-bold mb-2 capitalize">{postData.title}</h1>
                 <p className="text-sm">
-                Published on {new Date(postData.date).toLocaleDateString("pt-BR")}
+                    Published on {new Date(postData.date).toLocaleDateString("pt-BR")}
                 </p>
             </div>
 
@@ -74,6 +75,13 @@ export default async function PostPage({ params }: Props) {
                 className="markdown-body p-6 rounded"
                 dangerouslySetInnerHTML={{ __html: postData.contentHtml || "" }}
             />
+            <div className="markdown-body p-6 rounded">
+                <UtterancesComments
+                    repo="luis-ota/luis-blog"
+                    issueTerm="pathname"
+                    theme="preferred-color-scheme"
+                />
+            </div>
         </main>
     );
 }
