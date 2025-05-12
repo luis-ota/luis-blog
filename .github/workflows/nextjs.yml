@@ -51,7 +51,7 @@ jobs:
           cp -r out/luis-blog/images out/images
           
           cp -r out/docs out/luis-blog/docs
-          cp -r out/index.txt out/luis-blog.txt"
+          cp -r out/index.txt out/luis-blog.txt
 
       
       - name: Upload artifact for Pages
