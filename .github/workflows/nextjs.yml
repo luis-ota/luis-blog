@@ -46,9 +46,7 @@ jobs:
           mkdir -p out/luis-blog
           cp -r out/_next out/luis-blog/_next
           
-          mkdir -p out/images
-          cp -r out/images out/luis-blog
-          cp -r out/luis-blog/images out
+         
           
           cp -r out/docs out/luis-blog/docs
           cp -r out/index.txt out/luis-blog.txt
