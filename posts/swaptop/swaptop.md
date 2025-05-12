@@ -6,6 +6,8 @@ img: /luis-blog/images/swaptop/chart-demo.gif
 ---
 You can find it at: [https://github.com/luis-ota/swaptop/](https://github.com/luis-ota/swaptop/)
 
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/42qNWdLKCI41S4uzfamhFM?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
 ## Intro
 
 Recently I started studying [Rust](https://rustup.rs/), Rust is a very cool language to understand complex concepts about computers and SO. It is considered a low-level language but it's actually very easy to learn and apply. I started the [JetBrains Rust course via RustRover](https://plugins.jetbrains.com/plugin/16631-learn-rust/about) and learned a lot about how the language works and its syntax.
