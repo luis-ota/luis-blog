@@ -95,7 +95,7 @@ So the meminfo step was ok.
 
 As I said, I wanted it to be a TUI interface like btop, so I searched for libs in Rust to do it.
 
-First I found [`tu-rs`](https://docs.rs/tui/latest/tui/), then, [ratatui](https://github.com/ratatui/ratatui), so I decided to use Ratatui...  
+First I found [`tui-rs`](https://docs.rs/tui/latest/tui/), then, [`ratatui`](https://github.com/ratatui/ratatui), so I decided to use Ratatui...  
 Because, you know, Ratatui!  
 ![ratatui](https://github.com/ratatui/ratatui/raw/87ae72dbc756067c97f6400d3e2a58eeb383776e/examples/demo2-destroy.gif?raw=true)
 
@@ -183,10 +183,10 @@ I added some features:
 Then some themes:  
 ![theme-demo](theme-demo.gif)
 
-_voilà_! Swaptop
+_voilà_! Swaptop!!!!
 
 ## Conclusion
 
 This project was a lot of fun to work and learn with. I learned some new concepts about Linux and Rust language. And I must say it, I fell in love with Rust. What a beautiful and great language it is. I will continue to study and create new projects with it.
 
-Hope you enjoy.
+Hope you enjoy reading this post!
