@@ -189,4 +189,4 @@ _voilà_! Swaptop!!!!
 
 This project was a lot of fun to work and learn with. I learned some new concepts about Linux and Rust language. And I must say it, I fell in love with Rust. What a beautiful and great language it is. I will continue to study and create new projects with it.
 
-Hope you enjoy reading this post!
+Hope you enjoyed reading this post!
