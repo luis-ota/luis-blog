@@ -42,9 +42,8 @@ jobs:
         run: bun run build
       
       - name: Post-process exported files for basePath
-        run: |
-          mkdir -p out/luis-blog
-          cp -r out/_next out/luis-blog/_next
+        run: bun run postbuild
+
       
       - name: Upload artifact for Pages
         uses: actions/upload-pages-artifact@v3
