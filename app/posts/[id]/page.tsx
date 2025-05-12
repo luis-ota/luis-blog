@@ -1,4 +1,4 @@
-import UtterancesComments from '@/app/components/UtterancesComments.tsx UtterancesComments';
+import UtterancesComments from '@/app/components/utterances-comments';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import { Metadata } from 'next';
 
@@ -63,7 +63,7 @@ export default async function PostPage({ params }: Props) {
     }
 
     return (
-        <main className="max-w-3xl mx-auto p-4 flex flex-col justify-center gap-4">
+        <main className="max-w-4xl mx-auto p-4 flex flex-col justify-center gap-4">
             <div className="markdown-body p-4 text-center rounded">
                 <h1 className="text-4xl font-bold mb-2 capitalize">{postData.title}</h1>
                 <p className="text-sm">

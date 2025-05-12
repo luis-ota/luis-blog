@@ -28,6 +28,18 @@ header {
   background: var(--cute-bg);
 }
 
+.markdown-body img {
+  display: block; 
+  margin-left: auto; 
+  margin-right: auto; 
+
+  margin-top: 1.5rem; 
+  margin-bottom: 1.5rem;
+
+  max-width: 100%;
+  height: auto;
+}
+
 .backgroundImage {
   background-image: url("/luis-blog/docs/bg_baleia.png");
   background-position: center;
