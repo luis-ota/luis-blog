@@ -73,7 +73,7 @@ I love TUI tools in the Linux terminal. One of my favorites is [btop](https://gi
 ![btop-swap-info](btop-swap-info.png)
 
 So my goal was: make a btop-like tool, but for swap  
-......... ==SWAPTOP==
+......... SWAPTOP!
 
 ## The Start
 
@@ -81,7 +81,7 @@ First I learned how Linux logs the meminfo: `/proc`
 
 As in the docs: [https://docs.kernel.org/filesystems/proc.html](https://docs.kernel.org/filesystems/proc.html#:~:text=The%20proc%20file%20system%20acts%20as%20an%20interface%20to%20internal%20data%20structures%20in%20the%20kernel.%20It%20can%20be%20used%20to%20obtain%20information%20about%20the%20system%20and%20to%20change%20certain%20kernel%20parameters%20at%20runtime%20\(sysctl\).)
 
-```txt
+```
 The proc file system acts as an interface to internal data structures in the kernel. It can be used to obtain information about the system and to change certain kernel parameters at runtime (sysctl).
 ```
 
