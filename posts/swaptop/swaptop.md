@@ -149,7 +149,7 @@ And some others for features like aggregating and changing the unit from KB, MB,
 
 ## Interface
 
-I started by getting a Ratatui demo and went from there.
+I started by using a Ratatui demo and went from there.
 
 First I created a function to create the lines for the processes list and render it:
 
