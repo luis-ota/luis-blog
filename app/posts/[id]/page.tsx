@@ -1,6 +1,7 @@
 import UtterancesComments from '@/app/components/utterances-comments';
 import { getPostData, getSortedPostsData } from '@/lib/posts';
 import { Metadata } from 'next';
+import { Eye } from 'lucide-react';
 
 
 export const metadata: Metadata = {
@@ -62,13 +63,25 @@ export default async function PostPage({ params }: Props) {
         metadata.twitter.images[0] = postData.img?.startsWith("http") ? postData.img : `https://luis-ota.github.io${postData.img}` || "";
     }
 
+    const postCanonicalUrl = `https://luis-ota.github.io/luis-blog/posts/${postData.id}`;
+    const encodedUrl = encodeURIComponent(postCanonicalUrl);
+    const hitsBadgeUrl = `https://hitscounter.dev/api/hit?url=${encodedUrl}&color=%23cfe2ff`;
+
     return (
         <main className="max-w-4xl mx-auto p-4 flex flex-col justify-center gap-4">
             <div className="markdown-body p-4 text-center rounded">
                 <h1 className="text-4xl font-bold mb-2 capitalize">{postData.title}</h1>
-                <p className="text-sm">
-                    Published on {new Date(postData.date).toLocaleDateString("pt-BR")}
-                </p>
+                
+                <div className='flex flex-col items-center '>
+                    <p className="text-sm">
+                        Published on {new Date(postData.date).toLocaleDateString("pt-BR")}
+                    </p>
+                    <div className="flex gap-2 items-center h-1"> 
+                        <Eye className="text-gray-500" />
+                        <img src={hitsBadgeUrl} alt="Post Views" />
+                    </div>
+                </div>
+                
             </div>
 
             <article
