@@ -11,7 +11,7 @@ Listen to `Duvet - bôa` while reading!
 
 ## Intro
 
-Recently I started studying [Rust](https://rustup.rs/), Rust is a very cool language to understand complex concepts about computers and SO. It is considered a low-level language but it's actually very easy to learn and apply. I started the [JetBrains Rust course via RustRover](https://plugins.jetbrains.com/plugin/16631-learn-rust/about) and learned a lot about how the language works and its syntax.
+Recently I started studying [Rust](https://rustup.rs/). It is a very cool language to understand complex concepts about computers and OS. It is considered a low-level language but it's actually very easy to learn and apply. I started the [JetBrains Rust course via RustRover](https://plugins.jetbrains.com/plugin/16631-learn-rust/about) and learned a lot about how the language works and its syntax.
 
 ## How I study and learn a new tech
 
@@ -85,10 +85,9 @@ First I learned how Linux logs the meminfo: `/proc`
 As in the docs: [https://docs.kernel.org/filesystems/proc.html](https://docs.kernel.org/filesystems/proc.html#:~:text=The%20proc%20file%20system%20acts%20as%20an%20interface%20to%20internal%20data%20structures%20in%20the%20kernel.%20It%20can%20be%20used%20to%20obtain%20information%20about%20the%20system%20and%20to%20change%20certain%20kernel%20parameters%20at%20runtime%20\(sysctl\).)
 
 ```
-The proc file system acts as an interface to internal 
-data structures in the kernel. It can be used to obtain
-information about the system and to change certain kernel
-parameters at runtime (sysctl).
+The proc file system acts as an interface to internal data structures in 
+the kernel. It can be used to obtain information about the system and to
+change certain kernel parameters at runtime (sysctl).
 ```
 
 So to get the info, I needed to learn the proc filesystem structure and read it, cluster it, etc. Yes, too complicated, or... not.
