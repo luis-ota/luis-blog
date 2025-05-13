@@ -7,9 +7,9 @@
     "dev": "bun run prebuild && next dev",
     "act": "act -s ACTIONS_RUNTIME_TOKEN=dummy-token --artifact-server-path /tmp/artifacts",
     "build": "next build",
-    "start": "bun run postbuild && bunx serve@latest out",
+    "start": "bun run postbuild-local && bunx serve@latest out",
     "prebuild": "tsx lib/copy-images.ts",
-    "postbuild": "mkdir -p out/luis-blog/ && cp -r out/index.txt out/luis-blog.txt && cp -r out/_next out/luis-blog && cp -r out/images out/luis-blog && cp -r out/docs out/luis-blog",
+    "postbuild-local": "mkdir -p out/luis-blog/ && cp -r out/index.txt out/luis-blog.txt && cp -r out/_next out/luis-blog && cp -r out/images out/luis-blog && cp -r out/docs out/luis-blog",
     "deploy-local": "bun install && bun run prebuild && bun run build && bun run start"
 
   },
