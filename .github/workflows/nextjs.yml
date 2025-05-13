@@ -42,7 +42,8 @@ jobs:
         run: bun run build
       
       - name: Post-process exported files for basePath
-        run: bun run postbuild
+        run: |
+          cp -r out/index.txt out/luis-blog.txt
 
       
       - name: Upload artifact for Pages
