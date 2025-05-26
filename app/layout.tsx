@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import Link from "next/link";
-import { Linkedin, Github, Home} from 'lucide-react';
+import { Linkedin, Github, Home, Podcast} from 'lucide-react';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -59,6 +59,7 @@ export default function RootLayout({
             <Link href="/" className="text-xl font-bold"><Home/></Link>
             <Link href="https://github.com/luis-ota/luis-blog" className="text-xl font-bold"><Github /></Link>
             <Link href="https://www.linkedin.com/in/luis-ota/" className="text-xl font-bold"><Linkedin /></Link>
+            <Link href="https://open.spotify.com/show/6n18XZFHfd6p1PUcT8VhUC?si=wZueocvvRmqp0gNoZe-t7A" className="text-xl font-bold"><Podcast /></Link>
         </nav>
     </header>
         {children}
