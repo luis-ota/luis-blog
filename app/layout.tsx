@@ -51,10 +51,10 @@ export default function RootLayout({
       >
       <header className="flex justify-between items-center p-4 bg-blue-400 dark:bg-gray-800">
         <Link href="/">
-          <h1 className="text-3xl font-bold text-black dark:text-white">
-           {"luis's personal blog"}
+          <h1 className="text-1xl font-bold text-black dark:text-white md:text-3xl">
+            {"luis's personal blog"}
           </h1>
-        </Link>
+      </Link>
         <nav className="flex justify-between items-center p-4 gap-4">
             <Link href="/" className="text-xl font-bold"><Home/></Link>
             <Link href="https://github.com/luis-ota/luis-blog" className="text-xl font-bold"><Github /></Link>
