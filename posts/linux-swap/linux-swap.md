@@ -2,7 +2,7 @@
 title: How to change linux swap size
 date: 2025-02-19
 description: how to increase linux swap and more about it
-img: /luis-blog/images/linux-swap/swap.jpeg
+img: /images/linux-swap/swap.jpeg
 ---
 
 turn off the swap

@@ -2,7 +2,7 @@
   "name": "luis-blog",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://luis-ota.github.io/luis-blog",
+  "homepage": "https://blog.wired.rs",
   "scripts": {
     "dev": "bun run prebuild && next dev",
     "act": "act -s ACTIONS_RUNTIME_TOKEN=dummy-token --artifact-server-path /tmp/artifacts",

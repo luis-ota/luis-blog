@@ -2,7 +2,7 @@
 title: Swaptop, monitor your swap usage in real time
 date: 2025-05-12
 description: how i made a tui tool to monitor swap using rust
-img: /luis-blog/images/swaptop/chart-demo.gif
+img: /images/swaptop/chart-demo.gif
 ---
 You can find it at: [https://github.com/luis-ota/swaptop/](https://github.com/luis-ota/swaptop/)
 

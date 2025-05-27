@@ -28,7 +28,6 @@ export function getSortedPostsData(): Post[] {
         const fullPath = path.join(folderPath, markdownFile);
         const fileContents = fs.readFileSync(fullPath, 'utf8');
         const matterResult = matter(fileContents);
-        // console.log(matterResult.data)
         return {
             id: folder,
             ...matterResult.data,
@@ -42,7 +41,7 @@ function remarkImagePathTransformer(postId: string) {
     return () => (tree: Root) => {
       visit(tree as unknown as import('unist').Node, 'image', (node: Image) => {
         if (node.url && !node.url.startsWith('http') && !node.url.startsWith('/')) {
-          node.url = `/luis-blog/images/${postId}/${node.url}`; 
+          node.url = `/images/${postId}/${node.url}`; 
         }
       });
     };

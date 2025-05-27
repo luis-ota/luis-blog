@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "posts/swaptop/swaptop.md",
+                "file": "posts/linux-swap/linux-swap.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "swaptop"
+              "title": "linux-swap"
             }
           }
         ]
@@ -181,6 +181,12 @@
   },
   "active": "91d9011380c343cf",
   "lastOpenFiles": [
+    "posts/first-post/fisrt-post.md",
+    "posts/first-post/sonic.gif",
+    "posts/how-to-targz/how-to-targz.md",
+    "posts/linux-swap/linux-swap.md",
+    "posts/swaptop/ratatui.gif",
+    "posts/swaptop/swaptop.md",
     "README.md",
     "public/images/swaptop/theme-demo.gif",
     "public/images/swaptop/chart-demo.gif",
@@ -188,21 +194,15 @@
     "public/images/swaptop/btop-swap-info.png",
     "public/images/swaptop",
     "posts/swaptop/theme-demo.gif",
-    "posts/swaptop/swaptop.md",
-    "posts/swaptop/ratatui.gif",
     "posts/swaptop/chart-demo.gif",
     "posts/swaptop/btop-swap-info.png",
     "posts/swaptop",
     "app/components/utterances-comments.tsx",
     "app/components",
-    "posts/first-post/fisrt-post.md",
-    "posts/first-post/sonic.gif",
     "posts/linux-swap/swap.jpeg",
-    "posts/linux-swap/linux-swap.md",
     "app/page.tsx~",
     "public/images/linux-swap",
     "package.json~",
-    "posts/how-to-targz/how-to-targz.md",
     "posts/linux-swap",
     "posts/how-to-targz"
   ]

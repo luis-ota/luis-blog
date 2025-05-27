@@ -41,7 +41,7 @@ header {
 }
 
 .backgroundImage {
-  background-image: url("/luis-blog/docs/bg_baleia.png");
+  background-image: url("/docs/bg_baleia.png");
   background-position: center;
   height: 100%;
 }
