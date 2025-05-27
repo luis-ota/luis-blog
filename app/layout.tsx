@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import Link from "next/link";
-import { Linkedin, Github, Home} from 'lucide-react';
+import { Linkedin, Github, Podcast, Twitch} from 'lucide-react';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -51,14 +51,15 @@ export default function RootLayout({
       >
       <header className="flex justify-between items-center p-4 bg-blue-400 dark:bg-gray-800">
         <Link href="/">
-          <h1 className="text-3xl font-bold text-black dark:text-white">
-           {"luis's personal blog"}
+          <h1 className="text-1xl font-bold text-black dark:text-white md:text-3xl">
+            {"luis's personal blog"}
           </h1>
-        </Link>
+      </Link>
         <nav className="flex justify-between items-center p-4 gap-4">
-            <Link href="/" className="text-xl font-bold"><Home/></Link>
             <Link href="https://github.com/luis-ota/luis-blog" className="text-xl font-bold"><Github /></Link>
             <Link href="https://www.linkedin.com/in/luis-ota/" className="text-xl font-bold"><Linkedin /></Link>
+            <Link href="https://www.twitch.tv/luisofthewired" className="text-xl font-bold"><Twitch /></Link>
+            <Link href="https://open.spotify.com/show/6n18XZFHfd6p1PUcT8VhUC?si=wZueocvvRmqp0gNoZe-t7A" className="text-xl font-bold"><Podcast /></Link>
         </nav>
     </header>
         {children}
