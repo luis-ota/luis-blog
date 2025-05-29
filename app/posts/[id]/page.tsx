@@ -3,6 +3,7 @@ import { getPostData, getSortedPostsData } from "@/lib/posts";
 import { Metadata } from "next";
 import { Eye } from "lucide-react";
 import Image from "next/image";
+import LanguageSwitcher from "@/app/components/lang-switch";
 
 export const metadata: Metadata = {
   title: "luis's blog",
@@ -78,16 +79,6 @@ export default async function PostPage({ params }: Props) {
   const postCanonicalUrl = `https://luis-ota.github.io/luis-blog/posts/${postData.id}`;
   const encodedUrl = encodeURIComponent(postCanonicalUrl);
   const hitsBadgeUrl = `https://hitscounter.dev/api/hit?url=${encodedUrl}&color=%23cfe2ff`;
-  const languages = [
-    { code: "pt", label: "ptbr" },
-    { code: "es", label: "espanol" },
-    { code: "de", label: "deutsch" },
-    { code: "zh-CN", label: "中文" },
-    { code: "ja", label: "日本語" },
-    { code: "ru", label: "russian" },
-    { code: "th", label: "thai" },
-    { code: "ar", label: "arabic" },
-  ];
 
   return (
     <main className="max-w-4xl mx-auto p-4 flex flex-col justify-center gap-2">
@@ -105,17 +96,7 @@ export default async function PostPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="flex justify-between flex-row gap-2 items-center flex-wrap">
-        {languages.map((lang) => (
-          <a
-            key={lang.code}
-            href={`https://translate.google.com/website?sl=en&tl=${lang.code}&u=${encodedUrl}`}
-            className="flex items-center markdown-body gap-2 px-4 py-2 rounded transition"
-          >
-            {lang.label}
-          </a>
-        ))}
-      </div>
+      <LanguageSwitcher encodedUrl={encodedUrl} />
 
       <article
         className="markdown-body p-6 rounded"
