@@ -76,8 +76,10 @@ export default async function PostPage({ params }: Props) {
       : `https://luis-ota.github.io${postData.img}` || "";
   }
 
-  const postCanonicalUrl = `https://blog.wired.rs/posts/${postData.id}`;
+  const postCanonicalUrl = `https://luis-ota.github.io/luis-blog/posts/${postData.id}`;
+  const postCanonicalUrlWired = `https://blog.wired.rs/posts/${postData.id}`;
   const encodedUrl = encodeURIComponent(postCanonicalUrl);
+  const encodedUrlWired = encodeURIComponent(postCanonicalUrlWired);
   const hitsBadgeUrl = `https://hitscounter.dev/api/hit?url=${encodedUrl}&color=%23cfe2ff`;
 
   return (
@@ -96,7 +98,7 @@ export default async function PostPage({ params }: Props) {
         </div>
       </div>
 
-      <LanguageSwitcher encodedUrl={encodedUrl} />
+      <LanguageSwitcher encodedUrl={encodedUrlWired} />
 
       <article
         className="markdown-body p-6 rounded"

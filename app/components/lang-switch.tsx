@@ -10,6 +10,7 @@ const languages: Language[] = [
   { code: "zh-CN", label: "中文" },
   { code: "ja", label: "日本語" },
   { code: "ru", label: "russian" },
+  { code: "th", label: "thai" },
 ];
 
 type Props = {
