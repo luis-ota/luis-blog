@@ -6,13 +6,10 @@ type Language = { code: string; label: string };
 
 const languages: Language[] = [
   { code: "pt", label: "ptbr" },
-  { code: "es", label: "espanol" },
   { code: "de", label: "deutsch" },
   { code: "zh-CN", label: "中文" },
   { code: "ja", label: "日本語" },
   { code: "ru", label: "russian" },
-  { code: "th", label: "thai" },
-  { code: "ar", label: "arabic" },
 ];
 
 type Props = {
