@@ -109,9 +109,7 @@ export default async function PostPage({ params }: Props) {
         {languages.map((lang) => (
           <a
             key={lang.code}
-            href={`https://translate.google.com/website?sl=en&tl=${lang.code}&u=${encodeURIComponent(
-              encodedUrl,
-            )}`}
+            href={`https://translate.google.com/website?sl=en&tl=${lang.code}&u=${encodedUrl}`}
             className="flex items-center markdown-body gap-2 px-4 py-2 rounded transition"
           >
             {lang.label}
