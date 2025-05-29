@@ -27,8 +27,9 @@ export default function LanguageSwitcher({ encodedUrl }: Props) {
     const referrerIsGoogleTranslate = document.referrer.includes(
       "translate.google.com",
     );
+    const urlHasTranslate = window.location.href.includes("translate.goog");
 
-    if (inIframe || referrerIsGoogleTranslate) {
+    if (inIframe || referrerIsGoogleTranslate || urlHasTranslate) {
       setHide(true);
     }
   }, []);
