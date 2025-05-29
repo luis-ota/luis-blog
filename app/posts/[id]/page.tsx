@@ -1,7 +1,8 @@
 import UtterancesComments from "@/app/components/utterances-comments";
 import { getPostData, getSortedPostsData } from "@/lib/posts";
 import { Metadata } from "next";
-import { Eye, Languages } from "lucide-react";
+import { Eye } from "lucide-react";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "luis's blog",
@@ -99,7 +100,7 @@ export default async function PostPage({ params }: Props) {
           </p>
           <div className="flex gap-2 items-center h-1">
             <Eye className="text-gray-500" />
-            <img src={hitsBadgeUrl} alt="Post Views" />
+            <Image src={hitsBadgeUrl} alt="Post Views" />
           </div>
         </div>
       </div>
