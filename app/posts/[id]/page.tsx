@@ -79,7 +79,7 @@ export default async function PostPage({ params }: Props) {
   const hitsBadgeUrl = `https://hitscounter.dev/api/hit?url=${encodedUrl}&color=%23cfe2ff`;
 
   return (
-    <main className="max-w-4xl mx-auto p-4 flex flex-col justify-center gap-4">
+    <main className="max-w-4xl mx-auto p-4 flex flex-col justify-center gap-2">
       <div className="markdown-body p-4 text-center rounded">
         <h1 className="text-4xl font-bold mb-2 capitalize">{postData.title}</h1>
 
@@ -93,13 +93,16 @@ export default async function PostPage({ params }: Props) {
           </div>
         </div>
       </div>
-      <a
-        href={`https://translate.google.com/website?sl=en&tl=pt&u=${encodeURIComponent(encodedUrl)}`}
-        className="flex flex-row markdown-body w-40 gap-2 px-4 py-2 rounded transition"
-      >
-        <Languages />
-        Traduzir
-      </a>
+
+      <div className="flex justify-start">
+        <a
+          href={`https://translate.google.com/website?sl=en&tl=pt&u=${encodeURIComponent(encodedUrl)}`}
+          className="flex flex-row markdown-body gap-2 px-4 py-2 rounded transition"
+        >
+          <Languages />
+          ptbr
+        </a>
+      </div>
 
       <article
         className="markdown-body p-6 rounded"
