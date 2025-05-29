@@ -76,7 +76,7 @@ export default async function PostPage({ params }: Props) {
       : `https://luis-ota.github.io${postData.img}` || "";
   }
 
-  const postCanonicalUrl = `https://luis-ota.github.io/luis-blog/posts/${postData.id}`;
+  const postCanonicalUrl = `https://blog.wired.rs/posts/${postData.id}`;
   const encodedUrl = encodeURIComponent(postCanonicalUrl);
   const hitsBadgeUrl = `https://hitscounter.dev/api/hit?url=${encodedUrl}&color=%23cfe2ff`;
 
