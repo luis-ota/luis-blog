@@ -41,7 +41,7 @@ export default function LanguageSwitcher({ encodedUrl }: Props) {
           key={lang.code}
           href={`https://translate.google.com/website?sl=en&tl=${lang.code}&u=${encodedUrl}`}
           rel="noopener noreferrer"
-          className="flex items-center markdown-body gap-2 px-4 py-2 rounded transition"
+          className="flex-1 text-center flex items-center justify-center markdown-body gap-2 px-4 py-2 rounded transition min-w-[120px]"
         >
           {lang.label}
         </a>
