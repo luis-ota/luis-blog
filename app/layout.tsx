@@ -74,12 +74,6 @@ export default function RootLayout({
             >
               <Twitch />
             </Link>
-            <Link
-              href="https://open.spotify.com/show/6n18XZFHfd6p1PUcT8VhUC?si=wZueocvvRmqp0gNoZe-t7A"
-              className="text-xl font-bold"
-            >
-              <Podcast />
-            </Link>
           </nav>
         </header>
         {children}
