@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import Link from "next/link";
-import { Linkedin, Github, Twitch } from "lucide-react";
+import { Briefcase, Github, Linkedin, Twitch } from "lucide-react";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -56,6 +56,15 @@ export default function RootLayout({
             </h1>
           </Link>
           <nav className="flex justify-between items-center p-4 gap-4">
+            <Link
+              href="https://portfolio.wired.rs/"
+              aria-label="portfolio"
+              title="portfolio"
+              className="text-xl font-bold flex items-center gap-2"
+            >
+              <Briefcase />
+              <span className="hidden md:inline text-base">portfolio</span>
+            </Link>
             <Link
               href="https://github.com/luis-ota/luis-blog"
               className="text-xl font-bold"
