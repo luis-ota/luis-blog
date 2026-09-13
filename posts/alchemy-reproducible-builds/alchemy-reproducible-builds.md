@@ -5,41 +5,45 @@ description: alchemists wrote in symbols and lost their recipes. chemistry won b
 img: /images/alchemy-reproducible-builds/cover.jpg
 ---
 
-Alchemists were not stupid. They invented apparatus, discovered elements, and recorded real reactions. What they lacked was a **format for reproducibility**: much of their knowledge was written in deliberate riddles, in symbols only insiders could read, protecting secrets from competitors and from the church.
+lab notebook: reproducibility, from alchemy to ci
 
 ![German Pharmaceutical Museum at Heidelberg Castle](inline.jpg)
 
-The recipe for a thing was tied to a person. When the person died, the knowledge often died with them.
+excerpts from a notebook that spans four centuries. margins are mine, added later.
 
-Chemistry, as it formed in the 18th century, made a different bet: publish the method, standardize the notation, name the substances. Lavoisier's *Traité élémentaire de chimie* was, in a sense, a public specification. Anyone with the equipment could reproduce the result. The field accelerated because failure could now be *debugged*.
+---
 
-## "works on my machine" is an alchemical sentence
+**entry, 1618.** the recipe for the philosopher's stone, as recorded by a student: "dissolve the red dragon in the green lion, then let the black crow fly." the teacher guards the meaning. the student writes symbols, not steps.
 
-A build that only works on the author's machine is a riddle. The environment is part of the recipe, and if it isn't written down, nobody can reproduce the result.
+*margin:* a method that only one person can decode is not a method. it is a secret, and it will die with its owner.
 
-Everything we call "reproducible builds" is the chemistry bet, applied to software:
+---
 
-- a **lockfile** pins the exact versions of the ingredients,
-- a **container** records the apparatus: OS, libraries, tools,
-- **CI** is a second lab that runs the same recipe from scratch, and complains if it gets a different result,
-- **checksums and signatures** hook the output to a specific input, so you can prove the artifact came from that recipe.
+**entry, 1660s.** a famous laboratory burns. years of process knowledge vanish with the notebooks. the apparatus survives; the *sequence* does not. competitors cannot verify anything, allies cannot help, and the failure is not reproducible either.
 
-When those exist, a failure is an experiment you can rerun. When they don't, every bug hunt starts with an argument about whose machine is "correct".
+*margin:* data without a method cannot be debugged. this is the "works on my machine" of the seventeenth century.
 
-## secrecy is a real trade-off
+---
 
-There is a reason alchemists hid their work, and there are reasons we don't open-source everything. But the cost is the same as it was then: knowledge that only exists in one head is one accident away from being lost.
+**entry, 1789.** lavoisier publishes an elementary treatise of chemistry: named substances, a standard notation, described procedures. "nothing is lost, nothing is created, everything is transformed."
 
-I've made the chemistry choice for everything I can: environments in files, decisions in the repo, deployments as code. What stays private is credentials and customer data, not the method. The method is what lets anyone, including future me, reproduce the outcome.
+*margin:* the notable part is not a discovery. it is a *format*. with named ingredients and a shared notation, another laboratory can reproduce the result and find the error when it fails. the field accelerates because failure is now informative.
 
-## what I took from this
+---
 
-- A result without a method is an anecdote.
-- Environments are part of the recipe. Pin them or you're guessing.
-- Standard notation is a technology. YAML, Dockerfiles and lockfiles are the modern version.
-- If only one person can make it work, it isn't an engineering artifact yet.
+**entry, today. build.** `lockfile` pins the exact versions of every ingredient. the container records the apparatus: os, libraries, tools. ci is a foreign laboratory that runs the same recipe from scratch and complains if it gets a different result. checksums bind an artifact to an input.
 
-The philosophers' stone was never real. The reproducible method was, and it changed the world anyway.
+*margin:* we chose the chemistry bet. publish the method, pin the environment, make the build repeatable. what stays private is credentials and customer data, not the *how*.
+
+---
+
+**entry, also today. the alchemist's objection.** "our setup is too messy to document." that was also true in 1660, and the answer has not changed: start with one recipe. a dockerfile. a make target. a readme that a new machine could follow. the first reproducible experiment is the hardest and the rest get easier.
+
+*margin:* a result without a method is an anecdote. lockfiles, containers and ci are the modern standard notation, and they exist because someone lost a laboratory and decided never again.
+
+---
+
+*the philosophers' stone was never real. the method was, and it changed everything anyway.*
 
 ## image credits
 

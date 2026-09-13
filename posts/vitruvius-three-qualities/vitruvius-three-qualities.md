@@ -5,39 +5,45 @@ description: Vitruvius wrote down what a building needs. software keeps rediscov
 img: /images/vitruvius-three-qualities/cover.jpg
 ---
 
-Around 25 BC, a Roman architect named Vitruvius wrote *De Architectura*, and in it he defined what a building must be:
+firmitas, utilitas, venustas
 
 ![Roman Statue, marble sculpture. Location](inline.jpg)
 
-> *firmitas, utilitas, venustas* - durability, utility, beauty.
+three movements on a sentence older than software.
 
-It survives. We still quote it, mostly about buildings. But I keep coming back to it as a definition of software, because it names the three failure modes I recognize in every codebase.
+---
 
-## firmitas - it has to hold
+## i. it must hold
 
-Durability is not "it never breaks". It's that the thing resists time: foundations, materials, load paths. In software: error handling, tests that exercise failure, migrations that survive real data, a database that doesn't lose a transaction because a process died mid-write.
+vitruvius wrote, around 25 bc, that a building must be durable. not beautiful first, not useful first. durable. the foundation is the least visible and the least negotiable part of the work.
 
-The Roman trick in concrete was pozzolana, a volcanic ash that made harbor structures hold under water for millennia. The software equivalent is boring infrastructure: idempotency, backups you restore, health checks, no single points of failure. Not clever, just durable.
+the roman trick was pozzolana, a volcanic ash that let harbor concrete cure under water and last for two thousand years. nobody at the time could have known about the chemistry. they knew the material held, and they built with it.
 
-## utilitas - it has to be used well
+software has its own pozzolana: idempotent operations, backups that get restored, migrations that have been run against real data, health checks that fail loudly. none of it is visible in a demo. all of it decides whether the thing still exists next year.
 
-Utility is not a feature list. It's the fit between what a person is doing and what the structure allows. A doorway you can carry things through. A dashboard where the number you need is visible at a glance.
+the question is never "does it work". it is "does it still work when something it depends on has already failed".
 
-This is where I spend more time now than in code style. The question is never "can the user do X", it's "what does the user actually do, in what order, under what pressure". Utility is measured in the world, not in the repository.
+## ii. it must be used
 
-## venustas - it has to be worth looking at
+the second quality is utility, and it does not live in a feature list. a doorway is useful if a person carrying something can pass through it. a stair is useful if a tired person can climb it without thinking about the stair.
 
-Beauty was not decoration to the ancients. Proportion was a claim about correctness - a building that looked wrong usually *was* wrong somewhere in its geometry. The eye catches misalignment before the instrument does.
+this is where i spend most of my design time now: not on what the system can do, but on what the person is actually doing when they meet it. in what order, under what pressure, with what in their other hand.
 
-I think about this every time I align a grid or tune letter-spacing on a page, and every time I name a function badly. A design that feels calm usually means someone made a hundred small decisions consistently. Beauty is the visible residue of rigor.
+features are countable. utility is not, which is why it gets skipped. the test is concrete: watch someone use it, and count the moments they hesitate.
 
-## what I took from this
+## iii. it must be worth looking at
 
-- The three qualities are independent. A durable, ugly API is still a failure; a beautiful, fragile app is still a liability.
-- Vitruvius also wrote about the architect as a generalist: a bit of law, medicine, astronomy, history. That's the full-stack argument from antiquity.
-- When I can't decide whether a change is good, I ask which of the three it serves. If it serves none, it's churn.
+beauty was not decoration to the ancients. proportion was a claim about correctness. a building whose columns are misaligned usually has a structural error somewhere; the eye finds it before the instruments do.
 
-Two thousand years later, the checklist still closes the meeting.
+the same is true of an interface. a row that is two pixels off, a heading that is a weight too heavy, a spacing rhythm that breaks in one place: each is small, and together they are the difference between a page that feels inevitable and one that feels assembled.
+
+venustas is the visible residue of rigor. it cannot be added at the end, because it is the accumulated evidence of a hundred consistent decisions.
+
+---
+
+the three are independent, and that is the whole point. a durable ugly system is a failure of taste. a beautiful fragile one is a failure of engineering. a useful boring one is fine, and rare, and underrated.
+
+two thousand years later, the checklist still closes the meeting.
 
 ## image credits
 

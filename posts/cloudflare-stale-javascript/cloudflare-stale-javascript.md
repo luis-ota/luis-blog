@@ -7,53 +7,66 @@ img: /images/cloudflare-stale-javascript/cover.jpg
 
 You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
 
-Listen to `Daft Punk - Around the World` while reading!
+Listen to `FrankJavCee - SimpsonWave1995` while reading!
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1q4poN5PaGvY1RbEC5gl5s?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0qqRNnwh86N1XBV94GVgQN?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
-The deploy finished, the HTML was clearly the new one (new markup, new assets), and yet the page behaved like the old version. Buttons missing, enhancements dead. A hard refresh fixed it locally, which is always the worst kind of "fixed".
+a debugging session: why is my own site serving 2024 to me?
 
-![My Desire screenshot from '99](inline.jpg)
+![cmd.exe](inline.jpg)
 
-Then I looked at the headers:
+a transcript, lightly edited, from a tuesday.
 
-```text
-$ curl -sI https://portfolio.wired.rs/script.js
-cache-control: public, max-age=14400
-cf-cache-status: HIT
-age: 1656
-```
+---
 
-`age: 1656` - Cloudflare was serving a copy almost half an hour old, with a 4 hour TTL. And the file URL had never changed. `script.js` was still `script.js`. The CDN had no reason to fetch the new one, and cache headers alone weren't going to save me.
+**me:** the deploy is green. the HTML is new. the toggle I added does not exist.
 
-## why "no-cache" from origin didn't save me
+**browser:** refresh. still no toggle.
 
-My server was already sending `Cache-Control: no-cache` for HTML, and `max-age=3600` for JS/CSS. Cloudflare had its own idea of the TTL for JS/CSS (it can override origin TTLs, and it showed `max-age=14400`). Worse, browsers that had visited the old site had cached the old assets with `immutable, max-age=2592000` - 30 days - from the previous server configuration. Cache headers are a negotiation, and old promises don't expire when you change your mind.
+**me:** hard refresh. toggle appears. close tab. reopen. toggle gone again.
 
-## cache invalidation is a URL problem
+**browser:** `cache-control: public, max-age=14400`, `cf-cache-status: HIT`, `age: 1656`.
 
-The fix that actually works is to change the URL when the bytes change. Two parts:
+**me:** age 1656. twenty-eight minutes old. the deploy was six minutes ago. so this is not the *old* deploy, it is a cached copy of *some* earlier response, served under the same URL.
 
-1. In the repo, assets are referenced with a placeholder: `script.js?v=dev`, `styles.css?v=dev`.
-2. The CI stamps the commit SHA before building:
+**cdn:** `script.js`. same path as before. you changed the contents, not the address. why would I fetch again?
+
+**me:** because I sent `no-cache` from origin for HTML.
+
+**cdn:** for HTML, sure. `script.js` had a `max-age`, and I keep my own TTL for static assets. also, every visitor who came before this deploy has the old file cached with `immutable, max-age=2592000` from your previous server config. thirty days. you cannot take that promise back.
+
+**me:** so the fix is not a header.
+
+**cdn:** the fix is a different URL.
+
+**me:** ...
+
+---
+
+so that is what I did. the repo references assets with a placeholder, and CI stamps the commit into it:
 
 ```bash
 V="${GITHUB_SHA::7}"
 sed -i "s/?v=dev/?v=$V/g" public/index.html
 ```
 
-Now every deploy swaps all asset URLs. Old copies don't matter, because nobody asks for that URL anymore. The CDN can cache forever; the next deploy simply points somewhere else.
+each deploy changes every asset URL. old cached copies become irrelevant because nobody asks for those addresses anymore. no purging, no negotiation with the CDN, no "please revalidate" that can be ignored.
 
-For HTML the rule is the opposite: keep it short-lived or `no-cache`, because HTML is what points at the new URLs.
+for the other site I went further: nginx sends `no-cache` for the whole static tree, and the assets are versioned anyway. belt and suspenders, because the failure mode of a stale asset is subtle: the page *works*, just wrong.
 
-## what I took from this
+---
 
-- "Deployed" is not "served". Verify from the outside with `curl` and look for the version marker you expect.
-- Caching is per URL. If you don't change the URL, you haven't invalidated anything; you've just asked politely.
-- Stamp a version into every deploy. It's the cheapest correctness guarantee in web infrastructure.
-- A CDN with its own TTL is a second system you don't control. Design so you don't need to.
+**me:** and the lesson?
 
-I also stopped trusting old `immutable` headers: they are a promise to the browser, and you can't take promises back. You can only hand out a new URL.
+**cdn:** "deployed" is a word about your server. "served" is a word about the world. verify with `curl` from outside, check a version marker, every time.
+
+**me:** also: if a user's browser has an `immutable` copy, you can only escape by moving.
+
+**cdn:** now you get it.
+
+---
+
+*the stamped version is visible: every asset in my HTML carries `?v=<commit>`. when I need to know what is live, I read my own HTML like a stranger would.*
 
 ## image credits
 

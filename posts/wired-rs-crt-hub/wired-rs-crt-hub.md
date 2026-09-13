@@ -7,27 +7,38 @@ img: /images/wired-rs-crt-hub/cover.jpg
 
 You can find the code at: [github.com/luis-ota/wired-rs](https://github.com/luis-ota/wired-rs).
 
-Listen to `bôa - Duvet` while reading!
+Listen to `PASTEL GHOST - Abyss` while reading!
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/42qNWdLKCI41S4uzfamhFM?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4vgUB5tFrO8K7xasmzleme?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
-[wired.rs](https://wired.rs) is the front door of my studio, Wired Layer Co. It's a hub: five tools, one page. I could have shipped a list of cards. Instead I treated it as a small argument for the kind of work I do - and it turned into one of my favorite builds.
+design notes: wired.rs, a hub with a CRT soul
 
-![『If nothing happens - Check printer 』](inline.jpg)
+![『If nothing happens — Check printer 』](inline.jpg)
 
-## a metaphor that actually carries weight
+project: the front door of wired layer co. one page, five tools, no framework.
+constraint: it should feel like a machine that is alive but calm.
 
-The company is called **Wired Layer**. So the page is a layer stack: L0 to L4, each tool a node in the same network. That's not decoration; it's the information architecture. The hero draws the network on a `<canvas>` - nodes drifting, lines connecting whatever comes close. Cheap to render, calm to watch, and it sets the tone before any copy loads.
+---
 
-Technical details that made it feel alive without costing performance:
+## brief
 
-- the canvas resizes with `devicePixelRatio` capped at 2, so it's crisp on retina and cheap on phones,
-- animation pauses on `visibilitychange`,
-- with `prefers-reduced-motion`, it draws a single static frame.
+a list of links would have been honest. it would also have been forgettable. the brief i wrote for myself: a page that argues for craft in ten seconds, loads in one request, and never gets in the way of the actual tool links.
 
-## the palette swap trick
+---
 
-I wanted an easter egg. The page is phosphor green on near-black; the show it nods to has a red counterpart. Instead of maintaining two stylesheets, I made every color a CSS custom property and scoped an override:
+## the metaphor
+
+the company is called **wired layer**, so the hub is a layer stack: l0 to l4, each tool a node in the same network. the metaphor decides the information architecture, not the other way around.
+
+- hero: the network itself, drawn on a canvas.
+- layers: the tools, one per row, numbered.
+- footer: where you are, in plain language.
+
+---
+
+## palette and swap
+
+every color is a css custom property. the page is phosphor green on near-black. the hidden mode (more below) is red. swapping the entire site is one attribute:
 
 ```css
 html[data-protocolo="7"] {
@@ -36,28 +47,45 @@ html[data-protocolo="7"] {
 }
 ```
 
-One attribute flips the whole site - buttons, HUD, links, canvas colors (the script reads the same attribute). This is the strongest argument I've found for designing with tokens: **theming becomes an assignment**.
+this is the strongest argument i know for tokens over values. theming stopped being a stylesheet problem and became an assignment.
 
-## the easter egg is a QA suite
+---
 
-Type `lain` anywhere and "Protocol 7" takes over: red palette, glitch, a dialog. It exists as a joke, but building it forced me to handle real things:
+## motion budget
 
-- keyboard detection that ignores modified keys and editable fields,
-- a modal with focus management, `Escape` to close, click to dismiss,
-- translation of all dialog copy in both languages,
-- reduced-motion behavior,
-- and a HUD hint (`seq: ____`) that fills in as you type - discovery without spoiling.
+three effects, each with a job:
 
-If a feature survives both languages, keyboard-only users and reduced motion, it's not a toy. It's a stress test.
+| effect | job | cost control |
+|---|---|---|
+| canvas network | sets the tone, fills the hero | capped nodes, dpr max 2, paused when tab hidden |
+| scanline sweep | makes the screen feel like glass | css gradient, no layout impact |
+| wordmark glitch | personality, once every 7s | pseudo-elements, clip-path only |
 
-## what I took from this
+with `prefers-reduced-motion`, the canvas draws a single static frame and every animation stops. the page stays designed.
 
-- CSS variables are a theming architecture, not a convenience.
-- Canvas animation is cheap when it's small, paused off-screen and static for reduced motion.
-- An easter egg is a privacy-free way to show craft - and a demanding user of your design system.
-- Small sites deserve real engineering; constraints like "no framework, static files" make the decisions visible.
+---
 
-The deploy is a `git pull` behind a forced-command SSH key. The page is a handful of files. It feels like the whole studio in one screen, which is exactly the point.
+## the easter egg is the test suite
+
+type `lain` and protocol 7 takes over: red palette, glitch, a dialog. it exists because it is fun. it also forced the page through states that a "simple hub" would never have:
+
+- keyboard detection that ignores modifiers and editable fields,
+- a modal with focus management and escape-to-close,
+- both languages translated for the dialog,
+- reduced motion respected during a full-screen takeover,
+- a hud hint (`seq: ____`) that invites discovery without spoiling it.
+
+if a feature survives keyboard-only, both languages, and reduced motion, it is not a toy. it is a stress test that happens to be fun.
+
+---
+
+## deploy
+
+static files, no build. a forced-command ssh key runs `git fetch && git reset --hard` in a clone; nginx serves that directory. the site is the repository, and the deploy takes six seconds.
+
+---
+
+*it is the smallest project i have and the one that most looks like me.*
 
 ## image credits
 

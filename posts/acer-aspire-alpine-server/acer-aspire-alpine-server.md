@@ -5,9 +5,9 @@ description: a dead-battery Acer Aspire 5315, a minirootfs install, a QEMU dress
 img: /images/acer-aspire-alpine-server/cover.jpg
 ---
 
-Listen to `Kraftwerk - Home Computer` while reading!
+Listen to `alyzea - logged in for hours` while reading!
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0OAiLnWcipov7qYjSI7OqG?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7ClvPk3XRxD6WNKciMvguB?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
 There's a special kind of fun in taking a machine that the e-waste gods already claimed and turning it into something useful. This is the story of how a **2007 Acer Aspire 5315**, with its dead CMOS battery, dying speaker, and single-core Celeron 560, became a Docker server running in my living room in 2026.
 

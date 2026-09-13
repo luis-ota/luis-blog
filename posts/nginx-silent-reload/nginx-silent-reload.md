@@ -7,63 +7,76 @@ img: /images/nginx-silent-reload/cover.jpg
 
 You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
 
-I changed an nginx config, ran the usual dance, and saw this:
+logbook: the reload that lied
 
-![Racks line](inline.jpg)
+![Data storm](inline.jpg)
 
-```bash
+kept verbatim, timestamps approximate.
+
+---
+
+**14:02** changed the nginx root for wired.rs and ran the usual:
+
+```
 $ sudo nginx -t && sudo systemctl reload nginx
-nginx: configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
-# reload exits 0
+# exit 0
 ```
 
-Success. Except nothing changed. The site kept serving the old root directory, old proxy target, old everything. For days.
+green across the board. moved on.
 
-## reload is not apply
+**14:40** the site is still serving from the old directory. `curl` the page, check the marker I just changed. old marker.
 
-`systemctl reload nginx` sends `SIGHUP`. The master process re-reads the configuration and asks workers to gracefully shut down while new workers take over. If the re-read fails, the master keeps the **old configuration and the old workers**, and the reload command still returns success, because sending a signal succeeded.
+**14:44** assume browser cache. hard refresh. same. `curl` from a different machine. same.
 
-The actual failure was in the error log, which nobody reads when the command is green:
+**14:48** check the config that nginx *claims* to have loaded:
 
-```text
+```
+$ sudo nginx -T | grep -A2 "server_name wired.rs"
+root /home/ubuntu/wired-rs;
+```
+
+the running config says the new root. the responses say the old one. two truths.
+
+**14:53** check the workers:
+
+```
+$ ps -o pid,lstart,cmd -p <worker_pids>
+nginx: worker process   Mon Aug 24 15:48:34 2026
+```
+
+workers from weeks ago. my reload, six minutes old, produced **no new workers**. so nginx never applied anything. the `-t` test passed because it validates a *fresh parse*; it has no idea what is currently in memory.
+
+**15:01** the error log:
+
+```
 [emerg] limit_req "wired_auth" uses the "$binary_remote_addr" key
 while previously it used the "$http_cf_connecting_ip" key
 ```
 
-A `limit_req_zone` in another site's config had changed its key. nginx cannot change the key of an existing shared memory zone at reload time - the zone already exists in memory. So the whole reload was rejected. `nginx -t` passed because it parses the new config in a **fresh** process, where the old zone definition doesn't exist. The test was validating a world that would never be born.
+there it is. another site's config changed the key of a `limit_req_zone` that already existed in shared memory. nginx cannot redefine a zone's key at runtime. the reload aborted; the master kept the old config and the old workers; the signal had been delivered successfully, so systemd reported success.
 
-## how I noticed
+**15:04** restart:
 
-The smoking gun wasn't the config test; it was process state:
-
-```bash
-$ ps -o pid,lstart,cmd -p <worker_pids>
-# workers started weeks ago, long before my reload
+```
+$ sudo systemctl restart nginx
 ```
 
-New config means new workers. Old worker start times mean no reload happened.
+new workers, new shared memory, new config. the pollar went through.
 
-## the fix
+**15:06** verify from outside: `curl` returns the new marker. finally.
 
-A restart discards the old shared memory zones and applies everything:
+---
 
-```bash
-sudo systemctl restart nginx
-```
+**post-notes**
 
-It's a brief blip for all sites on that box (single-digit milliseconds for a busy server like this, honestly), and it's honest: it either works or it fails loudly.
+- reload exit 0 means "SIGHUP delivered". it is not an apply.
+- `nginx -t` validates a world that may never run. it cannot see runtime state.
+- worker start times are the ground truth for "did the config apply".
+- shared memory zones are stateful; changing how one is defined is a restart, not a reload.
+- after every deploy, curl a marker. the only reliable reporter is the outside.
 
-A better long-term fix is not changing a zone key in place. But when you inherit configs you didn't write, you want the restart in your toolbox.
-
-## what I took from this
-
-- `reload` returning 0 means "signal delivered", not "config applied". Check the error log and worker start times.
-- `nginx -t` tests a fresh parse; it cannot see runtime constraints like existing zones.
-- After any deploy, verify behavior from the outside: `curl` and check a marker. "No output" is not "no change".
-- Shared memory zones are stateful. Stateful things don't reload cleanly, and the error lives in the log, not in the exit code.
-
-Now every config change I make ends with a `curl` against the real domain, because I no longer trust green text.
+next time a config change "does nothing", i check three things in order: error log, worker PIDs, outside behavior. the config file is the least trustworthy of the four.
 
 ## image credits
 

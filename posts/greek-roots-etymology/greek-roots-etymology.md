@@ -5,45 +5,63 @@ description: automation, cryptography, schema, system. four words from one langu
 img: /images/greek-roots-etymology/cover.jpg
 ---
 
-Programming is full of old words. I started looking them up as a curiosity and ended up with a naming habit: if I understand where a term came from, I usually understand what it *should* mean, and I can tell when it's being stretched.
+lexicon: four greek words inside your editor
 
 ![Histria](inline.jpg)
 
-## automatos - acting of itself
+a small dictionary of terms i use daily, with the original sense and what it asks from a design.
 
-*αὐτόματος*: self-moving, acting on its own. Automation is not "a script". It's a system that acts without a person in the loop, which implies it must carry its own judgment about when to start, when to stop, and what to do when the world is not what it expects.
+---
 
-If your automation needs a human to check it every run, you built a prompt, not an automation.
+## automatos
 
-## kryptos - hidden
+*greek:* acting of itself, self-moving.
+*entered english as:* automatic, automation.
 
-*κρυπτός*: hidden, secret. Cryptography is the practice of hiding *in public*: a message can be read by anyone and still be private. That's the strange, beautiful part - the security does not depend on the channel being secret, only on the key.
+the word describes a thing that carries its own motion. a script run by hand is not automation; it is a keyboard shortcut. automation begins when the system decides *when* to act, and therefore must also decide what to do when the world is not what it expects.
 
-Systems that "hide" credentials by obscuring them miss the point. Hidden is not secure; hidden *plus a key* is.
+**design demand:** if a human has to check it on every run, it is a prompt wearing a cron costume.
 
-## schema - shape
+---
 
-*σχῆμα*: figure, shape, posture. A database schema is literally the shape of your data. The word reminds me that the shape is the design; the code that reads it changes more often.
+## kryptos
 
-Renaissance artists used *schema* for the geometry of a figure. Same idea: the shape that everything else hangs on.
+*greek:* hidden, secret.
+*entered english as:* crypt, cryptography.
 
-## systema - a whole from parts
+the interesting part is what it does not mean. cryptography is not "a secret channel". it is a message that can travel in public and stay private, because the secrecy lives in the key, not the pipe.
 
-*σύστημα*: an organized whole. Not a bag of components - parts arranged so they work together, with structure. The word carries the word *syn* (together) with *histanai* (to stand): things that stand together.
+**design demand:** anything whose security depends on the channel being secret is not secured. hidden is a property of the key. the pipe is assumed hostile.
 
-That's my test for "is this a system": if removing one part leaves a pile, it was a pile all along.
+---
+
+## schema
+
+*greek:* shape, figure, posture.
+*entered english as:* schema, schematic.
+
+a database schema is literally a shape. the renaissance borrowed the word for the geometry underneath a painted figure. same idea across three millennia: the shape that everything else hangs from.
+
+**design demand:** schemas are decisions with long lifetimes. code around them changes weekly; the shape outlives several of its authors. treat it like the foundation it is.
+
+---
+
+## systema
+
+*greek:* an organized whole, from *syn* (together) + *histanai* (to stand).
+*entered english as:* system.
+
+things that stand together. not a bag of components, not a pile of services. arrangement is the substance of the word.
+
+**design demand:** the removal test. take one part away. if what remains is a pile, there was never a system.
+
+---
 
 ## one correction, because it matters
 
-*Algorithm* is not Greek. It's from *al-Khwārizmī*, the 9th-century mathematician whose name Latinized into "algorismus". And *robot* is Czech - *robota*, forced labor, from Karel Čapek's play. Half the words in our vocabulary are borrowed, which is itself the lesson: engineering has always imported its language from whatever trade understood the problem first.
+*algorithm* is not greek. it comes from the latinized name of **al-khwārizmī**, the ninth-century mathematician. *robot* is czech, from *robota*, forced labor, via karel čapek's play. *algebra* is arabic.
 
-## what I took from this
-
-- Etymology is documentation that survived centuries of refactoring.
-- When a term feels wrong in your code, check what it originally meant. You'll usually find the missing part of your design.
-- Naming with the original sense is the cheapest form of documentation there is.
-
-*Ergon* meant work, and *energeia* meant being-at-work - Aristotle's word for something not yet finished. That's a build status, if I ever saw one.
+half the vocabulary of computing is borrowed, which is its own lesson: engineering has always taken its words from whoever solved the problem first. etymology is documentation that survived every rewrite.
 
 ## image credits
 

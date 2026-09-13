@@ -5,40 +5,57 @@ description: standardized surfaces, documented milestones, published deprecation
 img: /images/roman-roads-api/cover.jpg
 ---
 
-The Romans built about 80,000 km of paved roads, and the system outlived the empire that made it. When I read about how they were built, I can't stop seeing the same decisions we argue about in API design.
+itinerary: walking the via appia with api design notes
 
 ![The East Gate, Ancient Edessa](inline.jpg)
 
-## standardization is the product
+a travel log in five milestones, read as infrastructure.
 
-A Roman road was not just "a road". It followed a specification: prepared ground (*via*), layers of sand and gravel for drainage (*agger*), and slabs fitted so tightly that you could not wedge a blade between them. Widths were standardized enough that a legion could march and carts could pass.
+---
 
-An API is the same promise: not "a way to talk to my service", but a *uniform* way. If every service invents its own conventions, you don't have infrastructure, you have trails. The value is in the conformity, and conformity is boring by design.
+**milestone i. the specification**
 
-## milestones are observability
+the road begins as a rule, not a road. a width, a camber, a layered base, a crown so water leaves. every via in the empire follows the same recipe, which is why a traveler from rome can trust a road in gaul without inspecting it.
 
-Roman roads had milestones (*miliaria*) every 1,000 paces, telling travelers the distance to the next town and who built the road. That's a metric with an owner.
+*api note:* the value of a standard is that the client does not need to know the server. conformity is boring on purpose.
 
-It is also exactly what a good status endpoint does: where am I, what is the version, who do I talk to. The traveler on the Via Appia was doing a `GET /health` a couple of thousand years before uptime monitoring.
+---
 
-## layers and maintenance contracts
+**milestone ii. the layers**
 
-Under the surface, the road was layered: drainage, foundation, crown. If water doesn't leave, the road dies. In software, the layer you can't see is the one that decides your uptime: connection pooling, migrations, retry policy, backpressure.
+under the surface: a bed of stones, gravel, sand, and a paved top. the top is what everyone photographs. the drainage is what keeps it alive.
 
-And the roads were **maintained**, by law. Curators and contractors were responsible for stretches. When maintenance stopped, the road didn't disappear at once. It decayed silently, until it was a path, then a memory. I think about abandoned repos with no deprecation policy every time I see a Via Appia photo with grass in the joints.
+*api note:* the parts nobody sees decide the uptime. connection pooling, migrations, retry policy, backpressure. an interface is only as good as its least visible layer.
 
-## deprecation existed
+---
 
-The *cursus publicus* had rules about who could use the roads, what could be carried, and which routes were preferred. Emperors changed the rules and posted them. Versioning, with a change log, enforced by legions.
+**milestone iii. the milestone**
 
-## what I took from this
+a stone every thousand paces, with the distance and the name of whoever built it. a traveler always knows where they are and who to blame.
 
-- Interfaces are a contract, and contracts need a specification people can check against.
-- Observability is not new: if travelers need to know where they are, give them milestones.
-- Infrastructure decays from the bottom: drainage, maintenance, and migrations, in that order.
-- Standardize or don't scale. The empire ran on shared conventions, not on its own genius.
+*api note:* observability is not a dashboard you add later. it is the `GET /health` on the side of the road. version, owner, position.
 
-*All roads lead to Rome* is really a statement about compatibility. The road knew nothing about the destination. It just promised to take you there the same way, every time.
+---
+
+**milestone iv. the maintenance contract**
+
+the roads were maintained by law, by curators and contractors responsible for stretches. without that, the drainage silts, the slabs shift, and the road becomes a trail. the decay is silent for years and then total.
+
+*api note:* abandoned endpoints do not disappear. they rot. deprecation policies, migration guides and sunset headers are the maintenance contract.
+
+---
+
+**milestone v. the destination**
+
+all roads lead to rome. the phrase is usually read as imperial vanity. it is also a compatibility claim: the road itself knows nothing about where you are going. it promises the same trip, every time.
+
+*api note:* a good interface is neutral about use. it guarantees the journey, not the destination.
+
+---
+
+arrival. the via appia survives as a ruin with grass in its joints. the specification did not survive; we reverse-engineered it from the stones.
+
+infrastructure outlives the documents describing it, and both outlive the people who cared. write accordingly.
 
 ## image credits
 

@@ -7,53 +7,75 @@ img: /images/ssh-forced-commands/cover.jpg
 
 You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
 
-I automated the deploy of my portfolio with GitHub Actions: the workflow connects over SSH and runs `docker compose pull && docker compose up -d`. Simple. Then I looked at what that key actually was.
+the key that can only press one button
 
 ![Couple of metallic padlocks on old door frame](inline.jpg)
 
-It was an ed25519 key with **full shell access** as `ubuntu`, and `ubuntu` has passwordless sudo on that box. If that private key ever leaked, whoever had it owned the entire server. The deploy automation was fine; the blast radius was absurd.
+my CI had a shell. this is the story of taking it away, one option at a time.
 
-## the fix: one key, one command
+## the line, annotated
 
-`~/.ssh/authorized_keys` accepts options before the key. The important one:
+this single line in `~/.ssh/authorized_keys` is the entire security model:
 
-```text
-restrict,command="/usr/local/bin/deploy-portfolio" ssh-ed25519 AAAAC3... deploy-key
+```
+restrict,command="/usr/local/bin/deploy-portfolio" ssh-ed25519 AAAAC3...
 ```
 
-Two parts:
+read it as four decisions:
 
-- `restrict` turns off everything else: no pty, no port forwarding, no agent forwarding, no X11, no user rc.
-- `command="..."` forces that exact command to run for **any** session opened with that key. If the client asks for `id`, the server ignores it and runs the deploy script anyway. If the client tries `scp`, the forced command runs and the transfer fails.
+1. **`ssh-ed25519 AAAAC3...`** is the public key. Anyone holding the private half can open a session.
+2. **`restrict`** turns off every optional feature of that session: no pty, no agent forwarding, no port forwarding, no X11, no user rc. The session becomes an execution channel, not a shell.
+3. **`command="..."`** overrides whatever the client asks for. The client can beg for `bash`; the server runs the deploy script and returns its output.
+4. **`/usr/local/bin/...`** is a root-owned file. The deploy user can execute it and cannot edit it.
 
-I tested it the right way - by trying to break out:
+## what the client sees
 
-```bash
-ssh -i deploy_key server 'id; whoami'   # prints the deploy output, no id, no whoami
-ssh -i deploy_key -tt server 'bash'     # PTY allocation request failed
+```
+$ ssh -i deploy_key server 'id; whoami'
+ frontend  Pulling
+ backend   Pulling
+ deploy ok
 ```
 
-## the script is the security boundary
+The requested command is not rejected with an error. It is replaced. There is no `id`, no `whoami`, no shell prompt. There is only the deploy, which is the point.
 
-The forced command only helps if the command itself is safe. Mine is a root-owned script (not writable by the deploy user) that:
+```
+$ ssh -i deploy_key -tt server 'bash'
+PTY allocation request failed on channel 0
+```
 
-1. writes the `docker-compose.yml` from a heredoc **embedded in the script** (the key cannot send files),
-2. pulls the image,
-3. recreates the container,
-4. curls a health endpoint and exits non-zero if it fails.
+With `restrict`, there is no terminal to allocate.
 
-The key can't change what gets deployed. It can only press the deploy button. The worst a leaked key can do is... deploy the same thing again.
+## what an attacker would try, and get
 
-For a static site I went even simpler: the forced command runs `git fetch && git reset --hard origin/main` in a clone of the public repo, and nginx serves that directory. No filesystem writes from CI at all; GitHub itself is the source of truth.
+| attempt | result |
+|---|---|
+| run arbitrary commands | replaced by the forced command |
+| open an interactive shell | no pty |
+| scp a file to the server | the forced command runs instead; no transfer |
+| forward a port through the server | forwarding disabled |
+| edit what gets deployed | the script is root-owned; the key has no write path |
+| inspect other services on the box | the session has no shell; the script only runs compose |
 
-## what I took from this
+## why the compose lives inside the script
 
-- A deploy key is a credential for a *job*, not for a person. Scope it like a job.
-- `restrict,command=` is the cheapest security upgrade I've ever shipped.
-- If the deploy needs to run on a server with `sudo`, keep the key far away from that ability.
-- Audit what your keys can do, not what your workflow does. The workflow was never the problem.
+The first version of this setup accepted a `docker-compose.yml` from the workflow via `scp`. That was quietly the same as giving the key root on the host: a compose file can mount `/`, run privileged containers, join the host network.
 
-Since then I have four of these keys on two servers, each capable of exactly one script, and I sleep better.
+So the compose moved **inside** the deploy script, as a heredoc. The key cannot send files, therefore the key cannot change *what* runs. A leaked key can only do one thing: trigger the same deployment again.
+
+## the boring part that matters
+
+For the static wired.rs site, the forced command is even simpler: `git fetch && git reset --hard origin/main` in a clone of a public repo. The key cannot write code (only GitHub can). It cannot publish containers. It presses "update", and nothing else.
+
+## the checklist I now apply to every deploy key
+
+- Is it dedicated to one job, or is it a personal key with extra powers?
+- Does the forced command exist, and is it root-owned?
+- Can the key write anything the command reads?
+- Does the script validate the result, or just run?
+- If this key leaked tomorrow, what is the worst it could do? If the answer is longer than one sentence, it is not done.
+
+Security is often described as adding locks. This one was about removing a shell.
 
 ## image credits
 

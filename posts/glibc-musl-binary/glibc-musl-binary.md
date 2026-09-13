@@ -7,40 +7,79 @@ img: /images/glibc-musl-binary/cover.jpg
 
 You can find the code at: [github.com/luis-ota/songhunter](https://github.com/luis-ota/songhunter).
 
-Listen to `Kraftwerk - The Robots` while reading!
+Listen to `Aphex Twin - Pulsewidth` while reading!
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5eqZWYQ5tbIehx00NeKXz7?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1jScAJOKsMuB1FIlYAblu1?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
-I had a Rust service (SongHunter) that took about 5 minutes to build on every push, because everything was compiled inside the Docker build. I moved the compile step to the GitHub runner, cached `~/.cargo` and `target/` with `actions/cache`, and the build dropped to under 2 minutes. Great, right?
+## incident summary
 
-The container started. And then it crashed. In a loop.
+![Algorithmic Contaminations](inline.jpg)
 
-```text
-./songhunter: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.39' not found (required by ./songhunter)
+| | |
+|---|---|
+| **what** | every deploy of SongHunter produced a container that started and died within seconds |
+| **when** | the day I moved the Rust build from Docker to the GitHub runner |
+| **impact** | tool offline; no data loss; nobody noticed except me and the 502s |
+| **detection** | smoke test in the deploy script (`curl` to the health endpoint) |
+| **resolution** | runtime image switched to match the builder; yt-dlp moved to a venv |
+| **time to fix** | about 20 minutes, most of it spent disbelieving the error |
+
+## the symptom
+
+```
+./songhunter: /lib/x86_64-linux-gnu/libc.so.6:
+  version `GLIBC_2.39' not found (required by ./songhunter)
 ```
 
-## what actually happened
+The container was healthy by every other measure. The image built. The process started. It just could not load.
 
-A compiled binary is not portable by default. My binary was built on the GitHub runner, which is Ubuntu 24.04 with **glibc 2.39**. My runtime image was `python:3.11-slim-bookworm`, which is Debian 12 with **glibc 2.36**.
+## timeline
 
-Dynamic linking means the binary carries *symbol version requirements*, and at startup the loader checks if the system libc has them. 2.36 doesn't have 2.39 symbols. Crash.
+**17:02** build moved to the runner. `actions/cache` on `~/.cargo` and `target/`. Build time drops from ~5 minutes to ~2.
 
-The build machine and the runtime machine have to agree on the ABI. That's it. That's the whole story.
+**17:18** deploy green, smoke test red. Container in a crash loop.
 
-## the options
+**17:21** first hypothesis: broken image. Rebuilt. Same error.
 
-1. **Build for musl** (`x86_64-unknown-linux-musl`) and link statically. Truly portable, but dependencies that use C libraries (openssl, sqlite, etc.) can get painful.
-2. **Build inside an older base** so the binary needs an older glibc. This is why a lot of projects build on `debian:bookworm` even if production runs newer: you can always run on newer glibc, never on older.
-3. **Run on a runtime as new as the builder.** I picked this one: `ubuntu:24.04` as the runtime, which has glibc 2.39. I also moved yt-dlp to a Python venv there, because the pip package keeps extractors fresh.
+**17:26** `ldd` on the binary inside the image shows missing symbol versions, not missing libraries. That reframes everything.
 
-## what I took from this
+## the actual cause
 
-- `ldd ./binary` tells you what the binary needs. Do it when a container "starts but dies instantly".
-- The error message is precise: it's not "missing library", it's "this version of the symbol doesn't exist".
-- There's a direction to compatibility: newer glibc runs older binaries. Never the opposite.
-- "It works on my machine" has a concrete meaning here: my machine is the build machine.
+The binary was compiled on Ubuntu 24.04 (**glibc 2.39**). The runtime image was `python:3.11-slim-bookworm`, which is Debian 12 (**glibc 2.36**).
 
-The funniest part? After the fix, the CI went from ~6 minutes (build + deploy) to a warm build of about 3 minutes, and the crash was replaced by a health check that actually passes. I'll take it.
+A dynamically linked binary records *which versions of libc symbols it needs*. At startup, the loader checks the host. 2.36 does not contain the 2.39 symbols. The process never reaches `main`.
+
+This is not a bug in my code, not a corrupted image, and not a Docker problem. It is an ABI contract between two machines, and I had broken it in the most boring way possible.
+
+## resolution
+
+I chose the runtime that matches the builder instead of downgrading the builder:
+
+```dockerfile
+FROM ubuntu:24.04 AS runtime
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl ffmpeg libchromaprint-tools \
+    python3 python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+RUN python3 -m venv /opt/ytdlp \
+    && /opt/ytdlp/bin/pip install --no-cache-dir -U "yt-dlp[default]" curl_cffi
+```
+
+The other two options were building for musl (painful with C dependencies) and building inside an older base (works, but then the toolchain in CI lags). Matching glibc was the smallest honest fix.
+
+## five whys, correctly ordered
+
+1. Why did the container die? The loader could not find required symbol versions.
+2. Why? The binary needed glibc 2.39; the runtime had 2.36.
+3. Why? I built on a newer OS than I ran on.
+4. Why did I do that? Because the build was faster on the runner and I moved it without re-checking the runtime base.
+5. Why did I not notice earlier? Because "Container Started" is not a health check. The smoke test caught it, and that is the only reason the incident ended in 20 minutes.
+
+## what changed in the process
+
+The deploy script now fails loudly on an unhealthy response, and the runtime base is treated as part of the build contract, not as an afterthought. `ldd` is the first command I run when something "starts" but does not respond.
+
+A build that succeeds is not a working artifact. It is a hypothesis about the machine that will run it.
 
 ## image credits
 

@@ -7,54 +7,86 @@ img: /images/rate-limit-without-ip/cover.jpg
 
 You can find the code at: [github.com/luis-ota/afroretratos](https://github.com/luis-ota/afroretratos).
 
-AfroRetratos has an anonymous feed. That word - anonymous - is a design constraint, not a slogan. If I store raw IPs "just for rate limiting", the product is no longer anonymous, no matter what the UI says.
+ADR-001: rate limiting without storing identities
 
-![North Korea - Highway traffic](inline.jpg)
+![Toll gate on Vijayawada - Hyderabad highway](inline.jpg)
 
-But an anonymous public form without rate limiting is a gift to whoever writes the first abuse script. I needed both: enforce limits, store nothing that identifies a person.
+architecture decision record. status: accepted.
 
-## the trick: a keyed hash as a stable pseudonym
+---
 
-For counting, you don't need the IP. You need something *derived* from it that is:
+## context
 
-- stable (same visitor, same value, so counters work),
-- unguessable (can't be reversed or enumerated),
-- scoped (only valid for this app).
+the afroretratos feed accepts anonymous posts. no account, no login, no identity. that is a product decision, not a missing feature.
 
-That's what an HMAC gives you:
+an open anonymous form needs abuse protection. the obvious implementation stores the client IP and counts requests per address. that would quietly destroy the product promise: a table of IPs plus timestamps is an identity graph with extra steps.
 
-```text
+the system also runs behind proxies (cloudflare, then nginx), so "the client IP" is not a given. `x-forwarded-for` is attacker input until proven otherwise.
+
+---
+
+## decision
+
+derive a keyed pseudonym instead of storing the address.
+
+```
 ip_hash = HMAC_SHA256(server_secret, client_ip)
 ```
 
-I store `ip_hash`. Not the IP. The hash is deterministic, so I can count requests, apply a limit, and block an origin for a while - all without knowing who anyone is. If the secret leaks, hashes are compromised; that's why the secret is server-only and rotatable.
+store only `ip_hash`. never the raw IP. use it for:
 
-For the (rare) moderation case where the full picture matters, there's a second, optional field: the raw IP encrypted with AES-256-GCM, decryptable only in the admin panel. Off by default. Storing it is a deliberate choice, not a side effect.
+- counting requests in a window (rate limit),
+- blocking an origin for a period after abuse (block list).
 
-## getting the client IP right
+the hash is deterministic, so counters and blocks work exactly like they would with the IP. it is not reversible without the secret, so the data cannot be turned back into an address. rotate the secret and the pseudonyms change.
 
-The other half of this problem is "which IP?". Behind a proxy, `X-Forwarded-For` is just a header - anyone can send it. The rule I implemented:
+for the narrow moderation case where the full picture is needed, there is an optional encrypted field: `ip_encrypted`, AES-256-GCM, decryptable only in the admin panel. storing it is opt-in, not a side effect.
 
-- trust `X-Forwarded-For` only from known proxies, and only the entry **N hops from the right** (`TRUSTED_PROXY_HOPS`),
-- trust Cloudflare's `CF-Connecting-IP` only when the origin is conclusively behind Cloudflare (explicit flag),
-- if nothing is trusted, treat the origin as unknown and apply limits globally.
+---
 
-The order matters too. My POST pipeline is:
+## getting the address right
 
-```text
+- if `trusted_proxy_hops = n`, take the entry **n positions from the right** of `x-forwarded-for`, never the left.
+- cloudflare's `cf-connecting-ip` is trusted only when the origin can *only* be reached through cloudflare (explicit flag).
+- if nothing is trusted, treat the origin as unknown and apply the limit globally.
+
+---
+
+## pipeline order
+
+```
 origin -> ip_hash -> blocked? -> rate limit -> validate -> persist -> public response
 ```
 
-Blocking and limiting run *before* any parsing or database work, so abuse is cheap to reject.
+blocking and limiting run before any parsing or database access, so abusive traffic is rejected cheaply and the expensive path stays clean.
 
-## what I took from this
+---
 
-- Anonymity is an architectural property. "We don't show the IP" is not privacy if you keep it in a column.
-- HMAC gives you accountability-shaped data (stable pseudonyms, blockable origins) without identity.
-- Encryption at rest is for "we might need it for moderation". If you don't need it, don't store it at all.
-- Proxy headers are attacker input until proven otherwise. Trust hops, not headers.
+## consequences
 
-The public API response only ever contains `id`, `content`, `createdAt` and the event. Everything else lives where it belongs: in the moderation surface, behind a login, or nowhere.
+**positive**
+
+- rate limiting and origin blocking work without collecting personal data.
+- a leak of the database does not leak addresses.
+- the moderation surface stays small and separate.
+
+**negative**
+
+- if the secret leaks, pseudonyms become reversible by brute force (IPv4 space is small). mitigation: rotate the secret.
+- rotating the secret resets all counters and block decisions. acceptable for this system.
+- an operator cannot answer "which IP did this?" without the encrypted field. that was the point.
+
+---
+
+## alternatives considered
+
+- **store the IP plainly.** rejected: contradicts the product.
+- **captcha on every post.** rejected: kills participation for a community of students.
+- **no protection.** rejected: the form would be scraped into dust.
+
+---
+
+*the public API response contains `id`, `content`, `createdAt` and the event. everything else either lives in the moderation surface or does not exist.*
 
 ## image credits
 

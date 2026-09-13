@@ -5,38 +5,49 @@ description: Cologne Cathedral took 632 years. the masons who finished it never 
 img: /images/cathedrals-long-lived-software/cover.jpg
 ---
 
-Construction on Cologne Cathedral began in 1248 and stopped in 1473. The crane they left on the tower stayed there for **400 years**. Work resumed in 1842 and finished in 1880. Six hundred and thirty-two years, and the people who laid the foundation never met the people who raised the spires.
+restoration journal: cologne cathedral
 
-![8월에 휴가를 떠나는 친구때문에 다시 들춰본 2013년 가을의 크로아티아 #Travel #Memories #Throwback #2013 #Autumn #Zagre](inline.jpg)
+![Winchester Cathedral, Interior, Hampshire](inline.jpg)
 
-I work on infrastructure that will ideally outlive my involvement. Cathedrals are the most honest case study of that situation, because they couldn't hide behind "the team will remember".
+a timeline, annotated. the project ran from 1248 to 1880.
 
-## plans travel; memory doesn't
+---
 
-Medieval builders worked from plans, templates and *tracery*: geometric drawings that encoded the design so it could be executed by masons who never met the architect. They also left **mason marks** on stones, small signatures that let a master know who cut what, and today let historians reconstruct who worked where.
+**1248.** the first stone. the design is ambitious beyond what the current funds can support, which is true of every cathedral and most software.
 
-In software, plans are schemas, ADRs, and tests. Mason marks are commit history and code ownership. When those are missing, the next team re-derives the design from the ruin, often wrongly. Documentation is not bureaucracy; it is how design crosses generations.
+**1473.** work stops. the crane on the south tower stays in place. it will stay there for four hundred years. nobody plans this; funding and interest simply end.
 
-## scaffolding is allowed to be ugly
+*note:* the crane becomes a monument to a paused project. temporary scaffolds that nobody removes stop being temporary.
 
-Cathedrals were built with temporary scaffolds that held everything while the real structure grew. Nobody preserved the scaffolds, but they were engineered just as seriously.
+**1560s–1790s.** the unfinished building is used anyway. services happen. the choir stands. a cathedral is a process, not a deliverable.
 
-Our scaffolds are build servers, migration scripts, feature flags, one-off admin panels. They don't need beauty. They need to hold weight and come down safely. Confusing a scaffold for architecture is how you end up maintaining a crane for 400 years.
+*note:* partial systems are usually what people actually use. design the usable partial state.
 
-## maintenance is the actual product
+**1820s.** romanticism rediscovers the gothic. funding returns. the original plans are studied, debated, partially retrofitted. a generation picks up a design from five centuries earlier.
 
-What keeps a cathedral standing is not the first construction. It's the ongoing work: replacing weathered stone, repairing lead roofs, re-pointing mortar. Notre-Dame burned in 2019 and the question was never "can we build a cathedral", it was "can we restore *this* one, and do we still know how".
+*note:* the plans survived because they were drawn. masons also left marks on the stones, so later engineers could reconstruct who cut what and how. documentation is how design crosses generations.
 
-Legacy systems are the same. The interesting engineering question about a ten-year-old service is not "how do we rewrite it", it's "do we understand it well enough to change it safely". The answer is always cheaper to produce *before* you need it.
+**1842.** construction resumes with new techniques (iron roof supports) while keeping the medieval geometry. the building becomes a hybrid of two engineering eras, and that is fine, because the *specification* was geometric, not technical.
 
-## what I took from this
+*note:* separate the intent from the implementation and upgrades stop being rewrites.
 
-- Design for the person who inherits the work, not for the demo.
-- Record decisions where the future can find them, near the code.
-- Treat temporary scaffolding as temporary, and remove it on purpose.
-- The monument is the maintenance schedule. Everything else is the opening ceremony.
+**1880.** completion. six hundred and thirty-two years after the first stone. the people who finished it never met the people who started it, and the building only exists because both groups honored a design they had not authored.
 
-I write commit messages and docs for a colleague I will never meet. That colleague is me, in five years, with no memory of why anything is the way it is.
+---
+
+**the maintenance log (ongoing)**
+
+cathedrals do not stay built. stone weathers, lead moves, mortar fails. the current work will never end, and that is the actual product: a maintenance schedule wrapped around a work of art.
+
+every long-lived system has this shape. the interesting engineering question about a ten-year-old service is not "how do we rewrite it", it is "do we understand it well enough to change it safely". that answer is always cheaper to produce before you need it.
+
+---
+
+**closing entry**
+
+at the peak, the site employed hundreds of craftsmen who never saw the finished building. the software equivalent is any team that inherits a codebase older than its members. the only tools that help are the ones that carry intent forward: schemas, tests, decisions recorded near the code, commit messages written for a stranger.
+
+the stranger is you, in five years, with no memory of why anything is the way it is.
 
 ## image credits
 

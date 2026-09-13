@@ -5,47 +5,47 @@ description: SmartSec runs Nmap and Nuclei inside rootless Podman containers, wi
 img: /images/smartsec-podman-scanners/cover.jpg
 ---
 
-[SmartSec](https://github.com/luis-ota/smartsec-rust) is a security analysis prototype I am building in Rust: a TUI, a headless mode for CI, and a catalog of real scanners. The rule I set before writing the first line: **the scanner binary never runs on the host**.
+seven rules for running hostile software
 
 ![Fibre to Cabinet, Basingstoke](inline.jpg)
 
-It sounds paranoid until you list what a scanner is. Nmap and Nuclei are complex C/Go programs that parse untrusted network responses. Running them as my user, on my machine, with my credentials in reach, is a lot of trust for a tool whose whole job is dealing with hostile input.
+smartsec is a security scanner. scanned targets send hostile responses. these are the rules the project runs on.
 
-## containers as the execution boundary
+---
 
-So every scan runs in a rootless Podman container:
+### rule 1: the scanner never runs on the host
 
-- the image is **pinned by digest**, not by tag, so the thing I audited is the thing that runs,
-- templates are mounted **read-only**,
-- networking is rootless, with no host network access,
-- the scanner writes its output to a volume the app reads, and that is the only channel back.
+nmap and nuclei are complex programs that parse untrusted input. running them as my user, on my machine, is a trust decision disguised as a convenience. every scan executes inside a rootless podman container instead. the application orchestrates; the container touches the network.
 
-The application orchestrates; the container executes. If a scanner is compromised, it is compromised inside a box that can barely see anything.
+### rule 2: pin by digest, never by tag
 
-## evidence by minimization
+a tag is a moving label. `nuclei:latest` is a different program next week. the catalog pins image digests, so the thing that ran in a test is the thing that runs in production, and an update is a deliberate commit, not a surprise.
 
-The second principle came from reading what scanners emit: huge HTTP bodies, headers, query strings, credentials that happened to appear in a response. I do not want any of that sitting in my reports or logs.
+### rule 3: mount templates read-only
 
-So the pipeline preserves **template, matcher, endpoint, host, URL and tags** and drops everything else. The report stays useful ("this endpoint matched this template") while not becoming a second copy of the data that caused the finding. Minimization is a feature of the evidence model, not a redaction pass bolted on at the end.
+nuclei templates are code that runs against a target. they are mounted read-only, from a controlled source. a compromised template cannot write back into the host or into the next scan.
 
-## three ways to run, one core
+### rule 4: evidence is minimized at collection, not redacted later
 
-The same engine serves three surfaces:
+scanners happily dump http bodies, headers, query strings, tokens that appeared in a response. none of that reaches the report. the pipeline keeps template, matcher, endpoint, host, url and tags. everything else is dropped *before* it is written anywhere. a redaction pass can fail; a collector that never copies the bytes cannot.
 
-- an interactive TUI (ratatui + crossterm, mouse support),
-- a headless mode (`scan --target`) for pipelines,
-- an AI analysis step that runs on a local Ollama by default, with OpenAI/NVIDIA NIM as options.
+### rule 5: one engine, three surfaces
 
-One core, three adapters. It keeps the TUI from becoming the product and the pipeline path from becoming a second implementation.
+the same core runs the interactive tui, the headless mode (`scan --target`), and the ai analysis step. three adapters, one pipeline. otherwise the ci path becomes a second implementation, and second implementations drift.
 
-## what I took from this
+### rule 6: ai enriches, it does not decide
 
-- Isolation is a design decision you make at the boundary, not a flag you add later.
-- Pin by digest. Tags are convenient lies.
-- Collect the minimum evidence that proves the finding; everything else is liability.
-- Keep an "escape hatch" honest: the prototype only ships what really runs, and the README says so.
+the analysis step runs on a local ollama by default (openai or nvidia nim optionally). it writes explanations and recommendations on top of findings that deterministic tools produced. if the model is wrong or unavailable, the scan is still valid.
 
-SmartSec is still a prototype, but the architecture question it forced, *where does untrusted work execute?*, is one I now ask in every project.
+### rule 7: say what does not work
+
+the catalog ships nmap and nuclei today. everything else in the tcc spec is future work, and the readme says so in bold. a security tool that overstates its coverage is worse than a small one that is honest.
+
+---
+
+these are not general truths. they are the constraints this project needs, written down so future-me cannot "temporarily" cross them during a debug session. especially rule 1.
+
+smartsec is still a prototype. the architecture question it forced, *where does untrusted work execute?*, is the one I now ask before enabling any tool that touches data I did not write.
 
 ## image credits
 

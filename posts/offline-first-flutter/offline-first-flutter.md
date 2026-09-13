@@ -7,48 +7,55 @@ img: /images/offline-first-flutter/cover.jpg
 
 You can find the code at: [github.com/luis-ota/AppTransportadora](https://github.com/luis-ota/AppTransportadora).
 
-Listen to `AC/DC - Highway to Hell` while reading!
+Listen to `PASTEL GHOST - Shadows` while reading!
 
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2zYzyRzz6pRmhPzyfMEC8s?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/3vtFowc9zcQfvqsLAZ9Cx2?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
-A freight management app for a transport company: drivers register trips, expenses, delivery receipts (with photos), commissions. Flutter + Firebase (Auth + Firestore). The feature list is ordinary. The requirement that changed everything: **it has to work in a truck**, which means it has to work offline, on bad connections, on a phone that gets closed abruptly.
+field notes: a freight app that works in a truck
 
-![Modern fire truck minimizes fire hazard, Wheeling Downs, Wheeling, W. Va](inline.jpg)
+![Transportation Company controls the night on one of Afghanistan’s most dangerous roads (Im](inline.jpg)
 
-## "offline support" is three separate problems
+app: flutter + firebase for a transport company. drivers register trips, expenses, receipts with photos.
+constraint: the network is a rumour.
 
-1. **Reading offline** - local cache. Firestore gives this with persistence enabled; done.
-2. **Writing offline** - queue mutations and replay them when connectivity returns.
-3. **Agreeing afterwards** - resolving what happens when two devices changed the same thing.
+---
 
-Most tutorials stop at step one. Step two is where idempotency lives. Step three is where product decisions live.
+## day 1: "offline support" is not a checkbox
 
-## identity has to be client-generated
+turned on firestore persistence and the app read data offline immediately. tested it in airplane mode: list renders, cached values everywhere. looked done.
 
-If the server assigns IDs, you can't build a coherent local record while offline. So IDs are generated on the device (UUIDs). A trip created offline already has a stable identity, which makes retries safe: "create trip X" repeated ten times is still one trip.
+then the driver created a frete offline. the form submitted, the local list updated, and i closed the app. reopened it. the frete was there. **the office, however, saw nothing for six hours** when the phone finally found signal. that is when the real questions started.
 
-## conflicts are business rules
+## day 4: who makes the id?
 
-When a driver's phone and the office dashboard both edit the same frete, who wins? There's no universal answer:
+server-generated ids cannot exist offline. the frete needs an identity the moment it is created, or the local list cannot reference it, and a retry cannot be deduplicated.
 
-- **last write wins** is simple but can silently lose a receipt photo,
-- **append-only events** (status changes, expenses) merge naturally because they don't overwrite,
-- derived numbers (commissions) should be computed from the events, not stored as editable fields.
+solution: uuid v4 on the device. the create is idempotent by construction: "create frete 8f3a..." repeated ten times is still one frete. the retry queue stopped needing cleverness because the identity was already stable.
 
-Turning "editable rows" into "events plus computed views" removed most conflict surface. The remaining conflicts were real-world ones - and those needed a human, not a merge function.
+## day 9: conflicts are business rules
 
-## design for the retry, not the request
+two people edited the same frete: driver changed status, office corrected the commission. last-write-wins would silently delete one of them.
 
-Every write must be safe to repeat. Photos upload on their own with retry and backoff. A half-finished sync is a normal state, not an error state. And testing means airplane mode, force close, reconnect: the boring drills that catch what unit tests can't.
+we stopped storing "the frete" as an editable row and started storing **facts**: status changes, expenses, delivery events. facts append; they do not conflict. commissions became a computed view. the only true conflicts left were physical reality (two people claiming different drop-off times), and those got a resolution screen, not a merge algorithm.
 
-## what I took from this
+## day 15: receipts on a bad connection
 
-- Sync is a data model: client IDs, idempotent writes, event-shaped facts.
-- Offline-first is a UX promise. If the UI shows a spinner while offline, you broke it.
-- Firebase gives you the transport, not the semantics. You still own the semantics.
-- Test with the network off, or you're testing the happy path of a feature that exists for the unhappy path.
+photos are the heaviest thing a driver produces, and upload on a weak signal fails constantly. the rule: a receipt upload is never blocking. it sits in a retry queue with backoff, survives app restarts, and the trip is already saved without it. a half-synced state is normal here, not an error.
 
-The drivers don't care about any of this. They care that the app never says "sem conexão, tente novamente". That's the whole spec.
+## day 21: testing like a driver
+
+- airplane mode on, create, kill app, reopen, reconnect, verify.
+- two devices, same frete, divergent edits.
+- storage almost full.
+- phone dies mid-upload.
+
+unit tests never caught any of the interesting bugs. the interesting bugs all lived in the transitions between states of the world.
+
+## closing note
+
+the product promise is simple: the app never says "sem conexão, tente novamente". that sentence is the whole specification, and implementing it had almost nothing to do with network code and everything to do with **data modeling**: client ids, idempotent writes, facts instead of rows, queues that survive death.
+
+sync is not a library you install. it is a set of decisions about identity, time and truth.
 
 ## image credits
 

@@ -5,41 +5,70 @@ description: clipsync keeps the clipboard shared between Linux and Android. the 
 img: /images/clipsync-sync-loops/cover.jpg
 ---
 
-[clipsync](https://github.com/luis-ota/clipsync) syncs the clipboard between my Linux machine and my Android phone (and macOS/Windows builds). LAN-first, with a self-hosted relay when devices are apart. The obvious hard parts - encryption, pairing, NAT - were fine. The bug that kept biting was philosophical: **both sides kept syncing each other's sync**.
+clipsync protocol notes: teaching two clipboards to stop agreeing
 
 ![Phone](inline.jpg)
 
-## the echo loop
+an internal design doc, cleaned up.
 
-Device A copies "hello" → sends to B → B writes "hello" to its clipboard → B's clipboard watcher sees a change → B sends "hello" to A → A writes it → A's watcher fires again...
+---
 
-The clipboard is a stateful global that anyone can write. There's no "origin" field. So a real sync layer needs to *manufacture* the missing metadata.
+## problem statement
 
-What worked:
+device A and device B share a clipboard. when the user copies on A, B must receive it. when they copy on B, A must receive it. when the system applies a remote value, it must not mistake that for a user copy and send it back.
 
-- attach an **origin id and a revision** to every sync message,
-- when applying a remote value, remember the fingerprint of what you just wrote,
-- ignore watcher events that match a value you applied (with a short time window),
-- never re-broadcast a value that didn't come from a local user edit.
+the naive implementation works perfectly for exactly one copy, then enters an infinite loop of two polite machines agreeing with each other.
 
-In other words: the system maintains a tiny piece of state - "this change was mine, not the user's".
+---
 
-## content types are not strings
+## message flow
 
-Clipboards carry more than text: HTML, images, file lists. Some apps publish multiple formats for one copy. Sending the wrong representation means pasting broken content on the other side. My rule: negotiate the richest format both sides support, and fall back deliberately, not accidentally.
+```
+user copies "hello" on A
+    A: local watcher fires, value != last_applied
+    A -> B: SYNC { value, origin: A, rev: 41 }
+    B: applies value, records last_applied = fingerprint("hello", 41)
+    B: local watcher fires for the applied change
+    B: fingerprint matches last_applied -> dropped
+    (silence)
+```
 
-## pairing without an account
+without the `last_applied` record, step 5 never happens and the loop begins. the whole protocol exists to make step 5 possible.
 
-There is no login. Devices find each other, show a fingerprint, and confirm a shared secret out of band. After that, an authenticated, encrypted channel. A relay never sees plaintext - it forwards bytes it cannot read. Self-hosting the relay is a config line, not a second product.
+---
 
-## what I took from this
+## invariants
 
-- Distributed state needs provenance. If the platform doesn't provide it, you invent it.
-- Watchers that react to your own writes need damping. Every UI-framework developer learns this; it applies to any observable global.
-- "No account" is an architecture choice, and it's usually the right one for a personal tool.
-- Rust made me very aware of ownership here: "who owns this clipboard change" stopped being abstract.
+1. **every sync message carries an origin and a revision.** the clipboard has no provenance field, so the protocol supplies one.
+2. **applying a remote value is not a local edit.** it is recorded, then ignored by the watcher.
+3. **a value is broadcast at most once per revision.** retransmission is for reliability, not for change detection.
+4. **pairing is out-of-band.** devices show a fingerprint; the user confirms it once. after that, the channel is authenticated and encrypted.
+5. **the relay is blind.** it forwards ciphertext between paired devices and cannot read the payload.
 
-The CI ships a `clipsync-core` crate to crates.io and release binaries install with a checksum check. The satisfying part is that the hardest logic is the 50 lines about *not* doing something.
+---
+
+## content types
+
+clipboards carry text, HTML, images, file lists. one copy can publish several representations. the receiver picks the richest type both sides declare. if only one representation is supported, it is used, and that is still correct.
+
+the subtle rule: never silently downgrade to something lossy. if the receiver cannot handle the type, it declines the sync instead of pasting broken content.
+
+---
+
+## failure modes designed for
+
+- **relay down:** devices on the same LAN discover each other directly; the relay is only needed off-LAN.
+- **duplicate delivery:** handled by revisions; applying the same revision twice is a no-op.
+- **clock skew:** revisions are per-device counters, not timestamps. no clock trust required.
+- **partial writes:** a sync that fails mid-transfer is retried; the previous clipboard value remains untouched until a complete payload arrives.
+
+---
+
+## implementation note
+
+the core is a Rust crate (`clipsync-core`, published to crates.io) with the platform watchers as thin adapters. that is what made the loop logic testable without two real devices: the protocol tests simulate both sides and assert silence after the echo.
+
+the hardest part of the project was teaching two programs to *not* react. everything else was plumbing.
 
 ## image credits
 

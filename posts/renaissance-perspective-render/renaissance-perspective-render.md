@@ -5,40 +5,48 @@ description: Brunelleschi painted a building, held up a mirror, and invented the
 img: /images/renaissance-perspective-render/cover.jpg
 ---
 
-Around 1413, Filippo Brunelleschi set up an experiment in Florence: he painted the Baptistery on a panel, drilled a peephole, and had viewers look through it at a mirror that reflected the painting. If the geometry was right, the painted building lined up with the real one behind the mirror. It was, and a technology was born: **linear perspective**.
+lecture notes: the first render engine was a painting
 
 ![Florence cathedral dome interior](inline.jpg)
 
-What he had built, without knowing the word, was a projection. A 3D scene mapped onto a 2D plane, from a specific point of view.
+topic: linear perspective as a projection pipeline. no prerequisites except curiosity.
 
-## the math has not changed
+---
 
-Every time a 3D engine draws a frame, it does what Brunelleschi demonstrated:
+## the experiment
 
-- a **camera** with a position and orientation (his peephole),
-- a **projection** that maps the scene onto the image plane (his panel),
-- a **vanishing point** where parallel lines converge (the horizon line he painted),
-- and a **field of view** which is just the angle the panel covers.
+florence, around 1413. filippo brunelleschi paints the baptistery on a panel, drills a peephole, and holds a mirror in front of it. the viewer looks through the hole at the painting reflected in the mirror. if the geometry is right, the painting and the real building line up exactly.
 
-The camera matrix in your GPU pipeline is the formalization of a 15th-century painting trick. The difference is speed and automation, not principle.
+they did.
 
-## perspective is a contract with the viewer
+what brunelleschi demonstrated is that a 3d scene can be mapped onto a 2d surface by a rule. that rule is a projection, and the painting was the first render.
 
-If the geometry is wrong, the illusion collapses. Painters of the time noticed quickly that perspective constrains composition: you can't put a figure wherever you like anymore, or the space betrays you. Artists like Piero della Francesca wrote mathematical treatises because the technique *was* the art.
+## the pipeline, spelled out
 
-That is exactly the relationship between a renderer and a scene. The projection defines what's possible. A wrong matrix doesn't produce an "invalid scene", it produces a scene that fails to convince.
+a modern renderer does four things. so did the panel.
 
-## the camera obscura and render settings
+1. **place a camera.** a position and an orientation. brunelleschi's peephole.
+2. **define the image plane.** a rectangle where the world gets flattened. the panel.
+3. **project along lines of sight.** straight lines from the eye through the scene onto the plane. this is where math enters.
+4. **decide what the viewer sees where lines cross.** paint, or pixels.
 
-Later, the camera obscura let painters project reality directly onto the canvas. They added lenses, filters, shutters. That's a render pipeline: input, optics, exposure, output. Their "settings" were physical; ours are numeric. Same decisions about light and framing.
+*sidenote:*
 
-## what I took from this
+> in matrix terms, step 3 is a multiplication. the camera transform moves the world so the camera sits at the origin; the projection matrix divides by depth. the "divide by z" is why distant things get smaller. a renaissance painter executed the same division by drawing the vanishing point and running threads to it.
 
-- Projection is old. If you understand the vanishing point, you understand the perspective divide.
-- Art history is full of engineering solutions that were later formalized. Looking at old tools is a shortcut to understanding modern abstractions.
-- Any transformation that maps a space to a surface is a design decision, not neutral math. Perspective chooses who the viewer is.
+## why the vanishing point mattered
 
-The first render engine took a mirror, a panel and a very patient audience at 60 frames... per hour. We got faster. The idea stayed.
+parallel lines, in reality, do not meet. on the image plane they do, at a point determined by the camera's direction. painters noticed immediately that this constrains everything: you can no longer place a figure wherever you like. the space has laws, and the painting obeys them or fails to convince.
+
+that is the relationship between a projection and a scene today, exactly. a wrong camera matrix does not produce an "invalid render". it produces an image that lies about space, and the eye catches it.
+
+## the camera obscura years
+
+later, painters used a dark room with a lens to project reality directly onto canvas. they added lenses, apertures, mirrors. read that as a pipeline: input, optics, exposure, output. their render settings were physical; ours are numbers. the decisions are the same ones: framing, focus, light.
+
+## assignment
+
+look at a painting made after 1420 and find the vanishing point. then open any 3d game and find the frustum. same idea, six hundred years apart, and one of them runs at 144 frames per second.
 
 ## image credits
 

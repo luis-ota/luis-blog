@@ -7,42 +7,69 @@ img: /images/rag-retrieval-quality/cover.jpg
 
 You can find the code at: [github.com/luis-ota/rag-ai-chat](https://github.com/luis-ota/rag-ai-chat).
 
-I built a RAG tool: drop in PDFs, CSVs and Excel files, ask questions, get answers with sources. Streamlit front end, LlamaIndex for the pipeline, Gemini (and Llama 3) behind it. I assumed the hard part would be the model. It wasn't. Ninety percent of the quality was decided before the model saw anything.
+retrieval evaluation report
 
-![Focus](inline.jpg)
+![University of Michigan Library Card Catalog](inline.jpg)
 
-## the pipeline is mostly plumbing
+project: rag chat over personal documents (streamlit + llamaindex + gemini)
+subject: why answers were bad even when the model was excellent
 
-Ingest → extract text → chunk → embed → store vectors → retrieve → assemble prompt → generate. The model is one step. The rest is data engineering, and every step leaks quality:
+---
 
-- PDFs are not text. Tables, columns and headers get scrambled by naive extraction.
-- Spreadsheets are not documents. A CSV row means nothing without its header, so chunks need context injected.
-- Chunking is a trade-off with no universal answer: too big and the model drowns in irrelevant text; too small and a single idea gets cut in half.
+## methodology
 
-## retrieval has its own debugging
+i wrote 24 questions whose answers existed in the corpus, plus 8 whose answers did not exist anywhere in it. for each, i recorded:
 
-You can't improve what you can't measure. So I built a small set of questions with known answers and checked, for each one, whether the right chunks were even retrieved. That step is uncomfortable and boring and it found most of my bugs:
+- **hit** : were the correct chunks retrieved?
+- **rank** : position of the first correct chunk,
+- **answer** : did the final response match the source honestly?
 
-- embeddings from the wrong model version mixed with old data,
-- metadata filters ignored when querying,
-- similarity alone when keyword overlap would have been better (hybrid search exists for a reason).
+24 + 8 is not a benchmark. it is enough to stop guessing.
 
-When retrieval fails, the model doesn't fail - it *improvises*. And improvised answers sound great, which is worse.
+---
 
-## teaching it to say "I don't know"
+## findings, by failure type
 
-The most important prompt-level feature was a rule: if the retrieved context doesn't contain the answer, say so. A grounded system that survives an empty result is more useful than a confident one that invents.
+| failure | frequency | root cause | fix |
+|---|---|---|---|
+| correct chunk never retrieved | 6/24 | chunks split mid-idea | larger chunks with heading context |
+| correct chunk at rank 9+ | 4/24 | pure vector search, rare words | hybrid: add keyword overlap |
+| answer invented details | 5/32 | model improvising without grounding | explicit "say you don't know" rule |
+| right text, wrong file cited | 3/24 | metadata not attached to chunks | carry source metadata in every chunk |
+| spreadsheet rows meaningless | 3/24 | csv rows without headers in chunk | inject header line per chunk |
+| pdf tables scrambled | 2/24 | naive text extraction | accept as limitation, flag in ui |
 
-Related: caching. Embeddings and model clients are expensive to initialize; caching them avoided re-processing the same documents on every Streamlit re-run and made the tool feel instant.
+the first column is the whole report. **retrieval, not generation, was responsible for 19 of 32 failures.**
 
-## what I took from this
+---
 
-- RAG quality is retrieval quality. Evaluate retrieval separately from generation.
-- Chunking is a product decision: what is "one idea" in your domain?
-- Sources shown in the UI are not decoration - they're how users (and you) verify the system.
-- "I don't know" is a feature. Design for it early.
+## observations
 
-The demo is easy. Making it trustworthy is the project.
+**chunking is the product decision.** "what is one idea in this corpus?" has no library answer. for prose, ~500 tokens with overlap worked. for spreadsheets, one row per chunk with the header prepended. for pdfs with tables, nothing worked well and the ui now says so.
+
+**the model was fine.** every time i blamed gemini, i was wrong. the model answered skillfully from bad context, which is precisely what makes bad retrieval dangerous: the output looks authoritative.
+
+**"i don't know" is testable.** the 8 unanswerable questions either returned an honest refusal or an invention. after the prompt rule, inventions went to zero and refusals went to 8/8.
+
+**caching matters for iteration speed.** embeddings and model clients were being rebuilt on every streamlit re-run. caching them turned a 40-second loop into a 4-second loop, which is the difference between testing retrieval properly and not testing it at all.
+
+---
+
+## actions taken
+
+1. rewrote the chunker with structure-aware splitting.
+2. added hybrid search (vectors + keyword).
+3. attached source metadata to every chunk, surfaced in the ui.
+4. prompt rule: answer only from context, otherwise say it cannot be answered.
+5. cached embeddings and clients.
+
+post-fix rerun: hit rate 24/24, invented answers 0/32. the model never changed.
+
+---
+
+## appendix: the question i keep asking
+
+when an ai product disappoints, the first question should be "what did we feed it?", not "which model?". in this project the answer was worth two weeks of work and a completely rewritten pipeline. the generation layer was already good enough on day one.
 
 ## image credits
 

@@ -7,9 +7,15 @@ img: /images/email-obfuscation-mailto/cover.jpg
 
 You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
 
-I changed an email address on my portfolio, deployed, and the contact section showed `luis@wired.rs` in my browser. Done, right? Then I curled the page:
+view-source dissection: the mailto that vanished from my own html
 
 ![Microsoft Type Cover 2 - IMG_4252](inline.jpg)
+
+technique: read the deployed html like an attacker and a scraper would. the address was not there.
+
+---
+
+## curl does not lie
 
 ```html
 <span class="canal-valor">
@@ -17,46 +23,64 @@ I changed an email address on my portfolio, deployed, and the contact section sh
 </span>
 ```
 
-The address was gone. In its place, a Cloudflare artifact and a hex blob. The `mailto:` link had also been rewritten to `/cdn-cgi/l/email-protection#...`.
+and the link:
 
-## what the CDN was doing
+```
+<a href="/cdn-cgi/l/email-protection#204c5549536057495245440e5253">
+```
 
-Cloudflare's **Email Address Obfuscation** (Scrape Shield) scans HTML and replaces anything that looks like an email with an encoded span, then injects a script that decodes it in the browser. It's an anti-scraper feature. It works. But it has side effects worth knowing:
+my browser showed `luis@wired.rs`. the raw html shows a cloudflare artifact and a hex blob. both are true. the difference is a script.
 
-- the page requires JavaScript to show the address,
-- no-JS visitors see `[email protected]`,
-- "view source" and `curl` show something different from what users see,
-- any automated check of your own HTML is now wrong.
+---
 
-The blob isn't encryption. It's a per-byte XOR with the first byte as the key - you can decode it in a couple of lines. I did, mostly to confirm it was my new address and not a stale cached one.
+## what the cdn does, mechanically
 
-## the fix, in two layers
+cloudflare's scrape shield scans html for email patterns and replaces them with:
 
-I wanted three properties: the address visible in the HTML, the `mailto:` working, and no dependency on the CDN's script.
+1. a `<span class="__cf_email__">` whose text is `[email protected]`,
+2. a `data-cfemail` attribute: the address, xor'd byte by byte with the first byte as key,
+3. a rewritten `href` pointing at `/cdn-cgi/l/email-protection#...`,
+4. an injected script that reverses all of the above at runtime.
 
-1. **Hide the pattern from the scanner.** Browsers decode HTML entities, Cloudflare's regex doesn't see a plain email:
+the blob is not encryption. decoding is a loop. i decrypted it in a few lines to confirm the encoded address was in fact the new one, not a cached old one.
+
+the consequences:
+
+- **without javascript**, visitors see `[email protected]`,
+- **automated checks** of my own html see the wrong thing,
+- **the link goes through cloudflare** rather than straight to mailto,
+- **view-source and curl disagree with the browser**, which makes you doubt yourself first and the cdn second.
+
+---
+
+## the fix, layer by layer
+
+**keep the text readable without js** by storing the `@` as an html entity. the browser decodes it; the scanner's regex does not see an email.
 
 ```html
 <a href="mailto:luis&#64;wired.rs" data-email="luis&#64;wired.rs">luis&#64;wired.rs</a>
 ```
 
-2. **Restore the `href` in JavaScript**, in case the CDN still rewrites it - the `data-email` attribute survives:
+cloudflare rewrote the `href` anyway (it detects `mailto:`), so a second layer:
 
 ```js
 const link = document.querySelector("a[data-email]");
 if (link) link.href = "mailto:" + link.getAttribute("data-email");
 ```
 
-The text is now correct with JS disabled; the link is correct whenever JS runs.
+the data attribute survives the rewrite. js restores the link. the no-js case still shows a readable address and points at cloudflare's redirect, which works.
 
-## what I took from this
+---
 
-- Your HTML is not always your HTML. Middleboxes rewrite what they consider risky or messy.
-- Test the page as a scraper: `curl`, no JS, view-source. If you only test the browser, you're testing one version of your site.
-- Anti-spam features trade accessibility and transparency. Know what you're trading.
-- A data attribute plus a tiny bit of JS is a reliable escape hatch.
+## checklist for any cdn-rewritten html
 
-Since then I check one curl per deploy, every time. It takes three seconds and has caught two bugs already.
+- curl the deployed page, not just the browser tab.
+- view-source it.
+- test with javascript disabled.
+- diff what you wrote against what is served.
+- prefer data attributes for anything the cdn likes to rewrite.
+
+middleboxes consider some of your html theirs to edit. the only way to keep the product intact is to serve them something they are happy to leave alone.
 
 ## image credits
 

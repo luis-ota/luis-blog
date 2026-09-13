@@ -7,61 +7,74 @@ img: /images/yt-dlp-fallbacks/cover.jpg
 
 You can find the code at: [luis-ota/songhunter](https://github.com/luis-ota/songhunter), [luis-ota/downloadanyvideo](https://github.com/luis-ota/downloadanyvideo).
 
-Two of my projects download media from links (SongHunter identifies songs, DownloadAnyVideo extracts video formats). Both broke on the same week. The errors were different, which is typical:
+the extractor will break. here is the failure matrix.
 
 ![Unexpectedly Stylish Waveform](inline.jpg)
 
-```text
-ERROR: [TikTok] 7675886233427414289: Unexpected response from webpage request;
-please report this issue on https://github.com/yt-dlp/yt-dlp/issues
+two tools, one dependency, and a calendar of guaranteed outages.
 
-ERROR: [Instagram] DH56yy7p3lZ: Instagram sent an empty media response.
-Check if this post is accessible in your browser without being logged-in.
+---
+
+## the dependency
+
+both SongHunter and DownloadAnyVideo call yt-dlp. yt-dlp calls the platforms. the platforms do not have a contract with yt-dlp. when tiktok changes a page or adds a challenge, an extractor breaks, and the version of yt-dlp from three weeks ago is wrong.
+
+this is not a bug I can fix. it is a property of the domain, so the design has to absorb it.
+
+---
+
+## observed failures
+
+| site | error | cause | fix |
+|---|---|---|---|
+| tiktok | `unexpected response from webpage request` | outdated extractor | update yt-dlp in the image |
+| tiktok | same, after update | challenge solver differences | pip package + `curl_cffi` instead of standalone binary |
+| instagram | `empty media response` | outdated extractor | same update |
+| instagram | login wall on some posts | no cookies | out of scope; public posts work |
+| youtube | bot check on some clients | po-token era | deno/js runtime in the image |
+
+the pattern: **the same URL succeeds or fails based on a version number.** nobody changed the video. the world changed.
+
+---
+
+## the matrix I design against
+
+- **version drift** (weeks): fixed by rebuilding on a schedule, not by remembering.
+- **challenge changes** (days): fixed by keeping the challenger current, which means newest yt-dlp *and* the optional impersonation dependency.
+- **cookie walls** (per post): not fixable without accounts. documented, not hidden.
+- **platform outages** (hours): fallbacks.
+
+---
+
+## fallback tree
+
+```
+yt-dlp
+  ok? -> done
+  fail and tiktok? -> tikwm api -> direct media url
+  fail and other? -> surface the exact yt-dlp error
 ```
 
-Both services had yt-dlp installed, both were "working". The version was from a few weeks earlier. That's the whole bug.
+the fallback is not a second implementation of everything. it is a second *path* for the case with the highest failure rate. one api call, one download, same audio pipeline downstream.
 
-## extractors are reverse-engineered, and platforms move
+---
 
-yt-dlp doesn't have an API contract with TikTok. When TikTok changes its web page or adds a challenge, the extractor has to be updated. That means yt-dlp is a dependency with an **expiration date measured in weeks**, not years.
+## the calendar
 
-The fix is boring: update it at build time, not "eventually".
+both repos rebuild weekly via a scheduled workflow. the image pulls the newest yt-dlp at build time, so the extractors are never more than seven days stale. when the schedule runs and nothing changed, the deploy is a no-op; when it runs and something changed, the fix ships without me reading a changelog.
 
-```dockerfile
-RUN python3 -m venv /opt/ytdlp && \
-    /opt/ytdlp/bin/pip install --no-cache-dir -U "yt-dlp[default]" curl_cffi
-```
+---
 
-Two details I learned here:
+## what "reliable" means here
 
-- The **pip package** and the **standalone binary** are not equivalent. The pip install with `curl_cffi` handled TikTok's JS challenge with yt-dlp's native Python solver, while the standalone binary failed on the same URL, same version.
-- Some sites need browser impersonation, which `curl_cffi` provides. `--impersonate chrome` becomes possible only when that dependency is there.
+not "always works". it means:
 
-## don't trust one path
+1. failures are visible and named,
+2. the common case self-heals on a schedule,
+3. the highest-risk case has a fallback,
+4. the unsupported case is documented honestly.
 
-Even with an updated yt-dlp, a challenge can fail. So I added a fallback for TikTok: when yt-dlp errors, the service calls **TikWM** (`https://www.tikwm.com/api/?url=...`), takes `data.play` and downloads the media directly. The audio pipeline (ffmpeg → wav) doesn't care where the file came from.
-
-```rust
-match self.run_ytdlp(&effective_url, &output_dir, &template).await {
-    Ok(path) => Ok(path),
-    Err(err) if effective_url.contains("tiktok.com") => {
-        warn!(task_id, error = %err, "yt-dlp failed, falling back to TikWM");
-        self.tikwm_fallback(&effective_url, &output_dir).await
-    }
-    Err(err) => Err(err),
-}
-```
-
-And because I will absolutely forget to bump yt-dlp manually, both repos now have a **weekly scheduled rebuild**. The image gets the newest extractors once a week whether I think about it or not.
-
-## what I took from this
-
-- Treat scrapers as fragile dependencies: pin nothing, update on a schedule, and monitor.
-- Fallbacks are a product feature. "It works today" was never the promise; "the tool tries hard" is.
-- Keep URLs normalized before extraction (`/reels/` → `/reel/`, strip tracking params) - small things that remove whole classes of failure.
-- If two of your tools break on the same day, look for the shared dependency before debugging each tool.
-
-Since these changes, both tools survived the next wave of platform changes with zero downtime. That's the entire goal: the extractor breaks, and nobody notices.
+the tools went through the last platform wave without downtime. not because the code got smarter, but because the process stopped depending on me noticing.
 
 ## image credits
 

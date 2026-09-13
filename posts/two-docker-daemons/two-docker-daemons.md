@@ -7,55 +7,80 @@ img: /images/two-docker-daemons/cover.jpg
 
 You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
 
-This one cost me longer than it should have because the commands *worked*. They just worked on the wrong thing.
+field guide: which docker daemon am I talking to?
 
 ![network](inline.jpg)
 
-I was on a VPS where I had set up rootless Docker as my user (the daemon runs as `ubuntu`, socket under `$XDG_RUNTIME_DIR/docker.sock`). So `docker ps` showed my portfolio, boxdgrid, songhunter containers. Life was good.
+a checklist I wrote after losing an hour to the wrong socket.
 
-Then I inspected the same box with `sudo`:
+---
+
+## the symptom
+
+`docker ps` showed my containers. `sudo docker ps` showed *different* containers. both commands were "right". one machine, two engines.
+
+---
+
+## minute zero: check the socket before anything else
 
 ```bash
-$ docker ps                          # my rootless world
-CONTAINER ID  IMAGE                    ...  NAMES
-...            boxdgrid                 ...  boxdgrid
-...            songhunter               ...  songhunter
-
-$ sudo docker ps                     # a completely different world
-CONTAINER ID  IMAGE                          ...  NAMES
-...            downloadanyvideo-frontend-1  ...  downloadanyvideo-frontend-1
-...            downloadanyvideo-backend-1   ...  downloadanyvideo-backend-1
+echo "$DOCKER_HOST"
+docker context show
+ls -la /var/run/docker.sock "$XDG_RUNTIME_DIR/docker.sock" 2>/dev/null
 ```
 
-Two daemons. Two sets of containers. Two sets of port mappings. And when they try to bind the same host port, the second one loses, because the kernel doesn't care which daemon you like.
+if `DOCKER_HOST` is empty and you are not root, the CLI falls back to `/var/run/docker.sock`, which belongs to the **rootful** daemon. if it points to `/run/user/1000/docker.sock`, you are talking to **rootless**.
 
-## why this happens
+two sockets, two worlds. pick one and stay in it.
 
-Rootless Docker exists so you can run containers without root. The daemon runs as your user, with `rootlesskit` and `slirp4netns` doing the namespace and networking work. The socket lives somewhere like `/run/user/1001/docker/docker.sock`, and the CLI talks to it when the env/context says so.
+---
 
-The rootful daemon lives at `/var/run/docker.sock` and is used by default when you are root or when the CLI falls back to it.
+## minute five: read `ss`, not `docker ps`
 
-So `docker ps` and `sudo docker ps` are not "the same command with more permissions". They are two different engines, with separate image stores, networks, and containers.
+```bash
+sudo ss -tlnp | grep 3000
+```
 
-## how I diagnosed it
+the answer was the detail that cracked it:
 
-- `ss -tlnp` showed the listener belonged to `docker-proxy` **running as root**, for a port I thought was managed by my rootless container.
-- `docker context ls` and `echo $DOCKER_HOST` tell you where the CLI is pointed.
-- `ls -la /var/run/docker.sock $XDG_RUNTIME_DIR/docker.sock` shows which sockets exist.
+```
+users:(("docker-proxy",pid=1446,...))
+```
 
-In my case, the old stack (rootful) was still holding `127.0.0.1:3001` and `:3010`, so the new rootless stack simply could not bind. My deploy script ran as the deploy user (rootless), pulled the same images, and failed with "port already allocated" - which read like a bug in my script, not like a second daemon.
+`docker-proxy` running as **root**. my rootless containers could never own that port, and the deploy script (running as `ubuntu`) kept failing to bind it. the error said "port already allocated", which sounds like a race and is actually a different engine holding the lease.
 
-## the fix
+---
 
-Stop the old world. I keep everything on one daemon now (the rootless one), and the deploy scripts always run as the same user with the same context. One daemon, one port table, no ghosts.
+## the two engines, side by side
 
-If you *do* need both, give each daemon its own host ports, and never debug one while the other owns the socket.
+| | rootful | rootless |
+|---|---|---|
+| daemon runs as | root | your user |
+| socket | `/var/run/docker.sock` | `$XDG_RUNTIME_DIR/docker.sock` |
+| container processes | root on the host | your user, in a user namespace |
+| networking helper | `docker-proxy` as root | `rootlesskit` + `slirp4netns` |
+| managed by | `systemctl status docker` | a user service or `dockerd-rootless.sh` |
+| sees the other's containers | no | no |
 
-## what I took from this
+`docker ps` is not "the list of containers on this machine". it is "the list of containers **this daemon** knows about". those are different sentences.
 
-- `sudo docker` is a different machine. Check `docker context ls` before comparing `ps` output across privileges.
-- A port bind failure can mean "the other daemon owns it", not "your config is wrong".
-- Rootless Docker is great: no root daemon, better isolation. But it means your automation and your shell must agree on which socket is in play.
+---
+
+## the rules I follow now
+
+1. one daemon per host, unless there is a reason.
+2. deploy scripts always run as the same user, with the same context, as the containers they manage.
+3. when a port bind fails, check *who owns the port* before touching the config.
+4. never debug across the privilege boundary. `sudo docker` and `docker` are separate machines with a shared kernel.
+5. if both engines must exist, split their port ranges on purpose.
+
+---
+
+## why rootless is still worth it
+
+no root daemon means a container escape lands as my user, not as root. the price is exactly what bit me: an extra namespace between you and your ports, and a second universe to keep in your head.
+
+the trick is not choosing the better daemon. it is knowing which one answers when you type.
 
 ## image credits
 
