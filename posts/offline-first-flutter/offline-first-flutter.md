@@ -2,16 +2,24 @@
 title: offline-first is a data modeling problem
 date: 2026-06-16
 description: a trucking app taught me that sync is not a library toggle. it's a set of decisions about identity, conflicts and retries.
-img: /images/offline-first-flutter/cover.png
+img: /images/offline-first-flutter/cover.jpg
 ---
+
+You can find the code at: [github.com/luis-ota/AppTransportadora](https://github.com/luis-ota/AppTransportadora).
+
+Listen to `AC/DC - Highway to Hell` while reading!
+
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2zYzyRzz6pRmhPzyfMEC8s?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
 A freight management app for a transport company: drivers register trips, expenses, delivery receipts (with photos), commissions. Flutter + Firebase (Auth + Firestore). The feature list is ordinary. The requirement that changed everything: **it has to work in a truck**, which means it has to work offline, on bad connections, on a phone that gets closed abruptly.
 
+![Modern fire truck minimizes fire hazard, Wheeling Downs, Wheeling, W. Va](inline.jpg)
+
 ## "offline support" is three separate problems
 
-1. **Reading offline** — local cache. Firestore gives this with persistence enabled; done.
-2. **Writing offline** — queue mutations and replay them when connectivity returns.
-3. **Agreeing afterwards** — resolving what happens when two devices changed the same thing.
+1. **Reading offline** - local cache. Firestore gives this with persistence enabled; done.
+2. **Writing offline** - queue mutations and replay them when connectivity returns.
+3. **Agreeing afterwards** - resolving what happens when two devices changed the same thing.
 
 Most tutorials stop at step one. Step two is where idempotency lives. Step three is where product decisions live.
 
@@ -27,7 +35,7 @@ When a driver's phone and the office dashboard both edit the same frete, who win
 - **append-only events** (status changes, expenses) merge naturally because they don't overwrite,
 - derived numbers (commissions) should be computed from the events, not stored as editable fields.
 
-Turning "editable rows" into "events plus computed views" removed most conflict surface. The remaining conflicts were real-world ones — and those needed a human, not a merge function.
+Turning "editable rows" into "events plus computed views" removed most conflict surface. The remaining conflicts were real-world ones - and those needed a human, not a merge function.
 
 ## design for the retry, not the request
 
@@ -41,3 +49,8 @@ Every write must be safe to repeat. Photos upload on their own with retry and ba
 - Test with the network off, or you're testing the happy path of a feature that exists for the unhappy path.
 
 The drivers don't care about any of this. They care that the app never says "sem conexão, tente novamente". That's the whole spec.
+
+## image credits
+
+- cover: [The Rusty, Trusty, Steed](https://www.flickr.com/photos/35557234@N07/9416346080) by Zach Dischner (by 2.0)
+- image: [Modern fire truck minimizes fire hazard, Wheeling Downs, Wheeling, W. Va](https://www.flickr.com/photos/24029425@N06/9301354134) by Boston Public Library (by 2.0)

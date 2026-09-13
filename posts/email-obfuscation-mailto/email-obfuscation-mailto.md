@@ -2,10 +2,14 @@
 title: the mailto link that disappeared (thanks, CDN)
 date: 2026-07-15
 description: Cloudflare rewrote my email into a span only JavaScript could decode. undoing it taught me to read my own HTML as a stranger.
-img: /images/email-obfuscation-mailto/cover.png
+img: /images/email-obfuscation-mailto/cover.jpg
 ---
 
+You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
+
 I changed an email address on my portfolio, deployed, and the contact section showed `luis@wired.rs` in my browser. Done, right? Then I curled the page:
+
+![Microsoft Type Cover 2 - IMG_4252](inline.jpg)
 
 ```html
 <span class="canal-valor">
@@ -24,7 +28,7 @@ Cloudflare's **Email Address Obfuscation** (Scrape Shield) scans HTML and replac
 - "view source" and `curl` show something different from what users see,
 - any automated check of your own HTML is now wrong.
 
-The blob isn't encryption. It's a per-byte XOR with the first byte as the key — you can decode it in a couple of lines. I did, mostly to confirm it was my new address and not a stale cached one.
+The blob isn't encryption. It's a per-byte XOR with the first byte as the key - you can decode it in a couple of lines. I did, mostly to confirm it was my new address and not a stale cached one.
 
 ## the fix, in two layers
 
@@ -36,7 +40,7 @@ I wanted three properties: the address visible in the HTML, the `mailto:` workin
 <a href="mailto:luis&#64;wired.rs" data-email="luis&#64;wired.rs">luis&#64;wired.rs</a>
 ```
 
-2. **Restore the `href` in JavaScript**, in case the CDN still rewrites it — the `data-email` attribute survives:
+2. **Restore the `href` in JavaScript**, in case the CDN still rewrites it - the `data-email` attribute survives:
 
 ```js
 const link = document.querySelector("a[data-email]");
@@ -53,3 +57,8 @@ The text is now correct with JS disabled; the link is correct whenever JS runs.
 - A data attribute plus a tiny bit of JS is a reliable escape hatch.
 
 Since then I check one curl per deploy, every time. It takes three seconds and has caught two bugs already.
+
+## image credits
+
+- cover: [Rainbow fan sitting under black old fashioned typewriter keyboard keys](https://wordpress.org/photos/photo/90568630b0/) by Danielle Zarcaro (cc0 1.0)
+- image: [Microsoft Type Cover 2 - IMG_4252](https://www.flickr.com/photos/15216811@N06/14158246545) by Nicola since 1972 (by 2.0)

@@ -4,6 +4,7 @@ date: 2025-05-12
 description: how i made a tui tool to monitor swap using rust
 img: /images/swaptop/chart-demo.gif
 ---
+
 You can find it at: [https://github.com/luis-ota/swaptop/](https://github.com/luis-ota/swaptop/)
 
 Listen to `Duvet - bôa` while reading! 

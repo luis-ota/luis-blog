@@ -2,10 +2,14 @@
 title: giving a deploy key a single job with SSH forced commands
 date: 2025-10-21
 description: my CI key had a full shell on a server with passwordless sudo. here is how I made it unable to do anything except deploy.
-img: /images/ssh-forced-commands/cover.png
+img: /images/ssh-forced-commands/cover.jpg
 ---
 
+You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
+
 I automated the deploy of my portfolio with GitHub Actions: the workflow connects over SSH and runs `docker compose pull && docker compose up -d`. Simple. Then I looked at what that key actually was.
+
+![Couple of metallic padlocks on old door frame](inline.jpg)
 
 It was an ed25519 key with **full shell access** as `ubuntu`, and `ubuntu` has passwordless sudo on that box. If that private key ever leaked, whoever had it owned the entire server. The deploy automation was fine; the blast radius was absurd.
 
@@ -22,7 +26,7 @@ Two parts:
 - `restrict` turns off everything else: no pty, no port forwarding, no agent forwarding, no X11, no user rc.
 - `command="..."` forces that exact command to run for **any** session opened with that key. If the client asks for `id`, the server ignores it and runs the deploy script anyway. If the client tries `scp`, the forced command runs and the transfer fails.
 
-I tested it the right way — by trying to break out:
+I tested it the right way - by trying to break out:
 
 ```bash
 ssh -i deploy_key server 'id; whoami'   # prints the deploy output, no id, no whoami
@@ -50,3 +54,8 @@ For a static site I went even simpler: the forced command runs `git fetch && git
 - Audit what your keys can do, not what your workflow does. The workflow was never the problem.
 
 Since then I have four of these keys on two servers, each capable of exactly one script, and I sleep better.
+
+## image credits
+
+- image: [Couple of metallic padlocks on old door frame](https://www.flickr.com/photos/10361931@N06/4268291295) by Horia Varlan (by 2.0)
+- cover: [Canvas](https://www.flickr.com/photos/36006949@N00/5465456440) by DeclanTM (by 2.0)

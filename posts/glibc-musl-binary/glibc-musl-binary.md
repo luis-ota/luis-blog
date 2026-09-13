@@ -2,8 +2,14 @@
 title: glibc, musl, and the binary that refused to run
 date: 2025-09-27
 description: my CI got 2x faster and then the container crashed with "GLIBC_2.39 not found". this is what dynamic linking taught me.
-img: /images/glibc-musl-binary/cover.png
+img: /images/glibc-musl-binary/cover.jpg
 ---
+
+You can find the code at: [github.com/luis-ota/songhunter](https://github.com/luis-ota/songhunter).
+
+Listen to `Kraftwerk - The Robots` while reading!
+
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5eqZWYQ5tbIehx00NeKXz7?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
 I had a Rust service (SongHunter) that took about 5 minutes to build on every push, because everything was compiled inside the Docker build. I moved the compile step to the GitHub runner, cached `~/.cargo` and `target/` with `actions/cache`, and the build dropped to under 2 minutes. Great, right?
 
@@ -35,3 +41,7 @@ The build machine and the runtime machine have to agree on the ABI. That's it. T
 - "It works on my machine" has a concrete meaning here: my machine is the build machine.
 
 The funniest part? After the fix, the CI went from ~6 minutes (build + deploy) to a warm build of about 3 minutes, and the crash was replaced by a health check that actually passes. I'll take it.
+
+## image credits
+
+- cover: [Computer coding on a screen](https://www.rawpixel.com/image/432212/free-photo-image-code-binary-java) by Markus Spiske (cc0 1.0)

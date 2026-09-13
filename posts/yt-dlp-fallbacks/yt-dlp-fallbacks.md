@@ -2,10 +2,14 @@
 title: yt-dlp extractors break every few weeks. plan for it.
 date: 2026-03-17
 description: TikTok and Instagram stopped working on two of my tools on the same week. same cause, same fix, and a fallback.
-img: /images/yt-dlp-fallbacks/cover.png
+img: /images/yt-dlp-fallbacks/cover.jpg
 ---
 
+You can find the code at: [luis-ota/songhunter](https://github.com/luis-ota/songhunter), [luis-ota/downloadanyvideo](https://github.com/luis-ota/downloadanyvideo).
+
 Two of my projects download media from links (SongHunter identifies songs, DownloadAnyVideo extracts video formats). Both broke on the same week. The errors were different, which is typical:
+
+![Unexpectedly Stylish Waveform](inline.jpg)
 
 ```text
 ERROR: [TikTok] 7675886233427414289: Unexpected response from webpage request;
@@ -54,7 +58,12 @@ And because I will absolutely forget to bump yt-dlp manually, both repos now hav
 
 - Treat scrapers as fragile dependencies: pin nothing, update on a schedule, and monitor.
 - Fallbacks are a product feature. "It works today" was never the promise; "the tool tries hard" is.
-- Keep URLs normalized before extraction (`/reels/` → `/reel/`, strip tracking params) — small things that remove whole classes of failure.
+- Keep URLs normalized before extraction (`/reels/` → `/reel/`, strip tracking params) - small things that remove whole classes of failure.
 - If two of your tools break on the same day, look for the shared dependency before debugging each tool.
 
 Since these changes, both tools survived the next wave of platform changes with zero downtime. That's the entire goal: the extractor breaks, and nobody notices.
+
+## image credits
+
+- cover: [I just finished reading Ready Player One → Geek flashback](https://www.flickr.com/photos/44124348109@N01/13885224116) by jurvetson (by 2.0)
+- image: [Unexpectedly Stylish Waveform](https://www.flickr.com/photos/55023503@N00/7745232258) by rndmcnlly (by 2.0)

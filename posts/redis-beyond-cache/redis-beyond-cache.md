@@ -1,11 +1,17 @@
 ---
 title: Redis is not just a cache
 date: 2026-04-28
-description: rate limits, locks and queues all fit in Redis — until you need delivery guarantees. knowing where the line is changed how I design services.
-img: /images/redis-beyond-cache/cover.png
+description: rate limits, locks and queues all fit in Redis - until you need delivery guarantees. knowing where the line is changed how I design services.
+img: /images/redis-beyond-cache/cover.jpg
 ---
 
-I used Redis for years as a cache: `SET`, `GET`, `EXPIRE`, done. Then I started needing the things caches don't promise — atomic counters, locks, queues — and Redis turned into a different tool. A more dangerous one, in a fun way.
+Listen to `Radiohead - Everything In Its Right Place` while reading!
+
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/31DVVa40JpTudyGDNC1ROW?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+I used Redis for years as a cache: `SET`, `GET`, `EXPIRE`, done. Then I started needing the things caches don't promise - atomic counters, locks, queues - and Redis turned into a different tool. A more dangerous one, in a fun way.
+
+![Electronic Detective by Ideal Toy Corporation, Copyright 1979 (Electronic Board Game) - Th](inline.jpg)
 
 ## rate limiting: don't do it in two commands
 
@@ -16,18 +22,18 @@ INCR key
 EXPIRE key 60
 ```
 
-There's a race between the two: a crash or a concurrent caller can leave a key without TTL, and then the counter never resets. The fix is not "add a transaction somewhere" — it's doing the whole thing **atomically**, server-side, in a Lua script: read the counter, set it if missing, set the TTL if it was just created, increment, and return the current value. One round trip, no race, no half state.
+There's a race between the two: a crash or a concurrent caller can leave a key without TTL, and then the counter never resets. The fix is not "add a transaction somewhere" - it's doing the whole thing **atomically**, server-side, in a Lua script: read the counter, set it if missing, set the TTL if it was just created, increment, and return the current value. One round trip, no race, no half state.
 
-That's the first lesson: Redis is single-threaded for command execution, and a Lua script is one command. Atomicity is available — you just have to ask for it.
+That's the first lesson: Redis is single-threaded for command execution, and a Lua script is one command. Atomicity is available - you just have to ask for it.
 
 ## locks: SET NX PX with a token
 
 A distributed lock is `SET key value NX PX 30000`. Two details make it correct:
 
-- `NX` — only one holder,
-- `PX` — the lock expires, so a crashed process doesn't hold it forever.
+- `NX` - only one holder,
+- `PX` - the lock expires, so a crashed process doesn't hold it forever.
 
-And the value must be a unique token, because the release has to be conditional: "delete only if I'm still the owner". Otherwise a slow process releases a lock that already belongs to someone else — the classic bug that makes locks look like they work.
+And the value must be a unique token, because the release has to be conditional: "delete only if I'm still the owner". Otherwise a slow process releases a lock that already belongs to someone else - the classic bug that makes locks look like they work.
 
 ## queues: it depends on what "delivered" means
 
@@ -45,4 +51,9 @@ But when I need retries with backoff, routing between consumers, dead-letter que
 - Choose a queue by its failure semantics, not its throughput.
 - Cache, coordination and messaging are three different jobs that happen to share a daemon.
 
-I still start with Redis for simple things — and I've stopped feeling clever about it.
+I still start with Redis for simple things - and I've stopped feeling clever about it.
+
+## image credits
+
+- cover: [Macro Computer](https://stocksnap.io/photo/macro-computer-O7NIMDXKMF) by One Idea LLC (cc0 1.0)
+- image: [Electronic Detective by Ideal Toy Corporation, Copyright 1979 (Electronic Board Game) - Th](https://commons.wikimedia.org/w/index.php?curid=33068221) by Joe Haupt from USA (by-sa 2.0)

@@ -2,10 +2,14 @@
 title: the nginx reload that failed silently
 date: 2026-04-14
 description: systemctl reload said success, the site kept serving the old config, and nginx -t was happy. one line in the error log explained everything.
-img: /images/nginx-silent-reload/cover.png
+img: /images/nginx-silent-reload/cover.jpg
 ---
 
+You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
+
 I changed an nginx config, ran the usual dance, and saw this:
+
+![Racks line](inline.jpg)
 
 ```bash
 $ sudo nginx -t && sudo systemctl reload nginx
@@ -27,7 +31,7 @@ The actual failure was in the error log, which nobody reads when the command is 
 while previously it used the "$http_cf_connecting_ip" key
 ```
 
-A `limit_req_zone` in another site's config had changed its key. nginx cannot change the key of an existing shared memory zone at reload time — the zone already exists in memory. So the whole reload was rejected. `nginx -t` passed because it parses the new config in a **fresh** process, where the old zone definition doesn't exist. The test was validating a world that would never be born.
+A `limit_req_zone` in another site's config had changed its key. nginx cannot change the key of an existing shared memory zone at reload time - the zone already exists in memory. So the whole reload was rejected. `nginx -t` passed because it parses the new config in a **fresh** process, where the old zone definition doesn't exist. The test was validating a world that would never be born.
 
 ## how I noticed
 
@@ -60,3 +64,8 @@ A better long-term fix is not changing a zone key in place. But when you inherit
 - Shared memory zones are stateful. Stateful things don't reload cleanly, and the error lives in the log, not in the exit code.
 
 Now every config change I make ends with a `curl` against the real domain, because I no longer trust green text.
+
+## image credits
+
+- cover: [Ethernet Patch Panel - Rear](https://www.flickr.com/photos/84816487@N00/2261404199) by dmitrybarsky (by 2.0)
+- image: [Racks line](https://www.flickr.com/photos/58411470@N00/8475764430) by kewl (by 2.0)

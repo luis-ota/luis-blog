@@ -1,11 +1,13 @@
 ---
-title: deterministic colors — turning any string into a color that matches
+title: deterministic colors - turning any string into a color that matches
 date: 2025-11-05
 description: ChromaString makes a stable color out of any text. the interesting part is not the hash, it's making the result readable.
-img: /images/chromastring-hash-color/cover.png
+img: /images/chromastring-hash-color/cover.jpg
 ---
 
-I built [ChromaString](https://github.com/luis-ota/chromastring) as a tiny tool: type text, get a color. Same text, same color, forever. The hard part isn't the hashing — it's making the color *good*.
+I built [ChromaString](https://github.com/luis-ota/chromastring) as a tiny tool: type text, get a color. Same text, same color, forever. The hard part isn't the hashing - it's making the color *good*.
+
+![$h*! my Dad paints](inline.jpg)
 
 ## the obvious part
 
@@ -59,3 +61,8 @@ The database-free part is my favorite: no storage, no sync, no migration. The st
 - Tiny tools are great places to notice patterns you'll reuse in bigger systems.
 
 It's a weekend project, but I keep reaching for the same idea: derive, constrain, convert.
+
+## image credits
+
+- cover: [Blur-2](https://www.flickr.com/photos/97425966@N05/9135832665) by maxmadesign.com (by 2.0)
+- image: [$h*! my Dad paints](https://www.flickr.com/photos/51668926@N00/4996206922) by ruffin_ready (by 2.0)

@@ -2,10 +2,18 @@
 title: Cloudflare was serving my old JavaScript
 date: 2026-01-13
 description: the deploy was green, the HTML was new, the toggle didn't exist. CDNs cache URLs, not intentions.
-img: /images/cloudflare-stale-javascript/cover.png
+img: /images/cloudflare-stale-javascript/cover.jpg
 ---
 
+You can find the code at: [github.com/luis-ota/luis-ota-portfolio](https://github.com/luis-ota/luis-ota-portfolio).
+
+Listen to `Daft Punk - Around the World` while reading!
+
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1q4poN5PaGvY1RbEC5gl5s?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
 The deploy finished, the HTML was clearly the new one (new markup, new assets), and yet the page behaved like the old version. Buttons missing, enhancements dead. A hard refresh fixed it locally, which is always the worst kind of "fixed".
+
+![My Desire screenshot from '99](inline.jpg)
 
 Then I looked at the headers:
 
@@ -16,11 +24,11 @@ cf-cache-status: HIT
 age: 1656
 ```
 
-`age: 1656` — Cloudflare was serving a copy almost half an hour old, with a 4 hour TTL. And the file URL had never changed. `script.js` was still `script.js`. The CDN had no reason to fetch the new one, and cache headers alone weren't going to save me.
+`age: 1656` - Cloudflare was serving a copy almost half an hour old, with a 4 hour TTL. And the file URL had never changed. `script.js` was still `script.js`. The CDN had no reason to fetch the new one, and cache headers alone weren't going to save me.
 
 ## why "no-cache" from origin didn't save me
 
-My server was already sending `Cache-Control: no-cache` for HTML, and `max-age=3600` for JS/CSS. Cloudflare had its own idea of the TTL for JS/CSS (it can override origin TTLs, and it showed `max-age=14400`). Worse, browsers that had visited the old site had cached the old assets with `immutable, max-age=2592000` — 30 days — from the previous server configuration. Cache headers are a negotiation, and old promises don't expire when you change your mind.
+My server was already sending `Cache-Control: no-cache` for HTML, and `max-age=3600` for JS/CSS. Cloudflare had its own idea of the TTL for JS/CSS (it can override origin TTLs, and it showed `max-age=14400`). Worse, browsers that had visited the old site had cached the old assets with `immutable, max-age=2592000` - 30 days - from the previous server configuration. Cache headers are a negotiation, and old promises don't expire when you change your mind.
 
 ## cache invalidation is a URL problem
 
@@ -46,3 +54,8 @@ For HTML the rule is the opposite: keep it short-lived or `no-cache`, because HT
 - A CDN with its own TTL is a second system you don't control. Design so you don't need to.
 
 I also stopped trusting old `immutable` headers: they are a promise to the browser, and you can't take promises back. You can only hand out a new URL.
+
+## image credits
+
+- cover: [Clouded sky](https://www.flickr.com/photos/55856449@N04/10190046744) by Infomastern (by-sa 2.0)
+- image: [My Desire screenshot from '99](https://www.flickr.com/photos/35468151816@N01/181564444) by danbri (by 2.0)

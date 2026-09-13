@@ -2,10 +2,14 @@
 title: rate limiting without ever storing an IP
 date: 2026-02-10
 description: the AfroRetratos anonymous feed needed abuse protection without collecting personal data. HMACs and a bit of discipline did it.
-img: /images/rate-limit-without-ip/cover.png
+img: /images/rate-limit-without-ip/cover.jpg
 ---
 
-AfroRetratos has an anonymous feed. That word — anonymous — is a design constraint, not a slogan. If I store raw IPs "just for rate limiting", the product is no longer anonymous, no matter what the UI says.
+You can find the code at: [github.com/luis-ota/afroretratos](https://github.com/luis-ota/afroretratos).
+
+AfroRetratos has an anonymous feed. That word - anonymous - is a design constraint, not a slogan. If I store raw IPs "just for rate limiting", the product is no longer anonymous, no matter what the UI says.
+
+![North Korea - Highway traffic](inline.jpg)
 
 But an anonymous public form without rate limiting is a gift to whoever writes the first abuse script. I needed both: enforce limits, store nothing that identifies a person.
 
@@ -23,13 +27,13 @@ That's what an HMAC gives you:
 ip_hash = HMAC_SHA256(server_secret, client_ip)
 ```
 
-I store `ip_hash`. Not the IP. The hash is deterministic, so I can count requests, apply a limit, and block an origin for a while — all without knowing who anyone is. If the secret leaks, hashes are compromised; that's why the secret is server-only and rotatable.
+I store `ip_hash`. Not the IP. The hash is deterministic, so I can count requests, apply a limit, and block an origin for a while - all without knowing who anyone is. If the secret leaks, hashes are compromised; that's why the secret is server-only and rotatable.
 
 For the (rare) moderation case where the full picture matters, there's a second, optional field: the raw IP encrypted with AES-256-GCM, decryptable only in the admin panel. Off by default. Storing it is a deliberate choice, not a side effect.
 
 ## getting the client IP right
 
-The other half of this problem is "which IP?". Behind a proxy, `X-Forwarded-For` is just a header — anyone can send it. The rule I implemented:
+The other half of this problem is "which IP?". Behind a proxy, `X-Forwarded-For` is just a header - anyone can send it. The rule I implemented:
 
 - trust `X-Forwarded-For` only from known proxies, and only the entry **N hops from the right** (`TRUSTED_PROXY_HOPS`),
 - trust Cloudflare's `CF-Connecting-IP` only when the origin is conclusively behind Cloudflare (explicit flag),
@@ -51,3 +55,8 @@ Blocking and limiting run *before* any parsing or database work, so abuse is che
 - Proxy headers are attacker input until proven otherwise. Trust hops, not headers.
 
 The public API response only ever contains `id`, `content`, `createdAt` and the event. Everything else lives where it belongs: in the moderation surface, behind a login, or nowhere.
+
+## image credits
+
+- cover: [Abstract Light Painting](https://www.flickr.com/photos/124240658@N06/15821646318) by NiePhotography (by-sa 2.0)
+- image: [North Korea - Highway traffic](https://www.flickr.com/photos/51812388@N02/5609363979) by Roman Harak (by-sa 2.0)
