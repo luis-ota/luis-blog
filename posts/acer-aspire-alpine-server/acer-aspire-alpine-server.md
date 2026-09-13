@@ -11,7 +11,7 @@ Listen to `alyzea - logged in for hours` while reading!
 
 There's a special kind of fun in taking a machine that the e-waste gods already claimed and turning it into something useful. This is the story of how a **2007 Acer Aspire 5315**, with its dead CMOS battery, dying speaker, and single-core Celeron 560, became a Docker server running in my living room in 2026.
 
-![Hidden Lake](inline.jpg)
+![the actual server, living under a shelf](server-shelf.jpg)
 
 ## the corpse
 
@@ -23,6 +23,8 @@ The specs would make a Raspberry Pi laugh:
 - 320 GB spinning HDD (Samsung HM320JI)
 - BIOS only, of course. UEFI was two years in the future
 - A CMOS battery so dead that the hardware clock boots into **January 1st, 2001**
+
+![opened up: fan, heatsink, memory and the original hdd](laptop-open.jpg)
 
 The plan: Alpine Linux edge, Docker, SSH, Tailscale. A headless box that costs zero dollars and uses about 35 watts.
 
@@ -115,6 +117,8 @@ kernel.sched_autogroup_enabled = 1
 vm.watermark_scale_factor = 125
 ```
 
+![the memory stick, back in its slot](ram-stick.jpg)
+
 Result: about **190 MB of RAM in use** with Docker, sshd, chrony and tailscaled all running. Idle load 0.00.
 
 ## the hdd deserves better deadlines
@@ -171,6 +175,8 @@ docker run -d something         # 190MB of RAM says yes
 cargo install anything          # musl-linked, static, fast
 ```
 
+![fastfetch on the server: alpine edge, celeron 560, 571 mb in use](fastfetch.png)
+
 Btop on this machine taught me a lesson about Alpine: it has no locales at all out of the box (musl philosophy), so you install `musl-locales`, add `LANG=C.UTF-8` to `/etc/environment`, and flip `PermitUserEnvironment yes` in sshd so that *non-interactive* `ssh host 'btop'` commands get the locale too. Every layer of a system has opinions about your terminal, apparently.
 
 Oh, and compiling a Rust utility (swaptop) on a single-core 2.13 GHz Celeron takes about 20 minutes. It compiles. That's the point. It compiles.
@@ -199,7 +205,4 @@ Oh, and compiling a Rust utility (swaptop) on a single-core 2.13 GHz Celeron tak
 
 The machine that couldn't boot a modern web page reliably in 2007 now runs containers around the clock, wakes up with the correct year, and answers SSH from two continents. Long live the dead.
 
-## image credits
-
-- cover: [all setup for daily use - the 23 year old Apple //c](https://www.flickr.com/photos/35448539@N00/2376243912) by blakespot (by 2.0)
-- image: [Hidden Lake](https://www.flickr.com/photos/27784370@N05/8547777933) by U.S. Geological Survey (cc0 1.0)
+*(photos: mine)*
