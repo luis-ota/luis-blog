@@ -34,7 +34,9 @@ export function getSortedPostsData(): Post[] {
         } as Post;
     }).filter(Boolean) as Post[];
 
-    return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
+    return allPostsData.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
 }
 
 function remarkImagePathTransformer(postId: string) {
