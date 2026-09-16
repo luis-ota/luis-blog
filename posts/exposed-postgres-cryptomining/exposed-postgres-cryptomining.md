@@ -2,7 +2,7 @@
 title: "anatomy of a cryptomining incident: when a public postgresql ate our erp server"
 date: 2026-09-16
 description: "an anonymized post-mortem: how an exposed database, a weak password and a busy container turned a small saas server into someone else's crypto farm and how we got our data back at 30 kb/s."
-img: /images/exposed-postgres-cryptomining/cover.jpg
+img: /images/exposed-postgres-cryptomining/cover.png
 ---
 
 Listen to `bôa - Duvet` while reading!
@@ -30,10 +30,6 @@ Listen to `bôa - Duvet` while reading!
 Like a lot of small teams, we ran lean: one cloud VM, a Docker Compose stack with an
 ERP application and a PostgreSQL container, a reverse proxy in front, automated uploads
 to object storage, and a dream. It had served us well for months.
-
-![patch panel](patch-panel.jpg)
-
-*a patch panel: many doors, all of them open. ours was a single port, and that was enough.*
 
 The Compose file had the kind of line that looks harmless and isn't:
 
@@ -135,9 +131,9 @@ specifically hunt **exposed PostgreSQL servers** — see
 [PG_MEM](https://www.aquasec.com/blog/pg_mem-a-malware-hidden-in-the-postgres-processes) and
 this [Wiz write-up](https://www.wiz.io/blog/postgresql-cryptomining) on a later, fileless variant.
 
-![mining rig](mining-rig.jpg)
+[![docker layers](camadas.png)](/images/exposed-postgres-cryptomining/camadas.png)
 
-*not ours, but this is what our server was doing while we slept. rent-free.*
+*the miner lived in the container's writable layer, not in the image. that is where you look.*
 
 ## Root cause: not an exploit — a superpower left on the doorstep
 
@@ -162,9 +158,9 @@ payroll.
 For defenders, the takeaway is blunt: **a superuser connection equals OS command execution.**
 Treat database credentials like SSH keys.
 
-![padlock](padlock.jpg)
+[![the chain](cadeia.png)](/images/exposed-postgres-cryptomining/cadeia.png)
 
-*a password is not a lock. a lock is a firewall rule that says `deny`.*
+*the whole attack, in four boring steps. no exploit required.*
 
 ## The extraction: 30 KB/s over a serial console
 
@@ -200,9 +196,9 @@ verify SHA-256 against the server copy. Transfer speed? **~30 KB/s** — a 1 MB 
 Everything arrived byte-perfect, verified hash by hash. Total: a couple of hours of
 transfer for a story I'll be telling for years.
 
-![lain](/docs/lain-eiac.jpeg)
+[![timeline](linha-do-tempo.png)](/images/exposed-postgres-cryptomining/linha-do-tempo.png)
 
-*present day, present time. the serial console was the only wire left.*
+*from a smoke alarm to a rebuilt server, in five moves.*
 
 ## But did the attacker touch the customer data?
 
@@ -279,15 +275,4 @@ If this story makes one person run `docker ps --format '{{.Names}} {{.Ports}}'` 
 a `0.0.0.0:5432` from their Compose file today, it was worth writing.
 
 *Stay patched, keep your databases private, and verify your backups. See you next post.*
-
-![sonic](sonic.gif)
-
----
-
-## image credits
-
-- cover: [Server room](https://www.flickr.com/photos/8718930@N07/3463419826) by torkildr (by-sa 2.0)
-- image: [Patch panel cables](https://www.flickr.com/photos/15805954@N00/3905694973) by Wiki.will (by 2.0)
-- image: [Cryptocurrency Mining Rig GPU Farm](https://www.flickr.com/photos/190906320@N06/53388290798) by digicloudmedia (by 2.0)
-- image: [Computer Security - Padlock](https://www.flickr.com/photos/111692634@N04/15327725543) by perspec_photo88 (by-sa 2.0)
 
