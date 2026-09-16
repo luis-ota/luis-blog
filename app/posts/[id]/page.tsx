@@ -1,21 +1,22 @@
 import UtterancesComments from "@/app/components/utterances-comments";
-import { getPostData, getSortedPostsData } from "@/lib/posts";
+import { formatarData, getPostData, getSortedPostsData } from "@/lib/posts";
 import { Metadata } from "next";
 import { Eye } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import LanguageSwitcher from "@/app/components/lang-switch";
 
 export const metadata: Metadata = {
   title: "luis's blog",
   description: "luis's blog where you will find tech and other crazy posts",
   openGraph: {
-    url: "https://luis-ota.github.io/luis-blog/",
+    url: "https://blog.wired.rs/",
     type: "website",
     title: "luis's blog",
     description: "luis's blog where you will find tech and other crazy posts",
     images: [
       {
-        url: "https://luis-ota.github.io/luis-blog/sonic.gif",
+        url: "https://blog.wired.rs/sonic.gif",
         width: 1860,
         height: 1036,
       },
@@ -23,10 +24,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "luis-ota.github.io/luis-blog/",
+    site: "blog.wired.rs",
     title: "luis's blog",
     description: "luis's blog where you will find tech and other crazy posts",
-    images: ["https://luis-ota.github.io/luis-blog/sonic.gif"],
+    images: ["https://blog.wired.rs/sonic.gif"],
   },
 };
 
@@ -60,7 +61,7 @@ export default async function PostPage({ params }: Props) {
       if (typeof firstImage === "object" && "url" in firstImage) {
         firstImage.url = postData.img?.startsWith("http")
           ? postData.img
-          : `https://luis-ota.github.io${postData.img}` || "";
+          : `https://blog.wired.rs${postData.img}` || "";
       }
     }
   }
@@ -73,44 +74,44 @@ export default async function PostPage({ params }: Props) {
   ) {
     metadata.twitter.images[0] = postData.img?.startsWith("http")
       ? postData.img
-      : `https://luis-ota.github.io${postData.img}` || "";
+      : `https://blog.wired.rs${postData.img}` || "";
   }
 
-  const postCanonicalUrl = `https://luis-ota.github.io/luis-blog/posts/${postData.id}`;
   const postCanonicalUrlWired = `https://blog.wired.rs/posts/${postData.id}`;
-  const encodedUrl = encodeURIComponent(postCanonicalUrl);
   const encodedUrlWired = encodeURIComponent(postCanonicalUrlWired);
-  const hitsBadgeUrl = `https://hitscounter.dev/api/hit?url=${encodedUrl}&color=%23cfe2ff`;
+  const hitsBadgeUrl = `https://hitscounter.dev/api/hit?url=${encodedUrlWired}&color=%232a2a8c`;
 
   return (
-    <main className="max-w-4xl mx-auto p-4 flex flex-col justify-center gap-2">
-      <div className="markdown-body p-4 text-center rounded">
-        <h1 className="text-4xl font-bold mb-2 capitalize">{postData.title}</h1>
-
-        <div className="flex flex-col items-center ">
-          <p className="text-sm">
-            Published on {new Date(postData.date).toLocaleDateString("pt-BR")}
-          </p>
-          <div className="flex gap-2 items-center h-1">
-            <Eye className="text-gray-500" />
-            <Image src={hitsBadgeUrl} alt="Post Views" />
-          </div>
+    <main className="pagina-post limite">
+      <div className="post-cabeca">
+        <p className="post-data">publicado em {formatarData(postData.date)}</p>
+        <h1 className="post-titulo-grande">{postData.title}</h1>
+        <div className="post-metricas">
+          <Eye size={16} aria-hidden />
+          <Image src={hitsBadgeUrl} alt="visualizações" width={90} height={20} />
         </div>
       </div>
 
       <LanguageSwitcher encodedUrl={encodedUrlWired} />
 
       <article
-        className="markdown-body p-6 rounded"
+        className="markdown-body artigo"
         dangerouslySetInnerHTML={{ __html: postData.contentHtml || "" }}
       />
-      <div className="markdown-body p-6 rounded">
+
+      <div className="comentarios">
         <UtterancesComments
           repo="luis-ota/luis-blog"
           issueTerm="pathname"
           theme="preferred-color-scheme"
         />
       </div>
+
+      <p style={{ textAlign: "center", marginTop: "26px" }}>
+        <Link className="link-marca" href="/">
+          ← voltar para o arquivo
+        </Link>
+      </p>
     </main>
   );
 }

@@ -1,30 +1,38 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, Yellowtail, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 import Link from "next/link";
-import { Briefcase, Github, Linkedin, Twitch } from "lucide-react";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const yellowtail = Yellowtail({
+  variable: "--font-yellowtail",
   subsets: ["latin"],
+  weight: "400",
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "600"],
 });
 
 export const metadata: Metadata = {
   title: "luis's blog",
   description: "luis's blog where you will find tech and other crazy posts",
   openGraph: {
-    url: "https://luis-ota.github.io/luis-blog/",
+    url: "https://blog.wired.rs/",
     type: "website",
     title: "luis's blog",
     description: "luis's blog where you will find tech and other crazy posts",
     images: [
       {
-        url: "https://luis-ota.github.io/luis-blog/docs/lain-room.jpg",
+        url: "https://blog.wired.rs/docs/lain-room.jpg",
         width: 1860,
         height: 1036,
       },
@@ -32,10 +40,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "luis-ota.github.io/luis-blog/", // corresponds to twitter:domain
+    site: "blog.wired.rs",
     title: "luis's blog",
     description: "luis's blog where you will find tech and other crazy posts",
-    images: ["https://luis-ota.github.io/luis-blog/docs/lain-room.jpg"],
+    images: ["https://blog.wired.rs/docs/lain-room.jpg"],
   },
 };
 
@@ -45,47 +53,62 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased backgroundImage`}
-      >
-        <header className="flex justify-between items-center p-4 bg-blue-400 dark:bg-gray-800">
-          <Link href="https://luis-ota.github.io/luis-blog">
-            <h1 className="text-1xl font-bold text-black dark:text-white md:text-3xl">
-              {"luis's personal blog"}
-            </h1>
-          </Link>
-          <nav className="flex justify-between items-center p-4 gap-4">
-            <Link
-              href="https://portfolio.wired.rs/"
-              aria-label="portfolio"
-              title="portfolio"
-              className="text-xl font-bold flex items-center gap-2"
-            >
-              <Briefcase />
-              <span className="hidden md:inline text-base">portfolio</span>
+    <html
+      lang="en"
+      className={`${sora.variable} ${yellowtail.variable} ${plexMono.variable}`}
+    >
+      <body className="antialiased">
+        <header className="cabeca">
+          <div className="limite cabeca-linha">
+            <Link className="marca" href="/">
+              <span className="marca-selo" aria-hidden="true">
+                l
+              </span>
+              luis&apos;s blog
             </Link>
-            <Link
-              href="https://github.com/luis-ota/luis-blog"
-              className="text-xl font-bold"
-            >
-              <Github />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/luis-ota/"
-              className="text-xl font-bold"
-            >
-              <Linkedin />
-            </Link>
-            <Link
-              href="https://www.twitch.tv/luisofthewired"
-              className="text-xl font-bold"
-            >
-              <Twitch />
-            </Link>
-          </nav>
+            <nav className="nav" aria-label="links">
+              <Link href="https://portfolio.wired.rs/" target="_blank">
+                portfolio ↗
+              </Link>
+              <Link href="https://github.com/luis-ota/luis-blog" target="_blank">
+                github ↗
+              </Link>
+              <Link
+                href="https://www.linkedin.com/in/luis-ota/"
+                target="_blank"
+              >
+                linkedin ↗
+              </Link>
+              <Link href="https://www.twitch.tv/luisofthewired" target="_blank">
+                twitch ↗
+              </Link>
+            </nav>
+          </div>
         </header>
         {children}
+        <footer className="rodape">
+          <div className="limite rodape-linha">
+            <p className="rodape-marca">
+              <span className="marca-selo" aria-hidden="true">
+                l
+              </span>
+              luis&apos;s blog
+            </p>
+            <p>
+              © <span id="ano">{new Date().getFullYear()}</span>{" "}
+              <Link
+                className="link-marca"
+                href="https://wired.rs/"
+                target="_blank"
+              >
+                wired layer co.
+              </Link>
+            </p>
+            <Link className="link-marca" href="https://portfolio.wired.rs/" target="_blank">
+              portfolio ↗
+            </Link>
+          </div>
+        </footer>
       </body>
     </html>
   );

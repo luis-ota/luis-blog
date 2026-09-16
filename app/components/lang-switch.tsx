@@ -35,13 +35,13 @@ export default function LanguageSwitcher({ encodedUrl }: Props) {
   if (hide) return null;
 
   return (
-    <div className="flex justify-between flex-row gap-2 items-center flex-wrap">
+    <div className="idiomas">
       {languages.map((lang) => (
         <a
           key={lang.code}
           href={`https://translate.google.com/website?sl=en&tl=${lang.code}&u=${encodedUrl}`}
           rel="noopener noreferrer"
-          className="flex-1 text-center flex items-center justify-center markdown-body gap-2 px-4 py-2 rounded transition min-w-[120px]"
+          className="lang-pill"
         >
           {lang.label}
         </a>

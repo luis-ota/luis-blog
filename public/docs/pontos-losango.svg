@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" fill="none" aria-hidden="true">
+  <defs>
+    <pattern id="pl-indigo" width="4.4" height="4.4" patternUnits="userSpaceOnUse">
+      <circle cx="2.2" cy="2.2" r="1.25" fill="#2A2A8C"/>
+    </pattern>
+    <pattern id="pl-peri" width="4.4" height="4.4" patternUnits="userSpaceOnUse">
+      <circle cx="2.2" cy="2.2" r="1.25" fill="#A9AEE6"/>
+    </pattern>
+  </defs>
+  <g transform="rotate(45 150 86)">
+    <path d="M150 24 Q162.4 73.6 212 86 Q162.4 98.4 150 148 Q137.6 98.4 88 86 Q137.6 73.6 150 24 Z" fill="url(#pl-indigo)" opacity="0.85"/>
+    <path d="M150 24 Q162.4 73.6 212 86 Q162.4 98.4 150 148 Q137.6 98.4 88 86 Q137.6 73.6 150 24 Z" stroke="#2A2A8C" stroke-opacity="0.34" stroke-width="0.9" stroke-dasharray="2 2.6"/>
+  </g>
+  <g transform="rotate(45 104 208)">
+    <path d="M104 166 Q112.4 199.6 146 208 Q112.4 216.4 104 250 Q95.6 216.4 62 208 Q95.6 199.6 104 166 Z" fill="url(#pl-peri)" opacity="0.95"/>
+    <path d="M104 166 Q112.4 199.6 146 208 Q112.4 216.4 104 250 Q95.6 216.4 62 208 Q95.6 199.6 104 166 Z" stroke="#A9AEE6" stroke-opacity="0.34" stroke-width="0.9" stroke-dasharray="2 2.6"/>
+  </g>
+  <g transform="rotate(45 196 300)">
+    <path d="M196 270 Q202 294 226 300 Q202 306 196 330 Q190 306 166 300 Q190 294 196 270 Z" fill="url(#pl-indigo)" opacity="0.75"/>
+    <path d="M196 270 Q202 294 226 300 Q202 306 196 330 Q190 306 166 300 Q190 294 196 270 Z" stroke="#2A2A8C" stroke-opacity="0.34" stroke-width="0.9" stroke-dasharray="2 2.6"/>
+  </g>
+  <g transform="rotate(45 120 364)">
+    <path d="M120 346 Q123.6 360.4 138 364 Q123.6 367.6 120 382 Q116.4 367.6 102 364 Q116.4 360.4 120 346 Z" fill="url(#pl-peri)" opacity="0.90"/>
+    <path d="M120 346 Q123.6 360.4 138 364 Q123.6 367.6 120 382 Q116.4 367.6 102 364 Q116.4 360.4 120 346 Z" stroke="#A9AEE6" stroke-opacity="0.34" stroke-width="0.9" stroke-dasharray="2 2.6"/>
+  </g>
+</svg>

@@ -14,6 +14,13 @@ import type { Image, Root } from 'mdast';
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
+export function formatarData(valor: string | Date): string {
+    if (!valor) return "sem data";
+    const data = valor instanceof Date ? valor : new Date(valor);
+    if (Number.isNaN(data.getTime())) return "sem data";
+    return data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+}
+
 export function getSortedPostsData(): Post[] {
     const postFolders = fs.readdirSync(postsDirectory);
 
