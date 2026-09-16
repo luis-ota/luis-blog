@@ -3,6 +3,7 @@ import { Sora, Yellowtail, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 import Link from "next/link";
+import { Simbolos } from "./components/enfeites";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -58,6 +59,7 @@ export default function RootLayout({
       className={`${sora.variable} ${yellowtail.variable} ${plexMono.variable}`}
     >
       <body className="antialiased">
+        <Simbolos />
         <header className="cabeca">
           <div className="limite cabeca-linha">
             <Link className="marca" href="/">

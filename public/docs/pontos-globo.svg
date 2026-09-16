@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" fill="none" aria-hidden="true">
+  <defs>
+    <pattern id="pg" width="5.6" height="5.6" patternUnits="userSpaceOnUse">
+      <circle cx="2.8" cy="2.8" r="1.5" fill="#2A2A8C"/>
+    </pattern>
+    <radialGradient id="luz" cx="34%" cy="30%" r="78%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.15"/>
+      <stop offset="52%" stop-color="#fff" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="1"/>
+    </radialGradient>
+    <mask id="esfera">
+      <circle cx="130" cy="130" r="116" fill="url(#luz)"/>
+    </mask>
+    <clipPath id="recorte-globo"><circle cx="130" cy="130" r="116"/></clipPath>
+  </defs>
+  <g mask="url(#esfera)">
+    <rect width="260" height="260" fill="url(#pg)" clip-path="url(#recorte-globo)"/>
+  </g>
+  <circle cx="130" cy="130" r="116" stroke="#2A2A8C" stroke-opacity="0.35" stroke-width="1"/>
+  <ellipse cx="130" cy="130" rx="116" ry="34" stroke="#2A2A8C" stroke-opacity="0.18" stroke-width="1"/>
+</svg>

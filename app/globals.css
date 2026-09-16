@@ -151,6 +151,106 @@ a { color: inherit; }
   opacity: 0.2;
 }
 
+.fundo-quadrado {
+  top: 6%;
+  right: -4%;
+  width: min(20%, 200px);
+  opacity: 0.2;
+}
+
+.fundo-losango {
+  bottom: 4%;
+  left: -4%;
+  width: min(24%, 220px);
+  opacity: 0.22;
+}
+
+.fundo-globo {
+  top: 8%;
+  right: -3%;
+  width: min(18%, 170px);
+  opacity: 0.18;
+}
+
+.fundo-onda,
+.fundo-rio {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  object-position: 50% 68%;
+  opacity: 0.26;
+  -webkit-mask-image: linear-gradient(to top, #000 45%, transparent);
+  mask-image: linear-gradient(to top, #000 45%, transparent);
+}
+
+.fundo-rio {
+  height: 150px;
+  object-position: 50% 60%;
+  opacity: 0.22;
+}
+
+.fundo-meio { top: 34%; bottom: auto; }
+
+/* ---------- faiscas ---------- */
+
+.simbolos {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.faiscas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cintila {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--t);
+  height: var(--t);
+  color: var(--indigo);
+  opacity: 0.32;
+  animation: cintilar var(--dur, 3.4s) ease-in-out infinite;
+  animation-delay: var(--atraso, 0s);
+}
+.cintila svg { width: 100%; height: 100%; display: block; }
+
+@keyframes cintilar {
+  0%, 100% { opacity: 0.14; transform: scale(0.68) rotate(0deg); }
+  50% { opacity: 0.7; transform: scale(1) rotate(14deg); }
+}
+
+/* ---------- secoes com camadas ---------- */
+
+.arquivo-secao,
+.post-pagina {
+  position: relative;
+  overflow: hidden;
+}
+
+/* camadas espalhadas pela lista (secao muito alta): posicoes ao longo do scroll */
+.arquivo-secao .fundo-quadrado { top: 3%; }
+.arquivo-secao .fundo-losango { top: 24%; bottom: auto; }
+.arquivo-secao .fundo-estrelas { top: 62%; }
+.arquivo-secao .fundo-onda { top: 45%; bottom: auto; }
+.arquivo-secao .fundo-rio { bottom: 0; }
+
+.post-pagina .fundo-quadrado { top: 58%; }
+
+.arquivo-secao > .limite,
+.post-pagina > .limite {
+  position: relative;
+  z-index: 1;
+}
+
 .cartaz > *:not(.fundo) { position: relative; z-index: 1; }
 
 .rotulo {
@@ -488,6 +588,17 @@ a { color: inherit; }
   .markdown-body { font-size: 0.94rem; }
   .markdown-body pre { padding: 14px 14px; font-size: 0.86em; }
   .lang-pill { min-width: 92px; padding: 7px 12px; }
+  .fundo-quadrado,
+  .fundo-globo { opacity: 0.14; }
+  .fundo-losango { opacity: 0.16; }
+  .fundo-onda,
+  .fundo-rio { opacity: 0.2; }
+  .cintila { opacity: 0.26; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .cintila { animation: none; opacity: 0.36; }
 }
 
 @media (prefers-reduced-motion: reduce) {

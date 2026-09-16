@@ -5,6 +5,13 @@ import { Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import LanguageSwitcher from "@/app/components/lang-switch";
+import { Faiscas, type Cintila } from "@/app/components/enfeites";
+
+const faiscasPost: Cintila[] = [
+  { x: 6.5, y: 18.5, t: 11, atraso: 0.94, dur: 3.62, tipo: "faisca" },
+  { x: 93.2, y: 44.5, t: 9, atraso: 2.28, dur: 4.05, tipo: "ponto" },
+  { x: 7.8, y: 66.5, t: 13, atraso: 3.51, dur: 3.44, tipo: "estrela" },
+];
 
 export const metadata: Metadata = {
   title: "luis's blog",
@@ -84,7 +91,42 @@ export default async function PostPage({ params }: Props) {
   const hitsBadgeUrl = `https://hitscounter.dev/api/hit?url=${encodedUrlWired}&color=%232a2a8c`;
 
   return (
-    <main className="pagina-post limite">
+    <main className="post-pagina">
+      <Image
+        className="fundo fundo-estrelas"
+        src="/docs/pontos-estrelas.svg"
+        alt=""
+        aria-hidden
+        width={170}
+        height={138}
+      />
+      <Image
+        className="fundo fundo-losango fundo-meio"
+        src="/docs/pontos-losango.svg"
+        alt=""
+        aria-hidden
+        width={200}
+        height={266}
+      />
+      <Image
+        className="fundo fundo-rio"
+        src="/docs/pontos-rio.svg"
+        alt=""
+        aria-hidden
+        width={640}
+        height={240}
+      />
+      <Image
+        className="fundo fundo-quadrado"
+        src="/docs/pontos-quadrado-globo.svg"
+        alt=""
+        aria-hidden
+        width={180}
+        height={180}
+      />
+      <Faiscas itens={faiscasPost} />
+
+      <div className="pagina-post limite">
       <div className="post-cabeca">
         <p className="post-data">publicado em {formatarData(postData.date)}</p>
         <h1 className="post-titulo-grande">{postData.title}</h1>
@@ -114,6 +156,7 @@ export default async function PostPage({ params }: Props) {
           ← voltar para o arquivo
         </Link>
       </p>
+      </div>
     </main>
   );
 }
