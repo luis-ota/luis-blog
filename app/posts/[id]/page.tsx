@@ -93,6 +93,14 @@ export default async function PostPage({ params }: Props) {
   return (
     <main className="post-pagina">
       <Image
+        className="fundo fundo-abstrato"
+        src="/docs/dados-abstrato.svg"
+        alt=""
+        aria-hidden
+        width={1200}
+        height={630}
+      />
+      <Image
         className="fundo fundo-estrelas"
         src="/docs/pontos-estrelas.svg"
         alt=""

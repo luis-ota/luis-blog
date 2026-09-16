@@ -30,6 +30,14 @@ export default async function Home() {
     <div className="pagina">
       <section className="cartaz">
         <Image
+          className="fundo fundo-abstrato"
+          src="/docs/dados-abstrato.svg"
+          alt=""
+          aria-hidden
+          width={1200}
+          height={630}
+        />
+        <Image
           className="fundo fundo-ascii"
           src="/docs/pontos-ascii.svg"
           alt=""

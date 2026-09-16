@@ -3,6 +3,7 @@ import { Sora, Yellowtail, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
 import Link from "next/link";
+import { Briefcase, Github, Linkedin, Twitch } from "lucide-react";
 import { Simbolos } from "./components/enfeites";
 
 const sora = Sora({
@@ -69,20 +70,45 @@ export default function RootLayout({
               luis&apos;s blog
             </Link>
             <nav className="nav" aria-label="links">
-              <Link href="https://portfolio.wired.rs/" target="_blank">
-                portfolio ↗
-              </Link>
-              <Link href="https://github.com/luis-ota/luis-blog" target="_blank">
-                github ↗
+              <Link
+                className="nav-link"
+                href="https://portfolio.wired.rs/"
+                target="_blank"
+                aria-label="portfolio"
+                title="portfolio"
+              >
+                <Briefcase size={18} aria-hidden />
+                <span className="nav-texto">portfolio</span>
               </Link>
               <Link
+                className="nav-link"
+                href="https://github.com/luis-ota/luis-blog"
+                target="_blank"
+                aria-label="github"
+                title="github"
+              >
+                <Github size={18} aria-hidden />
+                <span className="nav-texto">github</span>
+              </Link>
+              <Link
+                className="nav-link"
                 href="https://www.linkedin.com/in/luis-ota/"
                 target="_blank"
+                aria-label="linkedin"
+                title="linkedin"
               >
-                linkedin ↗
+                <Linkedin size={18} aria-hidden />
+                <span className="nav-texto">linkedin</span>
               </Link>
-              <Link href="https://www.twitch.tv/luisofthewired" target="_blank">
-                twitch ↗
+              <Link
+                className="nav-link"
+                href="https://www.twitch.tv/luisofthewired"
+                target="_blank"
+                aria-label="twitch"
+                title="twitch"
+              >
+                <Twitch size={18} aria-hidden />
+                <span className="nav-texto">twitch</span>
               </Link>
             </nav>
           </div>
