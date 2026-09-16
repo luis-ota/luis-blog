@@ -22,7 +22,7 @@
   --linha: rgba(42, 42, 140, 0.14);
   --raio: 16px;
   --raio-pill: 999px;
-  --limite: 880px;
+  --limite: clamp(880px, 55vw, 1040px);
   --fonte: var(--font-sora), system-ui, sans-serif;
   --script: var(--font-yellowtail), cursive;
 }
@@ -30,6 +30,7 @@
 * { box-sizing: border-box; }
 
 html {
+  font-size: clamp(16px, 13px + 0.24vw, 19.5px);
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: var(--periwinkle) transparent;
