@@ -62,6 +62,8 @@ export default async function PostPage({ params }: Props) {
         firstImage.url = postData.img?.startsWith("http")
           ? postData.img
           : `https://blog.wired.rs${postData.img}` || "";
+        firstImage.width = 1200;
+        firstImage.height = 630;
       }
     }
   }
