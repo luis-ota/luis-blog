@@ -133,7 +133,7 @@ export default function RootLayout({
               </Link>
             </p>
             <Link className="link-marca" href="https://portfolio.wired.rs/" target="_blank">
-              portfolio ↗&#xFE0E;
+              portfolio ➚
             </Link>
           </div>
         </footer>
