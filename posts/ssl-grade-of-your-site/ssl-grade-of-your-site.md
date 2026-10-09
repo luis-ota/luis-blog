@@ -203,6 +203,47 @@ the `resolver` lines are not optional decoration: nginx refuses to start with st
 
 ---
 
+## the failures you will not see
+
+the reason this bug outlives most deployments is simple: the only machines that can reproduce it are not yours. here is the list of things it does quietly.
+
+**your browser is lying to you.** the intermediate is already in your OS trust store, cached from some other site that used the same CA. desktop chrome, the laptop you develop on, and most CI agents all say *fine*. the chain is only "incomplete" for clients that do not have a warm cache, which is precisely the population you do not sit next to.
+
+**android never fetches the AIA.** that is a deliberate design decision in android's chain builder, not an oversight: it will not go to the network to complete a chain. so a site that opens on every laptop in the office fails on every phone. "works on my machine" with a much longer arm.
+
+**some clients fail harder than others.** safari shows a page the user can click through. an app with ATS enabled gets `error -1022` and no dialog at all. a python client gets `CERTIFICATE_VERIFY_FAILED`, a go client gets `x509: certificate signed by unknown authority`. those never present as "certificate warning" to a human. they present as "the api is down" in a channel nobody reads.
+
+**the AIA fetch is a network dependency you do not control.** completing the chain means an extra HTTP request to the CA (`http://r11.c.lencr.org`, plain HTTP port 80, straight from the `caIssuers` URI). corporate egress proxies, dns filters and some networks block it. the symptom is that the site breaks only from inside one office, only on the network that blocks the CA, and works perfectly from home. you will never reproduce it from your desk, and your support channel will not tell you which network it came from.
+
+**one extra round trip on every handshake.** the client either waits on the CA or fails. on a phone link that is a visible latency cost, per connection, on top of every request.
+
+**hsts turns a warning into a wall.** this is the one that bites after you did everything right. with `Strict-Transport-Security` the browser stops offering the "advanced / proceed anyway" interstitial, because the whole point of HSTS is to remove the user's ability to ignore the certificate. `includeSubDomains` extends the wall to every other hostname you serve. a clickable warning on the desktop becomes a hard failure for the user you were trying to protect, and you got the A+ that caused it.
+
+**renewal is healthy, deployment is not.** certbot rewrites the files in `live/` every 60 days and reports success. if your image build copies only `cert.pem`, or your deploy hook reloads nginx from a path that still holds the old single file, the broken chain survives every renewal untouched. the certificate is always fresh and always incomplete, and nothing in the renewal log ever mentions it. this one can hide for years.
+
+**your monitoring lives inside the same trust boundary.** a health check from a container with baked-in roots, from the same cloud provider's network, or through the CDN that terminates on the other side, all have warm caches. "origin healthy" says nothing about the chain a stranger sees.
+
+**the trust path can expire under you.** the missing intermediate is usually compensated by a cross-signed path: intermediate X signed by an old root, cross-certified by the new one. clients holding the old root in their store keep connecting; clients on a fresh store take the other path. when a root or an intermediate is retired, the compensating path disappears and every incomplete chain breaks in the same week. DST Root CA on 30 Sep 2021 is the canonical example. your chain was never correct, you were borrowing time.
+
+to simulate a cold client, throw away the warm cache:
+
+```
+$ openssl verify -CAfile /etc/ssl/certs/ca-certificates.crt cert.pem
+cert.pem: unable to get local issuer certificate
+```
+
+that is the exact error a phone gives you, from a machine that has never seen the intermediate. now give `openssl` the chain:
+
+```
+$ cat cert.pem chain.pem > /tmp/bundle.pem
+$ openssl verify -CAfile /etc/ssl/certs/ca-certificates.crt /tmp/bundle.pem
+/tmp/bundle.pem: OK
+```
+
+every item in that list is fixed by the same single word: `fullchain.pem`.
+
+---
+
 ## a config that actually gets A+
 
 mozilla's "intermediate" profile, trimmed to what nginx supports:
@@ -283,6 +324,7 @@ the honest summary: **take the free certificate, automate the renewal, and spend
 - HSTS with a real max-age, plus a 301 from port 80
 - alert on expiry from *outside* your network. the CA emails you, and that email is not monitoring
 - when a client complains, test with a cold cache and `curl --cacert` before you blame the certificate
+- ship certificates only after testing them with a cold trust store (`openssl verify -CAfile /etc/ssl/certs/ca-certificates.crt`). a warm browser proves nothing
 - remember the grade is one vantage point on one day, scoring the worst client instead of yours
 
 ---
