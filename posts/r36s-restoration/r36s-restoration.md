@@ -1,7 +1,7 @@
 ---
-title: how i brought a dead r36s back with the pieces of its own card
+title: rebuilding a dead r36s, and the four cards that lied about their size
 date: 2026-11-10
-description: a console stuck on the logo, a partition nobody was watching, four cards that lied about their size, a board that is not the one on the label, and everything i built after it booted
+description: a console stuck on the logo, a filesystem nobody was watching, four cards that lied about their capacity, a board that is not the one on the label, and everything i built after it booted
 img: /images/r36s-restoration/cover.jpg
 ---
 
@@ -15,7 +15,7 @@ this is the story of a handheld that spent years as a test bench, stopped at the
 
 ![the console in my hand, menu on screen](handheld.jpg)
 
-no factory image was flashed. everything here was rebuilt from what the original card still had.
+no factory image was flashed. everything here was rebuilt from what the original card still had, and it took four cards to find one that could hold the result.
 
 ---
 
@@ -53,27 +53,87 @@ the games partition was the broken one, and the boot partition carried the finge
 
 ## why a broken games partition stops the boot
 
-this is the part nobody tells you. on this system `/roms` is part of `local-fs.target`, so the games partition is mounted **during the boot**, before the menu exists. when the mount fails, the boot stops there and the screen keeps the last frame it drew: the splash animation.
+this is the part nobody tells you. on this system `/roms` is part of `local-fs.target`, so the games partition is mounted **during the boot**, before the menu exists. when the mount fails, the boot stops there and the screen keeps the last frame it drew: the splash animation, or a blinking cursor in the corner.
 
 the console was not slow. it was stopped in the middle of the boot, waiting for a filesystem that could never answer.
 
-that single line explains weeks of "it freezes on the logo" reports for this device family. it is almost never the system that died. it is a mount timeout nobody is watching.
+a device stuck on a logo is not always a dead system. sometimes it is a mount timeout nobody is watching.
 
-## four cards, three lies
+## repairing 46 gb with one command
 
-with the diagnosis in hand, the next question was where to rebuild. i tested every card i had, and that was its own adventure.
+the repair is not scary once the diagnosis is right. two writes, both filesystem metadata, no formatting:
 
-**the 128 gb that was not.** it formatted, it mounted, it accepted files. then it reported one size on one connection and a few kilobytes on the next. that is a controller in emergency mode, not a filesystem bug. testing it properly, with random data written at spread offsets and read back through direct I/O, showed the truth: the card claimed 128 gb and something around 3.6 gb was real.
+```bash
+fsck.exfat -y /dev/sdb3   # rebuild the bitmap, fix the upcase table
+fsck.fat -a  /dev/sdb1    # clear the dirty bit
+```
 
-**the 16 gb that was already dead.** no partition table survived, writes went nowhere, reads returned garbage. dead before i touched it.
+| | before | after |
+|---|---|---|
+| directories | 115 | 311 |
+| files | 564 | 18,474 |
+| corrupted files | 353 | 0 |
 
-**the 8 gb bargain.** it worked perfectly on the notebook reader and showed up as 30.6 mb on the console. two readers, two answers, one useless card.
+then i checked that the games were really there, not just listed: crazy taxi 2 at 752 mb, gta vice city stories at 896 mb, tekken dark resurrection at 1.2 gb. all with their full size. 46 gb used, 84 system folders.
 
-**the 4 gb that worked.** small, boring, honest. it booted the rebuilt system and kept booting after every restart.
+one detail that scared me at first: the repair log had 2.5 million lines. it is not 2.5 million files. the tool reports one error per cluster, and a single 700 mb file has 90,000 clusters. the file is fine.
 
-the lesson cost me three cards: capacity is a claim, and the test is the evidence. reading through the page cache measures your own memory, not the card.
+## the reader that kept lying
 
-## rebuilding a system from its own pieces
+while all this was happening, the usb card reader kept dropping the card:
+
+```
+sd 1:0:0:0: [sdb] Media removed, stopped polling
+```
+
+twice this was just the card not being seated all the way. once it was the reader itself, connected through an unpowered hub, disconnecting and reconnecting three times in a row. a flashing reader and a dying card look the same from the software side. reseat, direct port, then blame the card.
+
+## the usb dead end
+
+before touching the card i tried the obvious thing: connect the console to the pc and get a shell. ark os does not speak adb, so the plan was usb networking, or at least storage mode.
+
+the console never showed up. what the kernel saw was this:
+
+```
+usb 1-1: new high-speed USB device number 15
+usb 1-1: device descriptor read/64, error -71     (EPROTO)
+usb 1-1: device descriptor read/64, error -110    (timeout)
+usb 1-1: Device not responding to setup address
+usb usb1-port1: unable to enumerate USB device
+```
+
+that is not a cable problem, at least not only. the device is electrically present and fails to answer the descriptor request. and the reason is simple in hindsight: **the system never finished booting**, so the usb gadget never started. the console was advertising itself and had nothing behind the door.
+
+i burned an hour on cables and ports before accepting the obvious: fix the boot first, the usb comes for free.
+
+## the 128 gb that was not
+
+the first replacement was a 128 gb card i already owned. it formatted, it mounted, it accepted files. it was fake.
+
+the tell is always the same: the controller reports one size on one connection and a few kilobytes on the next. mine went from something plausible to exactly that, which is emergency mode, not a filesystem bug.
+
+a second card, this one an 8 gb bargain, worked perfectly on the notebook reader and showed up as 30.6 mb on the console. two readers, two answers, one useless card.
+
+so i stopped trusting capacity and started testing it: random data at spread offsets, read back with direct I/O, hashes compared. reading through the page cache measures your own memory, not the card.
+
+## the 16 gb that came back read-only
+
+a 16 gb card looked like the obvious replacement. it was dead before i touched it: no partition table survived, reads returned garbage.
+
+months later it came back out of a drawer, and this time it did answer. it answered with this:
+
+```
+[sdb] Write Protect is on
+[sdb] Mode Sense: 21 00 80 00     <- the 0x80 bit
+```
+
+that is hardware write protection, reported by the card itself. microsd cards have no physical switch, so it is the controller talking. when the nand wear passes a threshold, the controller locks the card read-only to protect whatever is still readable. it is a one-way door.
+
+no root command opens it. `blockdev --setrw` returns success and changes nothing. `mount -o remount,rw` refuses. `dd` gets read-only file system. it happens below the operating system.
+
+the card still reads. it reads at 4 mb/s, which is another way of saying it is dying loudly. its contents were an empty 16 mb boot partition and an android adopted-storage blob nobody can decrypt outside the phone.
+
+## the smallest system that boots
 
 the plan stopped being "download an image" and became "rebuild what is here".
 
@@ -100,11 +160,19 @@ the next reboot took it back to the splash, with directories gone and the same c
 
 that was the third corruption, and the moment i stopped insisting on that card.
 
+## the 4 gb that worked
+
+i had a small genuine card, 4 gb, and nothing else to lose. i wrote the same image. it booted, and it kept booting after every restart.
+
+that is when the console became a console again. mario and pokemon went in, and both ran without drama. then i found a 2 gb card in a drawer and gave it a new job: the games.
+
+two cards, two responsibilities. the system on one, the games on the other, mounted at `/mnt/jogos`. saves survive a dead system card, and a dead games card no longer takes the system down with it. the theme moved too, because it used to live behind a symlink into the games partition and died with it.
+
 ## the black screen detour
 
-while testing cards i also tried other systems, because anything that booted was worth a shot. ROCKNIX and AmberELEC both came up and both gave a black screen. the device was alive, the network answered, the screen stayed dark.
+while the cards were being tested i tried other systems, because at that point anything that booted was worth a shot. rocknix and amberelec both came up and both showed a black screen. the device was alive, the network answered, the screen stayed dark.
 
-that is the dtb. each board revision drives a different panel, and a dtb from another panel configures a display that is not there. there is no error message, only black.
+that is the dtb. every board revision drives a different panel, and a dtb from another panel configures a display that is not there. there is no error message, only black.
 
 the factory dtb, kept from the original BOOT partition, is what fixed it.
 
@@ -125,13 +193,7 @@ cat /sys/firmware/devicetree/base/model
 tr '\0' '\n' < /sys/firmware/devicetree/base/compatible | head -3
 ```
 
-`model` says Rockchip RK3326, which tells you nothing about the panel. the pcb tells you everything.
-
-## two cards, two jobs
-
-the final layout is unglamorous and that is why it lasts: the system on the small genuine card, the games on another one mounted at `/mnt/jogos`.
-
-saves survive a dead system card, and a dead games card no longer takes the system down with it. the theme moved too, because it used to live behind a symlink into the games partition and died with it.
+`model` says rockchip rk3326, which tells you nothing about the panel. the pcb tells you everything.
 
 ## screenshots from a screen that has no screenshots
 
@@ -167,9 +229,9 @@ it later turned out the daemon leaked one file descriptor every five seconds, so
 
 ## the console as a workstation
 
-somewhere in the middle of this i stopped treating the console as a toy and started using it as a small linux box. remote shell over usb, a terminal dashboard on the console itself, even the editor i write code with, served from the device.
+somewhere in the middle of this i stopped treating the console as a toy and started using it as a small linux box. remote shell over usb, a terminal dashboard on the console itself, and later the editor i write code with, served from the device.
 
-the terminal was its own project: the screen is 640x480, so the font has to be exactly 8 pixels wide to fit 80 columns, and leaving the console means knowing which button the gamepad sends. it sends none of the classic ones. the extra buttons live in codes 704 to 708, which is why the first version of the script "never closed".
+the terminal was its own project: the screen is 640x480, so the font has to be exactly 8 pixels wide to fit 80 columns, and leaving the console means knowing which button the gamepad sends. it sends none of the classic ones. the extra buttons live in the codes 704 to 708, which is why the first version of the script "never closed".
 
 ![the console showing the ports menu](screen.jpg)
 
@@ -189,11 +251,42 @@ it does accept a keyboard, though. so the console now presses f5 for itself ever
 
 that story is its own post: [teaching a ds emulator to save itself](https://blog.wired.rs/posts/drastic-autosave-uinput).
 
+## the card graveyard, and how to test a card
+
+the last card i bought arrived as a 1 tb microsd. it formatted, it mounted, and the partition table looked normal. it was a fraud.
+
+a proper test writes known data, drops the kernel page cache, and reads it back. reading right after writing proves nothing, because the kernel serves your own data back from memory. my first attempt made exactly that mistake and produced a nonsense result: it claimed half the card was fine.
+
+the second attempt, with the cache dropped and the hash taken from the source data, was conclusive:
+
+| measurement | result |
+|---|---|
+| capacity claimed | 999 GiB |
+| capacity that persists | **3.7 GiB** |
+| writes above 3.75 GiB | silently discarded |
+| read speed | 5.5 MB/s |
+| write speed | 5.5 MB/s |
+
+it does not even wrap around. writes past the real capacity are simply thrown away, with the operating system told everything went fine. that is the worst failure mode there is: you save a game, the tool says ok, and the data does not exist.
+
+so the four cards, in order of appearance:
+
+| card | verdict |
+|---|---|
+| original 58 gb | recovered, system and 18k files intact |
+| "128 gb" | fake, real capacity around 3.6 gb |
+| "1 tb" | fake, 3.7 gb real, 5.5 mb/s |
+| 16 gb | dead, locked read-only by its own controller |
+| 4 gb | the one that actually worked |
+| 2 gb | became the games card |
+
+the rule that came out of this: a device that boots is not a device that survives a reboot. a clean fsck means the metadata is consistent, not that your files are there. a card that lies about its capacity will also lie about a successful write. and the label on the back is not the board inside.
+
 ## what i'd tell past me
 
-a device that boots is not a device that survives a reboot. a clean fsck means the metadata is consistent, not that your files are there. a card that lies about its capacity will also lie about a successful write. a mount that fails during boot looks exactly like a dead system. and the label on the back is not the board inside.
+read the card before touching the console. test capacity with random data and direct reads before you trust a card, and test it again after a reboot. keep an image of the working system with a checksum, and copies of the saves outside both cards.
 
-the console did not come back because i found the right image to flash. it came back because i read the card before touching the console, because i stopped trusting the first card that seemed to work, and because i stopped assuming that the sticker was the hardware.
+the console did not come back because i found the right image to flash. it came back because i stopped trusting the first card that seemed to work, because i read the filesystems instead of guessing, and because i stopped assuming that the sticker was the hardware.
 
 ## image credits
 
