@@ -15,7 +15,7 @@ This is the story of tearing down my whole infrastructure on Oracle Cloud's Alwa
 A pile of things that had grown organically:
 
 - two tiny 1 GB VMs running a bunch of side projects, some with plain `docker compose`, some with systemd units, some with forced-command SSH keys for deploys
-- a bigger VM for [ai.ther](https://ai.ther.social), my main product
+- a bigger VM for my main product
 - a 167 GB boot volume that was a leftover from an earlier experiment, and that quietly produced a **R$ 11.92 charge** I had to chase through support
 - deploys that all ended in `ssh user@host` into a machine I was about to delete
 
@@ -35,7 +35,7 @@ A common claim in forums is that older accounts keep the original 4 OCPU / 24 GB
 
 The layout I settled on:
 
-- **core**: A1, 2 OCPU / 12 GB. Coolify itself plus the heavy apps (ai.ther, the leads bot, a Postgres).
+- **core**: A1, 2 OCPU / 12 GB. Coolify itself plus the heavy apps (the main product, the leads bot, a Postgres).
 - **sides-a**, **sides-b**: the two E2 Micros, as remote servers managed by the Coolify on core.
 
 Three boot volumes of 50 GB each. 150 of 200 GB used, nothing extra attached.
@@ -54,11 +54,11 @@ We wrote a "safe launch" script that lists existing instances *before every atte
 
 Every app became a Coolify application. No more compose files floating in home directories. Roughly:
 
-1. **Back up first.** Both old VMs, plus the ai.ther data, copied off and checksummed *before* a single delete.
+1. **Back up first.** Both old VMs, plus the main product's data, copied off and checksummed *before* a single delete.
 2. **Delete the old Oracle resources**, then recreate VCN, subnet, internet gateway and security lists cleanly.
 3. **Bootstrap each VM**: updates, Docker, Tailscale, firewall, fail2ban.
 4. **Install Coolify on core**, then add the two sides as remote servers.
-5. **Restore ai.ther**, then add apps one by one and check each URL returns 200.
+5. **Restore the main product**, then add apps one by one and check each URL returns 200.
 
 At the end, fifteen public domains answered 200.
 
@@ -72,11 +72,11 @@ At the end, fifteen public domains answered 200.
 
 The E2 Micros have 1 GB of RAM. Coolify wants to be helpful, and one of its helpful features is **image vulnerability scanning**, which ran `grype` and ate about 55% of a CPU on a machine that has barely any. I disabled scanning on the sides. Observability is nice; a server that can't answer SSH is not.
 
-I also moved the leads bot from a side to core. It simply didn't fit in 1 GB. And instead of spawning one Postgres per app, ai.ther's Postgres now hosts a second database for the leads bot. **One database server, several databases.** Less RAM, fewer things to back up.
+I also moved the leads bot from a side to core. It simply didn't fit in 1 GB. And instead of spawning one Postgres per app, the main product's Postgres now hosts a second database for the leads bot. **One database server, several databases.** Less RAM, fewer things to back up.
 
 ## ARM vs AMD, the quiet trap
 
-core is ARM. The sides are AMD. An image built for one will refuse to start on the other, with the lovely error `exec format error`. The leads image needed an explicit ARM64 tag and a build that actually produces ARM64. The ai.ther build job runs on a native ARM runner so it doesn't pay the emulation tax.
+core is ARM. The sides are AMD. An image built for one will refuse to start on the other, with the lovely error `exec format error`. The leads image needed an explicit ARM64 tag and a build that actually produces ARM64. The main product's build job runs on a native ARM runner so it doesn't pay the emulation tax.
 
 If you mix architectures in a Coolify setup, **put the architecture in the image tag.** Future you will thank you.
 
@@ -93,11 +93,11 @@ git push
   -> calls the Coolify API: "deploy this app"
 ```
 
-For apps that use `:latest`, the final step is just a POST to the deploy endpoint. For ai.ther, I wanted every deploy to be reproducible, so the workflow first **PATCHes the app's image tag to the commit SHA** and then triggers the deploy. Rolling back is "set the tag to an older SHA".
+For apps that use `:latest`, the final step is just a POST to the deploy endpoint. For the main product, I wanted every deploy to be reproducible, so the workflow first **PATCHes the app's image tag to the commit SHA** and then triggers the deploy. Rolling back is "set the tag to an older SHA".
 
 A few things I learned wiring eleven repos:
 
-1. **Do not touch a dirty working tree.** My local ai.ther checkout had 43 modified files and 11 untracked ones. Rebases, stashes and merges all aborted. Instead of fighting git, I edited the workflow **through the GitHub contents API**, leaving my local state untouched. Odd, but safe.
+1. **Do not touch a dirty working tree.** My local checkout of the main product had 43 modified files and 11 untracked ones. Rebases, stashes and merges all aborted. Instead of fighting git, I edited the workflow **through the GitHub contents API**, leaving my local state untouched. Odd, but safe.
 2. **`GITHUB_TOKEN` can't always push to GHCR** for a repo whose package was created elsewhere (`permission_denied: read_package`). A personal token with `write:packages` fixed it. For a long-lived setup, a fine-grained token scoped only to packages is the better choice.
 3. **Secrets belong in a secret store.** The Cloudflare API token lived in my desktop keyring, not in a file. Asking `secret-tool` for it was the only reason the agent could create a DNS record without me pasting anything.
 4. **Some projects use CircleCI**, not GitHub Actions. Same idea, different CLI: set the context secrets with `circleci context secret set`, add an `image` job that builds ARM64, and let the `deploy` job call the Coolify API.
@@ -133,8 +133,8 @@ My main product runs on core, so I asked whether 50 GB was enough. The numbers:
 | disk | 48 GB, 19 GB used, **29 GB free** |
 | docker images | 11 GB |
 | docker volumes | 4.4 GB |
-| ai.ther database | 11 MB |
-| ai.ther storage | 3.6 MB |
+| main product database | 11 MB |
+| main product storage | 3.6 MB |
 
 The database is nothing. The risk is **uploaded media**: production uses the local `public` disk, images get re-encoded as JPEG at quality 100, and video uploads can reach 1 GB. Back-of-the-envelope, local disk holds a couple hundred light-use workspaces for a year, but only around fifteen medium ones, and one or two heavy ones.
 
